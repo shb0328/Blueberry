@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_list"
+        android:icon="@drawable/icon_list"
+        android:title="@string/title_list" />
+
+    <item
+        android:id="@+id/navigation_camera"
+        android:icon="@drawable/icon_camera"
+        android:title="@string/title_camera" />
+
+    <item
+        android:id="@+id/navigation_gallary"
+        android:icon="@drawable/icon_gallary"
+        android:title="@string/title_gallary" />
+
+    <item
+        android:id="@+id/navigation_option"
+        android:icon="@drawable/icon_option"
+        android:title="@string/title_option" />
+</menu>

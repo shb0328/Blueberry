@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Blueberry</string>
+    <string name="title_activity_option">OptionActivity</string>
+    <string name="title_list">List</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_gallary">Gallary</string>
+    <string name="title_option">Option</string>
 </resources>
