@@ -24,13 +24,6 @@ public class Optionragment extends Fragment {
         optionViewModel =
                 ViewModelProviders.of(this).get(OptionViewModel.class);
         View root = inflater.inflate(R.layout.fragment_option, container, false);
-        final TextView textView = root.findViewById(R.id.text_option);
-        optionViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
         return root;
     }
 }

@@ -5,4 +5,7 @@
     <string name="title_camera">Camera</string>
     <string name="title_gallary">Gallary</string>
     <string name="title_option">Option</string>
+    <string name="image01">image01</string>
+    <string name="information">BlueBerry ver0.1\nMade by CheeseCake\n"</string>
+    <string name="switch1">주소록 자동 저장</string>
 </resources>
