@@ -53,6 +53,12 @@
         android:layout_height="wrap_content" />
 
 
+    <Button
+        android:id="@+id/finishButton1"
+        android:onClick="onClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="검토화면으로 넘어갑니다" />
 
 
 </LinearLayout>
