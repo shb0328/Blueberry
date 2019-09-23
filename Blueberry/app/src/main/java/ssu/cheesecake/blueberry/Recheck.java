@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Recheck extends AppCompatActivity{
 
 
+
+
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -43,6 +46,10 @@ public class Recheck extends AppCompatActivity{
             spin4.setAdapter(adapter4);
 
         }
+
+
+
+
 
         public void onClick(View view)
         {

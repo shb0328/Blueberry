@@ -4,13 +4,19 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/business_card"
+        android:src="@drawable/testcard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.05"
+        />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이름을 선택하세요"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="이름을 선택하세요" />
 
 
     <Spinner
@@ -59,6 +65,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="검토화면으로 넘어갑니다" />
+
+
+
 
 
 </LinearLayout>
