@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Blueberry</string>
+    <string name="title_activity_re_check">reCheck</string>
+    <string name="action_settings">Settings</string>
 </resources>
