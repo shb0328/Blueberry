@@ -4,14 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class Recheck extends AppCompatActivity{
-
-
-
 
 
         @Override
@@ -45,16 +43,19 @@ public class Recheck extends AppCompatActivity{
             adapter4.setDropDownViewResource(R.layout.spin_dripdown);
             spin4.setAdapter(adapter4);
 
+            Button button=findViewById(R.id.finishButton1);
+            button.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v){
+                    Intent intent = new Intent(getApplicationContext(),ReCheck2.class);
+                    startActivity(intent);
+                }
+            });
+
         }
 
 
 
-
-
-        public void onClick(View view)
-        {
-            Intent intent= new Intent(this, ReCheck2.class);
-
-        }//intent 자꾸 오류 나서 일단 두번째 페이지부터 만들겠음
 
 }
