@@ -3,9 +3,12 @@
     <string name="title_activity_option">OptionActivity</string>
     <string name="title_list">List</string>
     <string name="title_camera">Camera</string>
-    <string name="title_gallary">Gallary</string>
+    <string name="title_gallery">Gallery</string>
     <string name="title_option">Option</string>
     <string name="image01">image01</string>
     <string name="information">BlueBerry ver0.1\nMade by CheeseCake\n"</string>
     <string name="switch1">주소록 자동 저장</string>
+
+    <string name="permission_1">[설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
+    <string name="permission_2">사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.</string>
 </resources>

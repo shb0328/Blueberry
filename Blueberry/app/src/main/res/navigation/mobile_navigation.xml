@@ -23,8 +23,8 @@
         tools:layout="@layout/fragment_camera" />
 
     <fragment
-        android:id="@+id/navigation_gallary"
-        android:name="ssu.cheesecake.blueberry.ui.gallary.GallaryFragment"
-        android:label="@string/title_gallary"
-        tools:layout="@layout/fragment_gallary" />
+        android:id="@+id/navigation_gallery"
+        android:name="ssu.cheesecake.blueberry.ui.gallery.GalleryFragment"
+        android:label="@string/title_gallery"
+        tools:layout="@layout/fragment_gallery" />
 </navigation>

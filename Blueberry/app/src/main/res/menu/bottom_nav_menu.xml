@@ -12,9 +12,9 @@
         android:title="@string/title_camera" />
 
     <item
-        android:id="@+id/navigation_gallary"
-        android:icon="@drawable/icon_gallary"
-        android:title="@string/title_gallary" />
+        android:id="@+id/navigation_gallery"
+        android:icon="@drawable/icon_gallery"
+        android:title="@string/title_gallery" />
 
     <item
         android:id="@+id/navigation_option"
