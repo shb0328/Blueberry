@@ -6,9 +6,4 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-   <Spinner
-       android:id="@id/planets_spinner"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
