@@ -6,8 +6,9 @@
     <string name="title_gallery">Gallery</string>
     <string name="title_option">Option</string>
     <string name="image01">image01</string>
-    <string name="information">BlueBerry ver0.1\nMade by CheeseCake\n"</string>
+    <string name="information">BlueBerry ver0.1\n\nMade by CheeseCake\nshb0328\t소혜빈\nzzarbttoo\t배유진\ncpuman7\t김한수\n"</string>
     <string name="switch1">주소록 자동 저장</string>
+    <string name="login_button">Login</string>
 
     <string name="permission_1">[설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
     <string name="permission_2">사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.</string>

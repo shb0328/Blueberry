@@ -1,6 +1,5 @@
 package ssu.cheesecake.blueberry.ui.gallery;
 
-import android.Manifest;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,23 +11,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.gun0912.tedpermission.PermissionListener;
-import com.gun0912.tedpermission.TedPermission;
-
 import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
 
-import ssu.cheesecake.blueberry.MainActivity;
-import ssu.cheesecake.blueberry.OptionActivity;
 import ssu.cheesecake.blueberry.R;
 
 import static android.app.Activity.RESULT_CANCELED;
