@@ -49,10 +49,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -92,7 +94,7 @@ public class CameraFragment extends Fragment
 
     /**
      *
-     * field
+     * fields
      *
      */
 
@@ -280,7 +282,9 @@ public class CameraFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        Date currentDateAndTime = new Date();
+        SimpleDateFormat currentDateAndTimeFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+        mFile = new File(getActivity().getExternalFilesDir(null), "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
     }
 
     /**
@@ -496,8 +500,11 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     * Opens the camera specified by {@link CameraFragment#mCameraId}.
+     *
+     * camera
+     *
      */
+
     private void openCamera(int width, int height) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -521,9 +528,6 @@ public class CameraFragment extends Fragment
         }
     }
 
-    /**
-     * Closes the current {@link CameraDevice}.
-     */
     private void closeCamera() {
         try {
             mCameraOpenCloseLock.acquire();
@@ -663,13 +667,12 @@ public class CameraFragment extends Fragment
      *
      */
 
-
     @Override
     public void onClick(View view) {
        switch (view.getId()){
            case R.id.takePictureButton: {
-               //TODO: takePicture();
                showToast("take a picture");
+               takePicture();
                break;
            }
 
@@ -685,7 +688,6 @@ public class CameraFragment extends Fragment
            }
        }
     }
-
 
 //    @Override
 //    public void onAttach(Context context) {
@@ -778,44 +780,6 @@ public class CameraFragment extends Fragment
      *
      */
 
-    private static class ImageSaver implements Runnable {
-
-        //The JPEG image
-        private final Image mImage;
-
-        // The file we save the image into.
-        private final File mFile;
-
-        ImageSaver(Image image, File file) {
-            mImage = image;
-            mFile = file;
-        }
-
-        @Override
-        public void run() {
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-    }
-
     private void showToast(final String text) {
         final Activity activity = getActivity();
         if (activity != null) {
@@ -845,10 +809,8 @@ public class CameraFragment extends Fragment
         int w = aspectRatio.getWidth();
         int h = aspectRatio.getHeight();
         for (Size option : choices) {
-            if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight &&
-                    option.getHeight() == option.getWidth() * h / w) {
-                if (option.getWidth() >= textureViewWidth &&
-                        option.getHeight() >= textureViewHeight) {
+            if (option.getWidth() <= maxWidth && option.getHeight() <= maxHeight && option.getHeight() == option.getWidth() * h / w) {
+                if (option.getWidth() >= textureViewWidth && option.getHeight() >= textureViewHeight) {
                     bigEnough.add(option);
                 } else {
                     notBigEnough.add(option);
@@ -885,6 +847,42 @@ public class CameraFragment extends Fragment
      * Class
      *
      */
+
+    //thread to save image into gallery
+    private static class ImageSaver implements Runnable {
+
+        private final Image mImage;
+        private final File mFile;
+
+        ImageSaver(Image image, File file) {
+            mImage = image;
+            mFile = file;
+        }
+
+        @Override
+        public void run() {
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            FileOutputStream output = null;
+            try {
+                output = new FileOutputStream(mFile);
+                output.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                mImage.close();
+                if (null != output) {
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
 
     //Compares two Sizes based on their areas.
     static class CompareSizesByArea implements Comparator<Size> {
