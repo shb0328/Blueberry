@@ -1,9 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ReCheck2">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAlignment="true"
+        android:gravity="top|center_horizontal"
+        android:orientation="horizontal"
+        android:paddingTop="30sp">
+
+        <ImageView
+            android:id="@+id/business_card_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="263dp"
+            android:layout_margin="20dp"
+            android:contentDescription="@string/recheck2_image"
+            android:marginTop="150dp"
+            android:src="@drawable/testcard" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginStart="60sp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:baselineAlignment="true"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/name_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:text="@string/recheck2_name2"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_name1"
+                tools:targetApi="o" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:baselineAlignment="true"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/phone_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:text="@string/recheck2_phone2"
+                android:textSize="@dimen/recheck2_question1"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recheck2_phone1"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:baselineAlignment="true"
+            android:orientation="horizontal">
+
+
+            <EditText
+                android:id="@+id/mail_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:text="@string/recheck2_mail2"
+                android:textSize="@dimen/recheck2_question1"
+                tools:ignore="LabelFor" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_mail1"
+                tools:targetApi="o"
+
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:baselineAlignment="true"
+            android:orientation="horizontal">
+
+
+            <EditText
+
+                android:id="@+id/company_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:text="@string/recheck2_company2"
+                android:textSize="@dimen/recheck2_question1"
+                tools:ignore="LabelFor"
+                tools:targetApi="o" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_company1"
+                tools:targetApi="o" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/recheck1_margin"
+        android:baselineAlignment="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/ToThePhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recheck2_toPhone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
