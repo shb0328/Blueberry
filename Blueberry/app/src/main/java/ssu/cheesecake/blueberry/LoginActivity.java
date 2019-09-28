@@ -76,6 +76,7 @@ public class LoginActivity extends FragmentActivity{
             }
         });
 
+        tedPermission();
     }
 
     @Override
