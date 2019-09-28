@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "276403560820-78ovog7kqeb2e102cts9bdm7kpoet314.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cheesecake.blueberry",
+            "certificate_hash": "34b4cc9b419e16ad18cc5039e39d125dda1d7e8e"
+          }
+        },
+        {
           "client_id": "276403560820-fghp74do14mng94sp57i6k7bqonvcic2.apps.googleusercontent.com",
           "client_type": 3
         }

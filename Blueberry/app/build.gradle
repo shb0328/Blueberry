@@ -30,9 +30,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    compile 'com.google.firebase:firebase-core:17.2.0'
-    compile 'com.google.firebase:firebase-auth:19.0.0'
-    compile 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
 
     implementation "gun0912.ted:tedpermission:2.1.0"
 }
