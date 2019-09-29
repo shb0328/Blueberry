@@ -3,6 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="take_picture">take picture</string>
-    <string name="request_permission">This App needs camera permission.</string>
+    <string name="request_camera_permission">This App needs camera permission.</string>
+    <string name="request_writeExternalStorage_permission">This App needs write_external_storage permission.</string>
     <string name="camera_error">camera error</string>
+    <string name="gallery_error">gallery error</string>
 </resources>
