@@ -13,8 +13,9 @@
         <ImageView
             android:id="@+id/business_card"
             android:layout_width="wrap_content"
-            android:layout_height="263dp"
+            android:layout_height="100dp"
             android:layout_margin="20dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/recheck_image"
             android:src="@drawable/testcard" />
 
@@ -50,7 +51,9 @@
                 android:id="@+id/spinner1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20sp" />
+                android:layout_marginStart="20sp"
+                android:entries="@array/recheck_name"
+                />
 
 
         </LinearLayout>
@@ -74,7 +77,9 @@
             <Spinner
                 android:id="@+id/spinner2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:entries="@array/recheck_phone"
+                />
 
 
         </LinearLayout>
@@ -99,7 +104,9 @@
             <Spinner
                 android:id="@+id/spinner3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:entries="@array/recheck_company"
+                />
 
         </LinearLayout>
 
@@ -122,7 +129,9 @@
             <Spinner
                 android:id="@+id/spinner4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:entries="@array/recheck_address"
+                />
 
 
         </LinearLayout>
@@ -140,7 +149,6 @@
             android:id="@+id/finishButton1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClick"
             android:text="@string/recheck_next"
             android:textSize="@dimen/recheck1_question1" />
 

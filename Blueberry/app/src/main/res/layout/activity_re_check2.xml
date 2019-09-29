@@ -5,24 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ReCheck2">
+    tools:context=".ReCheck2"
+    >
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAlignment="true"
+        android:baselineAligned="true"
         android:gravity="top|center_horizontal"
         android:orientation="horizontal"
-        android:paddingTop="30sp">
+        android:paddingTop="10sp">
 
         <ImageView
             android:id="@+id/business_card_confirm"
             android:layout_width="wrap_content"
-            android:layout_height="263dp"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:layout_marginTop="150dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/recheck2_image"
-            android:marginTop="150dp"
+            android:maxHeight="263dp"
             android:src="@drawable/testcard" />
 
     </LinearLayout>
@@ -30,18 +33,26 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30sp"
         android:layout_marginTop="30sp"
         android:layout_marginBottom="10sp"
-        android:layout_marginStart="60sp"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:baselineAlignment="true"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
             android:orientation="horizontal">
 
+
+            <TextView
+                android:id="@+id/name_confirm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_name2"
+                tools:targetApi="o" />
 
             <EditText
                 android:id="@+id/name_confirm"
@@ -49,25 +60,27 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_name2"
+                android:text="@string/recheck2_name1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
-            <TextView
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:text="@string/recheck2_name1"
-                tools:targetApi="o" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:baselineAlignment="true"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
             android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/phone_confirm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recheck2_phone2" />
 
 
             <EditText
@@ -76,27 +89,31 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_phone2"
+                android:text="@string/recheck2_phone1"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/recheck2_phone1"
-
-                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:baselineAlignment="true"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
             android:orientation="horizontal">
+
+
+
+            <TextView
+                android:id="@+id/mail_confirm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_mail2"
+                tools:targetApi="o" />
+
 
 
             <EditText
@@ -105,49 +122,42 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_mail2"
+                android:text="@string/recheck2_mail1"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor" />
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:text="@string/recheck2_mail1"
-                tools:targetApi="o"
-
-                />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:baselineAlignment="true"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
             android:orientation="horizontal">
 
 
-            <EditText
+            <TextView
+                android:id="@+id/company_confirm2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:text="@string/recheck2_company2"
+                tools:targetApi="o" />
 
+
+
+            <EditText
                 android:id="@+id/company_confirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_company2"
+                android:text="@string/recheck2_company1"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:importantForAutofill="no"
-                android:text="@string/recheck2_company1"
-                tools:targetApi="o" />
         </LinearLayout>
     </LinearLayout>
 
@@ -156,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/recheck1_margin"
-        android:baselineAlignment="true"
+        android:baselineAligned="true"
         android:orientation="horizontal">
 
         <Button
