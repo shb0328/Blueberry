@@ -33,6 +33,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
@@ -66,6 +67,7 @@ public class CameraFragment extends Fragment
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
 
     private static final int REQUEST_CAMERA_PERMISSION = 1;
+    private static final int REQUEST_GALLERY_PERMISSION = 2;
 
     private static final String FRAGMENT_DIALOG = "dialog";
 
@@ -275,7 +277,6 @@ public class CameraFragment extends Fragment
     /**
      *
      *  File
-     *  TODO: set Path
      *
      */
 
@@ -284,7 +285,9 @@ public class CameraFragment extends Fragment
         super.onActivityCreated(savedInstanceState);
         Date currentDateAndTime = new Date();
         SimpleDateFormat currentDateAndTimeFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-        mFile = new File(getActivity().getExternalFilesDir(null), "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
+        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/"
+                , "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
+
     }
 
     /**
@@ -590,7 +593,7 @@ public class CameraFragment extends Fragment
 
     /**
      *
-     * Background Thread
+     * Thread
      *
      */
 
@@ -636,7 +639,7 @@ public class CameraFragment extends Fragment
 
     /**
      *
-     * Camera Permission
+     * Permission
      *
      */
 
@@ -653,7 +656,7 @@ public class CameraFragment extends Fragment
                                            @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.request_permission))
+                ErrorDialog.newInstance(getString(R.string.request_camera_permission))
                         .show(getChildFragmentManager(), FRAGMENT_DIALOG);
             }
         } else {
@@ -934,7 +937,7 @@ public class CameraFragment extends Fragment
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Fragment parent = getParentFragment();
             return new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.request_permission)
+                    .setMessage(R.string.request_camera_permission)
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
