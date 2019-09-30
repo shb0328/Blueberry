@@ -263,30 +263,31 @@ public class CameraFragment extends Fragment
     //to prevent the app from exiting before closing the camera.
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
-    //This is the output file for our picture.
-    private File mFile;
-    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
-            = new ImageReader.OnImageAvailableListener() {
-
-        @Override
-        public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
-        }
-    };
-
     /**
      *
      *  File
      *
      */
 
+    private File mFile;
+    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/";
+    private String fileName = "blueberry_"+new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".jpg";
+    private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
+            = new ImageReader.OnImageAvailableListener() {
+        @Override
+        public void onImageAvailable(ImageReader reader) {
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+        }
+    };
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Date currentDateAndTime = new Date();
-        SimpleDateFormat currentDateAndTimeFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/"
-                , "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
+        mFile = new File(path,fileName);
+//        Date currentDateAndTime = new Date();
+//        SimpleDateFormat currentDateAndTimeFormat = new SimpleDateFormat("yyyyMMddhhmmss");
+//        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/"
+//                , "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
 
     }
 
