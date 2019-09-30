@@ -8,8 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
@@ -41,6 +45,8 @@ import android.util.Size;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.Surface;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -217,6 +223,7 @@ public class CameraFragment extends Fragment
     private int mSensorOrientation;
 
     private AutoFitTextureView mTextureView;
+    private SurfaceView surfaceView;
     private Size mPreviewSize;
     private CameraCaptureSession mCaptureSession;
     private CaptureRequest.Builder mPreviewRequestBuilder;
@@ -310,6 +317,39 @@ public class CameraFragment extends Fragment
         view.findViewById(R.id.takePictureButton).setOnClickListener(this);
         view.findViewById(R.id.IdontThinkAboutThisUsageYet).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.CameraTextureView);
+
+        //draw rect
+        surfaceView = (SurfaceView) view.findViewById(R.id.surfaceView);
+        surfaceView.setZOrderOnTop(true);
+        SurfaceHolder mHolder = surfaceView.getHolder();
+        mHolder.setFormat(PixelFormat.TRANSPARENT);
+        mHolder.addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+                Canvas canvas = holder.lockCanvas();
+                if (canvas == null) {
+                    Log.e(TAG, "Cannot draw onto the canvas as it's null");
+                } else {
+                    Paint myPaint = new Paint();
+                    myPaint.setColor(Color.rgb(50, 200, 50));
+                    myPaint.setStrokeWidth(10);
+                    myPaint.setStyle(Paint.Style.STROKE);
+                    canvas.drawRect(100, 500, 1000, 1000, myPaint);
+
+                    holder.unlockCanvasAndPost(canvas);
+                }
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
     }
 
     @SuppressWarnings("SuspiciousNameCombination")
@@ -959,4 +999,30 @@ public class CameraFragment extends Fragment
                     .create();
         }
     }
+
+//    class DrawOn extends View{ // 사각형 그리기
+//
+//        public DrawOn(Context context){
+//            super(context);
+//        }
+//
+//        @Override
+//        protected void onDraw(Canvas canvas) {
+//            super.onDraw(canvas);
+//
+//            Paint pt = new Paint();
+//            pt.setColor(Color.GREEN);
+//            pt.setStrokeWidth(5);
+//
+//            canvas.drawLine(100,350,100,400, pt);
+//            canvas.drawLine(100,350,200,350, pt);
+//            canvas.drawLine(520,350,620,350, pt);
+//            canvas.drawLine(620,350,620,400, pt);
+//            canvas.drawLine(100,600,100,650, pt);
+//            canvas.drawLine(100,650,200,650, pt);
+//            canvas.drawLine(520,650,620,650, pt);
+//            canvas.drawLine(620,650,620,600, pt);
+//
+//        }
+//    }
 }
