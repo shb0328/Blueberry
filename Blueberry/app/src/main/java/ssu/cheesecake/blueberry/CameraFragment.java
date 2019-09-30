@@ -313,9 +313,9 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.cam2galleryButton).setOnClickListener(this);
+//        view.findViewById(R.id.cam2galleryButton).setOnClickListener(this);
         view.findViewById(R.id.takePictureButton).setOnClickListener(this);
-        view.findViewById(R.id.IdontThinkAboutThisUsageYet).setOnClickListener(this);
+//        view.findViewById(R.id.IdontThinkAboutThisUsageYet).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.CameraTextureView);
 
         //draw rect
@@ -720,16 +720,16 @@ public class CameraFragment extends Fragment
                break;
            }
 
-           case R.id.cam2galleryButton: {
-               //TODO: go to gallery();
-               showToast("go to gallery");
-               break;
-           }
-
-           case R.id.IdontThinkAboutThisUsageYet: {
-               showToast("i don't think about this usage ,,, yet");
-               break;
-           }
+//           case R.id.cam2galleryButton: {
+//               //TODO: go to gallery();
+//               showToast("go to gallery");
+//               break;
+//           }
+//
+//           case R.id.IdontThinkAboutThisUsageYet: {
+//               showToast("i don't think about this usage ,,, yet");
+//               break;
+//           }
        }
     }
 
