@@ -42,6 +42,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276403560820:android:fd04cb73277b18686c0c21",
+        "android_client_info": {
+          "package_name": "ssu.cheesecake.blueberry"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "276403560820-fghp74do14mng94sp57i6k7bqonvcic2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnYMoxubAmrz01i5PndoxXPsbUTpKBG68"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "276403560820-fghp74do14mng94sp57i6k7bqonvcic2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"
