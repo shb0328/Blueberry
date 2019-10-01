@@ -71,10 +71,6 @@ public class CameraFragment extends Fragment
                             implements  View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
-
-    private static final int REQUEST_CAMERA_PERMISSION = 1;
-    private static final int REQUEST_GALLERY_PERMISSION = 2;
-
     private static final String FRAGMENT_DIALOG = "dialog";
 
     /**
@@ -552,7 +548,7 @@ public class CameraFragment extends Fragment
     private void openCamera(int width, int height) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-            requestCameraPermission();
+//            requestCameraPermission();
             return;
         }
         setUpCameraOutputs(width, height);
@@ -675,33 +671,6 @@ public class CameraFragment extends Fragment
             mBackgroundHandler = null;
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-    }
-
-    /**
-     *
-     * Permission
-     *
-     */
-
-    private void requestCameraPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-            new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
-        } else {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length != 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                ErrorDialog.newInstance(getString(R.string.request_camera_permission))
-                        .show(getChildFragmentManager(), FRAGMENT_DIALOG);
-            }
-        } else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
@@ -971,34 +940,34 @@ public class CameraFragment extends Fragment
     }
 
     //Shows OK/Cancel confirmation dialog about camera permission.
-    public static class ConfirmationDialog extends DialogFragment {
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Fragment parent = getParentFragment();
-            return new AlertDialog.Builder(getActivity())
-                    .setMessage(R.string.request_camera_permission)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            parent.requestPermissions(new String[]{Manifest.permission.CAMERA},
-                                    REQUEST_CAMERA_PERMISSION);
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    Activity activity = parent.getActivity();
-                                    if (activity != null) {
-                                        activity.finish();
-                                    }
-                                }
-                            })
-                    .create();
-        }
-    }
+//    public static class ConfirmationDialog extends DialogFragment {
+//
+//        @NonNull
+//        @Override
+//        public Dialog onCreateDialog(Bundle savedInstanceState) {
+//            final Fragment parent = getParentFragment();
+//            return new AlertDialog.Builder(getActivity())
+//                    .setMessage(R.string.request_camera_permission)
+//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            parent.requestPermissions(new String[]{Manifest.permission.CAMERA},
+//                                    REQUEST_CAMERA_PERMISSION);
+//                        }
+//                    })
+//                    .setNegativeButton(android.R.string.cancel,
+//                            new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    Activity activity = parent.getActivity();
+//                                    if (activity != null) {
+//                                        activity.finish();
+//                                    }
+//                                }
+//                            })
+//                    .create();
+//        }
+//    }
 
 //    class DrawOn extends View{ // 사각형 그리기
 //
