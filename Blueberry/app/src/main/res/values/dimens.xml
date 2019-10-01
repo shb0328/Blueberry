@@ -2,4 +2,10 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- TODO: Remove or change this placeholder text : for U_Jin-->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="recheck1_question1">20sp</dimen>
+    <dimen name="recheck1_margin">10sp</dimen>
+    <dimen name="recheck2_question1">20sp</dimen>
 </resources>
