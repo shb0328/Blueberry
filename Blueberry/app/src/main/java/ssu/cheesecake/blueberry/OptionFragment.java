@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry.ui.option;
+package ssu.cheesecake.blueberry;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

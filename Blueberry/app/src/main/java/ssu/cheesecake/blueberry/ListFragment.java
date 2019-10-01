@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry.ui.list;
+package ssu.cheesecake.blueberry;
 
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,12 +29,8 @@ import ssu.cheesecake.blueberry.R;
 public class ListFragment extends Fragment {
     BitmapDrawable bitmap;
 
-    private ViewModel listViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        ViewModel listViewModel =
-                ViewModelProviders.of(this).get(ListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_list, container, false);
 
         final ScrollView scrollView = (ScrollView)root.findViewById(R.id.listScrollView);

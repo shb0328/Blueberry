@@ -7,24 +7,18 @@
 
     <fragment
         android:id="@+id/navigation_option"
-        android:name="ssu.cheesecake.blueberry.ui.option.Optionragment"
+        android:name="ssu.cheesecake.blueberry.OptionFragment"
         android:label="@string/title_option"
         tools:layout="@layout/fragment_option" />
     <fragment
         android:id="@+id/navigation_list"
-        android:name="ssu.cheesecake.blueberry.ui.list.ListFragment"
+        android:name="ssu.cheesecake.blueberry.ListFragment"
         android:label="@string/title_list"
         tools:layout="@layout/fragment_list" />
 
     <fragment
-        android:id="@+id/navigation_camera"
-        android:name="ssu.cheesecake.blueberry.ui.camera.CameraFragment"
-        android:label="@string/title_camera"
-        tools:layout="@layout/fragment_camera" />
-
-    <fragment
         android:id="@+id/navigation_gallery"
-        android:name="ssu.cheesecake.blueberry.ui.gallery.GalleryFragment"
+        android:name="ssu.cheesecake.blueberry.GalleryFragment"
         android:label="@string/title_gallery"
         tools:layout="@layout/fragment_gallery" />
 </navigation>

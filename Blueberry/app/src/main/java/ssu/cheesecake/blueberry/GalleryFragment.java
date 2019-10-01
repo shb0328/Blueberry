@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry.ui.gallery;
+package ssu.cheesecake.blueberry;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -27,12 +27,8 @@ public class GalleryFragment extends Fragment {
     private static final int REQUEST_CODE = 0;
     private static final int PICK_FROM_ALBUM = 1;
 
-    private GalleryViewModel galleryViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        galleryViewModel =
-                ViewModelProviders.of(this).get(GalleryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
         goToAlbum();
         return root;
