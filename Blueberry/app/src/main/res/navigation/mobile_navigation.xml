@@ -3,22 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_list">
+    app:startDestination="@+id/fragment_list">
 
     <fragment
-        android:id="@+id/navigation_option"
-        android:name="ssu.cheesecake.blueberry.OptionFragment"
-        android:label="@string/title_option"
-        tools:layout="@layout/fragment_option" />
-    <fragment
-        android:id="@+id/navigation_list"
+        android:id="@+id/fragment_list"
         android:name="ssu.cheesecake.blueberry.ListFragment"
         android:label="@string/title_list"
         tools:layout="@layout/fragment_list" />
-
     <fragment
-        android:id="@+id/navigation_gallery"
+        android:id="@+id/fragment_gallery"
         android:name="ssu.cheesecake.blueberry.GalleryFragment"
         android:label="@string/title_gallery"
         tools:layout="@layout/fragment_gallery" />
+    <fragment
+        android:id="@+id/fragment_option"
+        android:name="ssu.cheesecake.blueberry.OptionFragment"
+        android:label="@string/title_option"
+        tools:layout="@layout/fragment_option" />
 </navigation>
