@@ -39,21 +39,26 @@
     <string name="recheck2_company2">회사명을 확인하시오</string>
     <string name="recheck2_toPhone">SAVE</string>
 
+
     <string-array name="recheck_name">
         <item>이름1</item>
         <item>이름2</item>
+        <item>해당없음</item>
     </string-array>
 
     <string-array name="recheck_phone">
         <item>전화1</item>
+        <item>해당없음</item>
     </string-array>
 
     <string-array name="recheck_company">
         <item>회사1</item>
+        <item>해당없음</item>
     </string-array>
 
     <string-array name="recheck_address">
         <item>이메일1</item>
+        <item>해당없음</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

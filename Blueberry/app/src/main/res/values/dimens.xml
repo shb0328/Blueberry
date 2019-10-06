@@ -12,5 +12,5 @@
     <dimen name="activity_login_box_vertical">45dp</dimen>
     <dimen name="activity_login_box_border">10dp</dimen>
     <dimen name="activity_login_blueberrySize">120dp</dimen>
-    <dimen name="activity_loginButtonSize">10dp</dimen>
+    <dimen name="activity_loginButtonSize">20dp</dimen>
 </resources>
