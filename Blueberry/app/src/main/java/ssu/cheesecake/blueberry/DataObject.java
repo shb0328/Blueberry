@@ -13,13 +13,13 @@ import java.util.Calendar;
 import static android.os.Build.ID;
 
 public class DataObject {
-    public String id;
-    public String firstName;
-    public String lastName;
-    public String phoneNumber;
-    public String email;
-    public String company;
-    public String time;
+    private String id;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String email;
+    private String company;
+    private String time;
 
     public DataObject(){
     }
@@ -33,6 +33,21 @@ public class DataObject {
         this.company = company;
         makeTImeString();
     }
+
+    String getId() {return id;}
+    String getFirstName() {return firstName;}
+    String getLastName() { return lastName;}
+    String getPhoneNumber() { return phoneNumber;}
+    String getEmail(){return email;}
+    String getCompany(){return company;}
+    String getTime(){return time;}
+
+    void putId(String str){this.id = str;}
+    void putFirstName(String str){this.firstName = str;}
+    void putLastName(String str){this.lastName = str;}
+    void putPhoneNumber(String str) {this.phoneNumber = str;}
+    void putEmail(String str) {this.email = email;}
+    void putCompany(String str){this.company = company;}
 
     public void makeTImeString(){
         Calendar c = Calendar.getInstance();
@@ -92,9 +107,7 @@ public class DataObject {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         postValues = this.toMap();
-        mPostReference.child("users").child(path).child(time).setValue(postValues);
-        //childUpdates.put(ID, postValues);
-        //mPostReference.updateChildren(childUpdates);
+        mPostReference.child(path).push().setValue(postValues);
     }
 
 }
