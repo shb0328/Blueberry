@@ -23,11 +23,22 @@ import androidx.lifecycle.ViewModelProviders;
 import java.io.File;
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import ssu.cheesecake.blueberry.R;
 
-public class ListFragment extends Fragment {
+import static android.os.Build.ID;
+
+public class ListFragment extends Fragment{
     BitmapDrawable bitmap;
+    private FirebaseAuth firebaseAuth;
+    private FirebaseUser user;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -51,6 +62,9 @@ public class ListFragment extends Fragment {
             textView.setTextSize(25);
             linearLayout.addView(textView);
         }
+        DataObject tempObject = new DataObject("cpuman7@gmail.com", "Hansu", "Kim", "010-4537-9662", "cpuman7@gmail.com", "SoongSil Unv.");
+        tempObject.postFirebaseDatabase();
+
         return root;
     }
 
