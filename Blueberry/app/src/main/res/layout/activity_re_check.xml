@@ -17,9 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:layout_marginTop="150dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/recheck_image"
+            android:contentDescription="@string/imageFile"
             android:maxHeight="263dp"
             android:src="@drawable/testcard" />
 

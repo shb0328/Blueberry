@@ -24,7 +24,7 @@
             android:layout_margin="20dp"
             android:layout_marginTop="150dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/recheck2_image"
+            android:contentDescription="@string/imageFile"
             android:maxHeight="263dp"
             android:src="@drawable/testcard" />
 
@@ -61,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_name1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
@@ -90,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_phone1"
+
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
@@ -123,7 +122,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_mail1"
+
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor" />
 
@@ -153,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:inputType="text"
-                android:text="@string/recheck2_company1"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />

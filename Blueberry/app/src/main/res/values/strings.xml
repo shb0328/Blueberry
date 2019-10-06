@@ -32,29 +32,12 @@
     <string name="recheck_company">회사를 선택하세요</string>
     <string name="recheck_email">이메일을 선택하세요</string>
     <string name="recheck_next">확인 화면으로 넘어갑니다</string>
-    <string name="recheck_image">image</string>
-    <string name="recheck2_name1">이름</string>
+    <string name="imageFile">image</string>
     <string name="recheck2_name2">이름을 확인하시오</string>
-    <string name="recheck2_phone1">전화번호</string>
     <string name="recheck2_phone2">전화번호를 확인하시오</string>
-    <string name="recheck2_mail1">메일</string>
     <string name="recheck2_mail2">메일주소를 확인하시오</string>
-    <string name="recheck2_company1">회사</string>
     <string name="recheck2_company2">회사명을 확인하시오</string>
-    <string name="recheck2_toPhone">전화부에 저장</string>
-    <string name="recheck2_image">image</string>
-    <string name="recheckName1">이름1</string>
-    <string name="recheckName2">이름2</string>
-    <string name="recheckName3">이름3</string>
-    <string name="recheckPhone1">번호1</string>
-    <string name="recheckPhone2">번호2</string>
-    <string name="recheckPhone3">번호3</string>
-    <string name="recheckCompany1">회사1</string>
-    <string name="recheckCompany2">회사2</string>
-    <string name="recheckCompany3">회사3</string>
-    <string name="recheckAddress1">이메일1</string>
-    <string name="recheckAddress2">이메일2</string>
-    <string name="recheckAddress3">이메일3</string>
+    <string name="recheck2_toPhone">SAVE</string>
 
     <string-array name="recheck_name">
         <item>이름1</item>
@@ -75,6 +58,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 </resources>

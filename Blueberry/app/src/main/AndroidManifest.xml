@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,12 +25,19 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/title_activity_option" />
+            android:label="@string/title_activity_option"
+            android:screenOrientation="portrait"
+            />
 
-        <activity android:name=".CameraActivity"/>
+        <activity android:name=".CameraActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".ReCheck"/>
-        <activity android:name=".ReCheck2"/>
+        <activity android:name=".ReCheck"
+            android:screenOrientation="portrait"
+            android:exported="true"/>
+        <activity android:name=".ReCheck2"
+            android:screenOrientation="portrait"
+            android:exported="true"/>
 
     </application>
 
