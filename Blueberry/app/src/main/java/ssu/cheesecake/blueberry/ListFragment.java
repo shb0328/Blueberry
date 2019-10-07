@@ -5,9 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +42,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -46,6 +52,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
 
 import ssu.cheesecake.blueberry.R;
 
@@ -58,34 +68,52 @@ public class ListFragment extends Fragment{
     private DatabaseReference myRef;
     RecyclerView recyclerView;
     private ArrayList<DataObject> list = new ArrayList<DataObject>();
+    View root;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
+        //MainActivity
+        root = inflater.inflate(R.layout.fragment_list, container, false);
+
         //Firebase
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        myRef = FirebaseDatabase.getInstance().getReference("users");
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        String path = user.getDisplayName() + "_" + user.getUid();
+        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(path);
 
-        //MainActivity
-        View root = inflater.inflate(R.layout.fragment_list, container, false);
-
-        DataObject tmp = null;
-        for(int i = 0; i < 10; i++){
-            tmp = new DataObject("cpuman7@gmail.com", "Hansu", "Kim", "010-4537-9662", "cpuman7@gmail.com", "SoongSil Unv.");
-            //tmp.postFirebaseDatabase();
-            list.add(tmp);
-        }
         recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
         recyclerView.setAdapter(adapter);
 
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                list = new ArrayList<>();
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    DataObject object = postSnapshot.getValue(DataObject.class);
+                    list.add(object);
+                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
+                    recyclerView.setAdapter(adapter);
+                   //Toast.makeText(root.getContext(),  object.getTime(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
         final Button addBtn = root.findViewById(R.id.add_button);
         addBtn.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                new DataObject("cpuman7@gmail.com", "Hansu", "Kim", "010-4537-9662", "cpuman7@gmail.com", "SoongSil Unv.").postFirebaseDatabase();
+                DataObject object = new DataObject("EnName", "한글이름", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
+                object.postFirebaseDatabase();
             }
         });
 
@@ -101,19 +129,25 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
 
     //RecyclerView Adapter Class 내에서 ViewHolder Class 선언
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView;
+        ImageView imageView;
+        TextView enNameTextView;
+        TextView krNameTextView;
         TextView phoneTextView;
         TextView emailTextView;
         TextView companyTextView;
         TextView dateTextView;
+        TextView imageUrlTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.item_name);
-            phoneTextView = itemView.findViewById(R.id.item_phone_number);
-            emailTextView = itemView.findViewById(R.id.item_email);
-            companyTextView = itemView.findViewById(R.id.item_company);
-            dateTextView = itemView.findViewById(R.id.item_date);
+            imageView = (ImageView)itemView.findViewById(R.id.item_image);
+            enNameTextView = (TextView)itemView.findViewById(R.id.item_en_name);
+            krNameTextView = (TextView)itemView.findViewById(R.id.item_kr_name);
+            phoneTextView = (TextView)itemView.findViewById(R.id.item_phone_number);
+            emailTextView = (TextView)itemView.findViewById(R.id.item_email);
+            companyTextView = (TextView)itemView.findViewById(R.id.item_company);
+            dateTextView = (TextView)itemView.findViewById(R.id.item_date);
+            imageUrlTextView = (TextView)itemView.findViewById(R.id.item_image_url);
         }
     }
 
@@ -135,9 +169,58 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
 
     // onBindViewHolder() - position에 해당하는 데이터를 뷰홀더의 아이템뷰에 표시
     @Override
-    public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
+        FirebaseStorage storage = FirebaseStorage.getInstance("gs://blueberry-cheesecake-ssu.appspot.com/");
+        StorageReference storageRef = storage.getReference();
         DataObject object = mData.get(position);
-        holder.nameTextView.setText(object.getFirstName() + object.getLastName()) ;
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        //String path = user.getDisplayName() + "_" + user.getUid();
+        String path = "sample";
+        String fileName = object.getImageUrl();
+        StorageReference pathReference = storageRef.child(path + "/" + fileName);
+
+        //Image Loading
+        File file = null;
+        try {
+            //Local에 Image 저장할 경로 지정
+            File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
+            file = new File(dir, fileName);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+
+            /*
+            //Firebase에서 image download해 ImageView에 출력
+            final FileDownloadTask fileDownloadTask = pathReference.getFile(file);
+            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    holder.imageUrlTextView.setText(file.getAbsolutePath());
+                    holder.imageView.setImageURI(Uri.fromFile(file));
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    Log.e("fail","fail");
+                }
+            }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                }
+            });
+        */
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //Local에 저장된 Image를 ImageView에 출력
+        holder.imageUrlTextView.setText(file.getAbsolutePath());
+        holder.imageView.setImageURI(Uri.parse(file.getAbsolutePath()));
+
+        //TextView 출력
+        holder.enNameTextView.setText(object.getEnName());
+        holder.krNameTextView.setText(object.getKrName());
         holder.phoneTextView.setText(object.getPhoneNumber());
         holder.emailTextView.setText(object.getEmail());
         holder.companyTextView.setText(object.getCompany());

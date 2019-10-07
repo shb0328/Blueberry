@@ -8,10 +8,28 @@
     android:layout_marginTop="15dp"
     android:layout_marginBottom="15dp"
     android:layout_gravity="center_horizontal"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/item_image"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/item_en_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        />
+
+    <TextView
+        android:id="@+id/item_kr_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -44,5 +62,13 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         />
+        <TextView
+            android:id="@+id/item_image_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="10dp"
+            />
+    </LinearLayout>
 
 </LinearLayout>

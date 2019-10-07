@@ -10,41 +10,44 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Calendar;
 
-import static android.os.Build.ID;
-
 public class DataObject {
-    private String id;
-    private String firstName;
-    private String lastName;
-    private String phoneNumber;
-    private String email;
-    private String company;
-    private String time;
+    public String id;
+    public String enName;
+    public String krName;
+    public String phoneNumber;
+    public String email;
+    public String company;
+    public String time;
+    public String imageUrl;
+    public String path;
 
     public DataObject(){
     }
 
-    public DataObject(String id, String firstName, String lastName, String phoneNumber, String email, String company){
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public DataObject(String enName, String krName, String phoneNumber, String email, String company, String imageUrl){
+        this.enName = enName;
+        this.krName = krName;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.company = company;
+        this.imageUrl = imageUrl;
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        this.path = user.getDisplayName() + "_" + user.getUid();
         makeTImeString();
     }
 
-    String getId() {return id;}
-    String getFirstName() {return firstName;}
-    String getLastName() { return lastName;}
+    String getEnName() {return enName;}
+    String getKrName() { return krName;}
     String getPhoneNumber() { return phoneNumber;}
     String getEmail(){return email;}
     String getCompany(){return company;}
     String getTime(){return time;}
+    String getImageUrl(){return imageUrl;}
+    String getPath(){return path;}
 
-    void putId(String str){this.id = str;}
-    void putFirstName(String str){this.firstName = str;}
-    void putLastName(String str){this.lastName = str;}
+    void putEnName(String str){this.enName = str;}
+    void putKrName(String str){this.krName = str;}
     void putPhoneNumber(String str) {this.phoneNumber = str;}
     void putEmail(String str) {this.email = email;}
     void putCompany(String str){this.company = company;}
@@ -88,26 +91,23 @@ public class DataObject {
     @Exclude
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
-        result.put("ID", id);
-        result.put("LastName", lastName);
-        result.put("FirstName", firstName);
-        result.put("PhoneNumber", phoneNumber);
-        result.put("Email", email);
-        result.put("Company", company);
-        result.put("Date", time);
+        result.put("enName", enName);
+        result.put("krName", krName);
+        result.put("phoneNumber", phoneNumber);
+        result.put("email", email);
+        result.put("company", company);
+        result.put("time", time);
+        result.put("imageUrl", imageUrl);
         return result;
     }
 
     public void postFirebaseDatabase(){
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        String path = user.getDisplayName() + "_" + user.getUid();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference mPostReference = database.getReference();
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         postValues = this.toMap();
-        mPostReference.child(path).push().setValue(postValues);
+        mPostReference.child("users").child(path).push().setValue(postValues);
     }
 
 }
