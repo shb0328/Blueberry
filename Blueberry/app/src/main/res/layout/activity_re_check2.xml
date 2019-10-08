@@ -6,7 +6,50 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".ReCheck2"
+    android:background="@color/colorBlueBerry1"
     >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="@dimen/activity_recheck_title_horizontal"
+        android:layout_marginRight="@dimen/activity_recheck_title_horizontal"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumsquare"
+            android:text="@string/recheck2_title"
+            android:textSize="25sp"
+            android:textColor="@color/colorWhite"
+            android:layout_marginStart="5dp"
+            />
+
+        <View
+            android:background="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:textColor="@color/colorWhite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/recheck_guiding"
+            android:textSize="12sp"
+            android:layout_marginStart="5dp"
+            />
+
+
+
+    </LinearLayout>
+
+
 
 
     <LinearLayout
@@ -24,8 +67,9 @@
             android:layout_margin="20dp"
             android:layout_marginTop="150dp"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/recheck2_image"
+            android:contentDescription="@string/imageFile"
             android:maxHeight="263dp"
+            android:background="@drawable/borderimage"
             android:src="@drawable/testcard" />
 
     </LinearLayout>
@@ -53,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
                 android:text="@string/recheck2_name2"
+                android:textColor="@color/colorWhite"
                 tools:targetApi="o" />
 
             <EditText
@@ -60,8 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-                android:text="@string/recheck2_name1"
+                android:inputType="textCapWords"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
@@ -81,6 +125,7 @@
                 android:id="@+id/phone_confirm2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorWhite"
                 android:text="@string/recheck2_phone2" />
 
 
@@ -89,8 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-                android:text="@string/recheck2_phone1"
+                android:inputType="phone"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
@@ -112,6 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
+                android:textColor="@color/colorWhite"
                 android:text="@string/recheck2_mail2"
                 tools:targetApi="o" />
 
@@ -122,8 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-                android:text="@string/recheck2_mail1"
+                android:inputType="textEmailAddress"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor" />
 
@@ -142,6 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
+                android:textColor="@color/colorWhite"
                 android:text="@string/recheck2_company2"
                 tools:targetApi="o" />
 
@@ -152,8 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-                android:text="@string/recheck2_company1"
+                android:inputType="textCapWords"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
@@ -168,6 +212,7 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/recheck1_margin"
         android:baselineAligned="true"
+
         android:orientation="horizontal">
 
         <Button

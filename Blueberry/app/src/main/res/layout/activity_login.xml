@@ -1,28 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    android:background="@color/colorBlueBerry1"
+    android:layout_weight="100"
+    tools:context=".LoginActivity"
+    >
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
-
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/btn_googleSignIn"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|center_horizontal" />
+        android:layout_marginTop="60dp"
+        android:layout_weight="60"
+        android:orientation="horizontal">
 
-    <Button
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="70dp"
+            android:background="@drawable/border"
+            android:fontFamily="@font/polyregular"
+            android:paddingLeft="@dimen/activity_login_box_horizontal"
+            android:paddingTop="@dimen/activity_login_box_vertical"
+            android:paddingRight="@dimen/activity_login_box_horizontal"
+            android:paddingBottom="@dimen/activity_login_box_vertical"
+            android:text="BlueBerry"
+            android:textColor="@color/colorWhite"
+            android:textSize="60sp"
+
+            />
+
+        <ImageView
+            android:id="@+id/BlueBerryLogo"
+            android:layout_width="@dimen/activity_login_blueberrySize"
+            android:layout_height="@dimen/activity_login_blueberrySize"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="20dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/imageFile"
+            android:src="@drawable/icon_blueberry_login" />
+
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF" />
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:orientation="vertical">
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/btn_googleSignIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginLeft="@dimen/activity_loginButtonSize"
+            android:layout_marginRight="@dimen/activity_loginButtonSize"/>
+    </LinearLayout>
 
 </LinearLayout>

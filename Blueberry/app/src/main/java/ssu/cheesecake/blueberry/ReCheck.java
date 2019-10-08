@@ -17,6 +17,7 @@ public class ReCheck extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_re_check);
 
+        //image 파일하고 값 받는 함수도 만들어야한다
 
         final Spinner spinner_1 = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.recheck_name, android.R.layout.simple_spinner_item);
@@ -64,6 +65,7 @@ public class ReCheck extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+
 
         final Spinner spinner_4 = findViewById(R.id.spinner4);
         ArrayAdapter<CharSequence> adapter4 = ArrayAdapter.createFromResource(this, R.array.recheck_company, android.R.layout.simple_spinner_item);
