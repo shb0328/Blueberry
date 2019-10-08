@@ -5,12 +5,18 @@
 
     <!-- TODO: Remove or change this placeholder text : for U_Jin-->
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="recheck1_question1">20sp</dimen>
+    <dimen name="recheck1_question1">13sp</dimen>
     <dimen name="recheck1_margin">10sp</dimen>
-    <dimen name="recheck2_question1">20sp</dimen>
+    <dimen name="recheck2_question1">13sp</dimen>
     <dimen name="activity_login_box_horizontal">35dp</dimen>
+
     <dimen name="activity_login_box_vertical">45dp</dimen>
     <dimen name="activity_login_box_border">10dp</dimen>
     <dimen name="activity_login_blueberrySize">120dp</dimen>
     <dimen name="activity_loginButtonSize">20dp</dimen>
+    <dimen name="activity_recheck_imageBox">5dp</dimen>
+    <dimen name="activity_recheck12_selectionBox">2dp</dimen>
+    <dimen name="activity_recheck12_selectionMargin">3dp</dimen>
+    <dimen name="activity_recheck_title_horizontal">15dp</dimen>
+
 </resources>
