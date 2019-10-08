@@ -46,6 +46,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -72,15 +73,19 @@ public class ListFragment extends Fragment{
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        int i = 0;
 
         //MainActivity
         root = inflater.inflate(R.layout.fragment_list, container, false);
 
         //Firebase
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        FirebaseAuth firebaseAuth = null;
+        FirebaseUser user = null;
+        while(user == null) {
+            firebaseAuth = FirebaseAuth.getInstance();
+            user = firebaseAuth.getCurrentUser();
+        }
+
         String path = user.getDisplayName() + "_" + user.getUid();
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(path);
 
@@ -98,7 +103,6 @@ public class ListFragment extends Fragment{
                     list.add(object);
                     RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
                     recyclerView.setAdapter(adapter);
-                   //Toast.makeText(root.getContext(),  object.getTime(), Toast.LENGTH_SHORT).show();
                 }
             }
 

@@ -6,30 +6,29 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 
-public class LoginActivity extends FragmentActivity{
+public class LoginActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     // 구글로그인 result 상수
     private static final int RC_SIGN_IN = 900;
@@ -42,10 +41,6 @@ public class LoginActivity extends FragmentActivity{
 
     // 구글  로그인 버튼
     private SignInButton buttonGoogle;
-
-    private FirebaseUser user;
-
-    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +83,10 @@ public class LoginActivity extends FragmentActivity{
                 // 구글 로그인 성공
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
             } catch (ApiException e) {
-
+                Toast.makeText(LoginActivity.this, "예외처리!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -100,7 +94,6 @@ public class LoginActivity extends FragmentActivity{
     // 사용자가 정상적으로 로그인한 후에 GoogleSignInAccount 개체에서 ID 토큰을 가져와서
 // Firebase 사용자 인증 정보로 교환하고 Firebase 사용자 인증 정보를 사용해 Firebase에 인증합니다.
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -108,12 +101,7 @@ public class LoginActivity extends FragmentActivity{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // 로그인 성공
-                            user = firebaseAuth.getCurrentUser();
                             Toast.makeText(LoginActivity.this, R.string.success_login, Toast.LENGTH_SHORT).show();
-                            //Firebase에 User Data 등록
-                            String cu = firebaseAuth.getUid();
-                            String name = user.getDisplayName();
-                            mDatabase.child("users").child(name+"_"+cu).setValue(null);
                         } else {
                             // 로그인 실패
                             Toast.makeText(LoginActivity.this, R.string.failed_login, Toast.LENGTH_SHORT).show();
@@ -141,4 +129,10 @@ public class LoginActivity extends FragmentActivity{
                 .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 .check();
     }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(LoginActivity.this, "Test", Toast.LENGTH_LONG).show();
+    }
 }
+
