@@ -105,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
 
@@ -134,8 +134,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-
+                android:inputType="phone"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
@@ -168,8 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
-
+                android:inputType="textEmailAddress"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor" />
 
@@ -199,7 +197,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:textSize="@dimen/recheck2_question1"
                 tools:ignore="LabelFor"
                 tools:targetApi="o" />
