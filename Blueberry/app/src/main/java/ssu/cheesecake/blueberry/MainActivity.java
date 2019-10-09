@@ -2,14 +2,18 @@ package ssu.cheesecake.blueberry;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
     NavController navController;
@@ -20,7 +24,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        androidx.fragment.app.Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
         MenuItem item;
         navView.setOnNavigationItemSelectedListener(
@@ -50,4 +54,16 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Fragment navHostFragment = getSupportFragmentManager().getFragments().get(0);
+        Fragment nowFragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
+        if(nowFragment != null){
+            if(nowFragment instanceof OnBackPressedListener){
+                ((OnBackPressedListener)nowFragment).onBackPressed();
+            }
+        }
+    }
+
 }
+

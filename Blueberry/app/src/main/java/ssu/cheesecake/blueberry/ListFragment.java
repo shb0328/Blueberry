@@ -1,68 +1,44 @@
 package ssu.cheesecake.blueberry;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
-import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserInfo;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 
-import ssu.cheesecake.blueberry.R;
 
-import static android.os.Build.ID;
-
-public class ListFragment extends Fragment{
+public class ListFragment extends Fragment implements OnBackPressedListener{
     BitmapDrawable bitmap;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
@@ -73,7 +49,12 @@ public class ListFragment extends Fragment{
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        int i = 0;
+
+        //Navigation Menu bar Icon 변경
+        Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
+        BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
+        Menu menu = navView.getMenu();
+        menu.getItem(0).setChecked(true);
 
         //MainActivity
         root = inflater.inflate(R.layout.fragment_list, container, false);
@@ -91,17 +72,18 @@ public class ListFragment extends Fragment{
 
         recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
+        final RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
         recyclerView.setAdapter(adapter);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Log.d("blueee", "onDataChange!!");
                 list = new ArrayList<>();
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     DataObject object = postSnapshot.getValue(DataObject.class);
                     list.add(object);
-                    RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
+                    adapter.setData(list);
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -124,6 +106,26 @@ public class ListFragment extends Fragment{
         return root;
     }
 
+    //back button 누를 시 App 종료
+    @Override
+    public void onBackPressed() {
+        Log.d("blueee", "List Fragment BackPressed!!");
+        final Activity root = this.getActivity();
+        new AlertDialog.Builder(root)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.dialog_exit_title)
+                .setMessage(R.string.dialog_exit_question)
+                .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        root.finish();
+                    }
+
+                })
+                .setNegativeButton(R.string.dialog_exit_no, null)
+                .show();
+    }
 }
 
 //RecyclerView Adapter Class
@@ -158,6 +160,8 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
     RecyclerViewAdapter(ArrayList<DataObject> list){
         mData = list;
     }
+
+    public void setData(ArrayList<DataObject> Data) { this.mData = Data; }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴
     @Override

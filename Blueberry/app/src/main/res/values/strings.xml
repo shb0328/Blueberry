@@ -43,6 +43,11 @@
     <string name="recheck2_company2">회사명을 확인하시오</string>
     <string name="recheck2_toPhone">SAVE</string>
 
+    <string name="dialog_exit_title">종료</string>
+    <string name="dialog_exit_question">종료하시겠습니까?</string>
+    <string name="dialog_exit_yes">예</string>
+    <string name="dialog_exit_no">아니오</string>
+
 
 
     <string-array name="recheck_name">

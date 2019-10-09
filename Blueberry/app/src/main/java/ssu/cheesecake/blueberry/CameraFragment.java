@@ -68,7 +68,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CameraFragment extends Fragment
-                            implements  View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
+                            implements  View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
 
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
     private static final String FRAGMENT_DIALOG = "dialog";
