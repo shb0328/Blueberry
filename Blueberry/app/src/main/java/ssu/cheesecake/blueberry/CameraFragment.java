@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
@@ -275,6 +276,7 @@ public class CameraFragment extends Fragment
     private File mFile;
     private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/";
     private String fileName = "blueberry_"+new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".jpg";
+
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
         @Override
@@ -690,7 +692,6 @@ public class CameraFragment extends Fragment
            }
 
 //           case R.id.cam2galleryButton: {
-//               //TODO: go to gallery();
 //               showToast("go to gallery");
 //               break;
 //           }
@@ -776,6 +777,12 @@ public class CameraFragment extends Fragment
                     showToast("Saved: " + mFile);
                     Log.d(TAG, mFile.toString());
                     unlockFocus();
+
+                    /**
+                     * 드디어!!!!!!!여기야!!!!!!!
+                     */
+                    Intent intent = new Intent(activity, ReCheck.class);
+                    startActivity(intent);
                 }
             };
 
