@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -85,6 +84,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 firebaseAuthWithGoogle(account);
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             } catch (ApiException e) {
                 Toast.makeText(LoginActivity.this, "예외처리!", Toast.LENGTH_SHORT).show();
             }
