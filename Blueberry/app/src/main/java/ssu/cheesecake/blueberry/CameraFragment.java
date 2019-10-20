@@ -69,15 +69,13 @@ import java.util.concurrent.TimeUnit;
 
 
 public class CameraFragment extends Fragment
-                            implements  View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback{
+        implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
     private static final String FRAGMENT_DIALOG = "dialog";
 
     /**
-     *
      * Constructor
-     *
      */
 
     public CameraFragment() {
@@ -98,13 +96,12 @@ public class CameraFragment extends Fragment
 //    }
 
     /**
-     *
      * fields
-     *
      */
 
     //Conversion from screen rotation to JPEG orientation.
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
         ORIENTATIONS.append(Surface.ROTATION_90, 0);
@@ -268,14 +265,13 @@ public class CameraFragment extends Fragment
     private Semaphore mCameraOpenCloseLock = new Semaphore(1);
 
     /**
-     *
-     *  File
-     *
+     * File
      */
 
     private File mFile;
-    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/";
-    private String fileName = "blueberry_"+new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+".jpg";
+//    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/blueberry/";
+    private  String path = Environment.getExternalStorageDirectory() + "/blueberry/";
+    private String fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
 
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
@@ -288,18 +284,11 @@ public class CameraFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(path,fileName);
-//        Date currentDateAndTime = new Date();
-//        SimpleDateFormat currentDateAndTimeFormat = new SimpleDateFormat("yyyyMMddhhmmss");
-//        mFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/"
-//                , "blueberry_"+currentDateAndTimeFormat.format(currentDateAndTime)+".jpg");
-
+        mFile = new File(path, fileName);
     }
 
     /**
-     *
      * Preview
-     *
      */
 
     @Override
@@ -311,9 +300,14 @@ public class CameraFragment extends Fragment
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-//        view.findViewById(R.id.cam2galleryButton).setOnClickListener(this);
-        view.findViewById(R.id.takePictureButton).setOnClickListener(this);
-//        view.findViewById(R.id.IdontThinkAboutThisUsageYet).setOnClickListener(this);
+        view.findViewById(R.id.takePictureButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToast("take a picture");
+                takePicture();
+            }
+        });
+
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.CameraTextureView);
 
         //draw rect
@@ -542,9 +536,7 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     *
      * camera
-     *
      */
 
     private void openCamera(int width, int height) {
@@ -631,9 +623,7 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     *
      * Thread
-     *
      */
 
     @Override
@@ -677,58 +667,7 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     *
-     * Button Event
-     *
-     */
-
-    @Override
-    public void onClick(View view) {
-       switch (view.getId()){
-           case R.id.takePictureButton: {
-               showToast("take a picture");
-               takePicture();
-               break;
-           }
-
-//           case R.id.cam2galleryButton: {
-//               showToast("go to gallery");
-//               break;
-//           }
-//
-//           case R.id.IdontThinkAboutThisUsageYet: {
-//               showToast("i don't think about this usage ,,, yet");
-//               break;
-//           }
-       }
-    }
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
-//
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
-
-    /**
-     *
      * This method should be called when we get a response in mCaptureCallback from lockFocus()
-     *
      */
 
     //Run the precapture sequence for capturing a still image.
@@ -781,7 +720,9 @@ public class CameraFragment extends Fragment
                     /**
                      * 드디어!!!!!!!여기야!!!!!!!
                      */
-                    Intent intent = new Intent(activity, ReCheck.class);
+                    Intent intent = new Intent(activity, EditPhotoActivity.class);
+                    intent.putExtra("path",path);
+                    intent.putExtra("fileName",fileName);
                     startActivity(intent);
                 }
             };
@@ -795,9 +736,7 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     *
      * Function
-     *
      */
 
     private void showToast(final String text) {
@@ -851,9 +790,9 @@ public class CameraFragment extends Fragment
     }
 
 
-     //Retrieves the JPEG orientation from the specified screen rotation.
-     //@param rotation The screen rotation.
-     //@return The JPEG orientation (one of 0, 90, 270, and 360)
+    //Retrieves the JPEG orientation from the specified screen rotation.
+    //@param rotation The screen rotation.
+    //@return The JPEG orientation (one of 0, 90, 270, and 360)
     private int getOrientation(int rotation) {
         // Sensor orientation is 90 for most devices, or 270 for some devices (eg. Nexus 5X)
         // We have to take that into account and rotate JPEG properly.
@@ -863,9 +802,7 @@ public class CameraFragment extends Fragment
     }
 
     /**
-     *
      * Class
-     *
      */
 
     //thread to save image into gallery
@@ -946,59 +883,4 @@ public class CameraFragment extends Fragment
 
     }
 
-    //Shows OK/Cancel confirmation dialog about camera permission.
-//    public static class ConfirmationDialog extends DialogFragment {
-//
-//        @NonNull
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            final Fragment parent = getParentFragment();
-//            return new AlertDialog.Builder(getActivity())
-//                    .setMessage(R.string.request_camera_permission)
-//                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            parent.requestPermissions(new String[]{Manifest.permission.CAMERA},
-//                                    REQUEST_CAMERA_PERMISSION);
-//                        }
-//                    })
-//                    .setNegativeButton(android.R.string.cancel,
-//                            new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialog, int which) {
-//                                    Activity activity = parent.getActivity();
-//                                    if (activity != null) {
-//                                        activity.finish();
-//                                    }
-//                                }
-//                            })
-//                    .create();
-//        }
-//    }
-
-//    class DrawOn extends View{ // 사각형 그리기
-//
-//        public DrawOn(Context context){
-//            super(context);
-//        }
-//
-//        @Override
-//        protected void onDraw(Canvas canvas) {
-//            super.onDraw(canvas);
-//
-//            Paint pt = new Paint();
-//            pt.setColor(Color.GREEN);
-//            pt.setStrokeWidth(5);
-//
-//            canvas.drawLine(100,350,100,400, pt);
-//            canvas.drawLine(100,350,200,350, pt);
-//            canvas.drawLine(520,350,620,350, pt);
-//            canvas.drawLine(620,350,620,400, pt);
-//            canvas.drawLine(100,600,100,650, pt);
-//            canvas.drawLine(100,650,200,650, pt);
-//            canvas.drawLine(520,650,620,650, pt);
-//            canvas.drawLine(620,650,620,600, pt);
-//
-//        }
-//    }
 }
