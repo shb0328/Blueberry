@@ -1,11 +1,8 @@
 package ssu.cheesecake.blueberry;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -14,11 +11,10 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
@@ -26,6 +22,7 @@ import me.pqpo.smartcropperlib.view.CropImageView;
 public class EditPhotoActivity extends AppCompatActivity {
 
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
+    private static final int REQUEST_CODE = 1020;
 
     private String path;
     private String fileName;
@@ -38,13 +35,16 @@ public class EditPhotoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent cameraIntent = new Intent(this, CameraActivity.class);
+        startActivityForResult(cameraIntent,REQUEST_CODE);
+        
         setContentView(R.layout.activity_crop);
         SmartCropper.buildImageDetector(this);
 
-        Intent intent = getIntent();
-        path = intent.getExtras().getString("path");
-        fileName = intent.getExtras().getString("fileName");
-        mFile = new File(path,fileName+"_edit");
+//        Intent receivedIntent = getIntent();
+//        path = receivedIntent.getExtras().getString("path");
+//        fileName = receivedIntent.getExtras().getString("fileName");
+//        mFile = new File(path,fileName+"_edit");
 
         cropImageView = (CropImageView) findViewById(R.id.iv_crop);
 
@@ -64,8 +64,8 @@ public class EditPhotoActivity extends AppCompatActivity {
                     Bitmap crop = cropImageView.crop();
                     if (crop != null) {
                         saveImage(crop, mFile);
-                        Intent intent1 = new Intent(EditPhotoActivity.this,ReCheck.class);
-                        startActivity(intent1);
+                        Intent intent = new Intent(EditPhotoActivity.this,ReCheck.class);
+                        startActivity(intent);
                     } else {
                         Log.d(TAG,"Bitmap crop is null...");
                     }
@@ -89,6 +89,18 @@ public class EditPhotoActivity extends AppCompatActivity {
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
+
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+//        Intent receivedIntent = getIntent();
+        path = data.getExtras().getString("path");
+        fileName = data.getExtras().getString("fileName");
+        mFile = new File(path,fileName+"_edit");
 
         Bitmap selectedBitmap = null;
         selectedBitmap = BitmapFactory.decodeFile(path+fileName);

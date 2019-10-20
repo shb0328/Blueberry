@@ -723,7 +723,10 @@ public class CameraFragment extends Fragment
                     Intent intent = new Intent(activity, EditPhotoActivity.class);
                     intent.putExtra("path",path);
                     intent.putExtra("fileName",fileName);
-                    startActivity(intent);
+//                    startActivity(intent);
+                    activity.setResult(1020,intent);
+                    activity.finish();
+
                 }
             };
 
