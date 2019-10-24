@@ -12,11 +12,9 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
-import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraCaptureSession;
@@ -74,6 +72,8 @@ public class CameraFragment extends Fragment
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
     private static final String FRAGMENT_DIALOG = "dialog";
 
+    Activity activity;
+
     /**
      * Constructor
      */
@@ -86,14 +86,11 @@ public class CameraFragment extends Fragment
         return new CameraFragment();
     }
 
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = getActivity();
+    }
 
     /**
      * fields
@@ -268,24 +265,32 @@ public class CameraFragment extends Fragment
      * File
      */
 
-    private File mFile;
+    private File dir;
 //    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/blueberry/";
-    private  String path = Environment.getExternalStorageDirectory() + "/blueberry/";
+    private  String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/";
+
     private String fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
 
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), new File(dir,fileName)));
         }
     };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(path, fileName);
+        dir = new File(path);
+        if(!dir.exists()){
+            dir.mkdir();
+        }
+        dir.setWritable(true);
+        Log.i(TAG,"dir.getAbsolutePath() : "+dir.getAbsolutePath());
+        Log.i(TAG,"dir.getPath() : "+dir.getPath());
     }
+
 
     /**
      * Preview
@@ -713,8 +718,8 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + mFile);
-                    Log.d(TAG, mFile.toString());
+                    showToast("Saved: " + dir+fileName);
+                    Log.d(TAG, "Saved: " +dir.toString());
                     unlockFocus();
 
                     /**
