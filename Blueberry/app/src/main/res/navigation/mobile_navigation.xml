@@ -16,6 +16,11 @@
         android:label="@string/title_gallery"
         tools:layout="@layout/fragment_gallery" />
     <fragment
+        android:id="@+id/fragment_create"
+        android:name="ssu.cheesecake.blueberry.CreateFragment"
+        android:label="@string/title_create"
+        tools:layout="@layout/fragment_create" />
+    <fragment
         android:id="@+id/fragment_option"
         android:name="ssu.cheesecake.blueberry.OptionFragment"
         android:label="@string/title_option"

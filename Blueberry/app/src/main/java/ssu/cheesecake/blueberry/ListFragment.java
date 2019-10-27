@@ -23,6 +23,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -155,6 +157,9 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 startActivity(intent);
                 break;
             case R.id.fab_gallery:
+                Fragment navHostFragment = this.getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = Navigation.findNavController(this.getActivity().findViewById(R.id.nav_host_fragment));
+                navController.navigate(R.id.fragment_gallery);
                 anim();
                 break;
         }
@@ -163,12 +168,14 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
 
     public void anim(){
         if (isFabOpen) {
+            fab_add.setImageResource(R.drawable.icon_add_simple);
             fab_camera.startAnimation(fab_close);
             fab_gallery.startAnimation(fab_close);
             fab_camera.setClickable(false);
             fab_gallery.setClickable(false);
             isFabOpen = false;
         } else {
+            fab_add.setImageResource(R.drawable.icon_close_simple);
             fab_camera.startAnimation(fab_open);
             fab_gallery.startAnimation(fab_open);
             fab_camera.setClickable(true);

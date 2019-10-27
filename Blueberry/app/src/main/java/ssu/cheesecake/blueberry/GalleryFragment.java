@@ -40,7 +40,7 @@ public class GalleryFragment extends Fragment implements OnBackPressedListener{
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
         BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
         Menu menu = navView.getMenu();
-        menu.getItem(2).setChecked(true);
+        menu.getItem(0).setChecked(true);
         return root;
     }
 
