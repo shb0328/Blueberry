@@ -13,9 +13,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -27,6 +30,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -37,19 +41,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-
-public class ListFragment extends Fragment implements OnBackPressedListener{
+public class ListFragment extends Fragment implements OnBackPressedListener, View.OnClickListener{
     BitmapDrawable bitmap;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
     private DatabaseReference myRef;
-    RecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private ArrayList<DataObject> list = new ArrayList<DataObject>();
-    View root;
 
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    private Animation fab_open, fab_close;
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab_add, fab_camera, fab_gallery;
+    private View root;
 
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //Navigation Menu bar Icon 변경
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
         BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
@@ -78,7 +83,6 @@ public class ListFragment extends Fragment implements OnBackPressedListener{
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Log.d("blueee", "onDataChange!!");
                 list = new ArrayList<>();
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                     DataObject object = postSnapshot.getValue(DataObject.class);
@@ -103,6 +107,17 @@ public class ListFragment extends Fragment implements OnBackPressedListener{
             }
         });
 
+        //Floating Action Button
+        fab_open = AnimationUtils.loadAnimation(this.getContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(this.getContext(), R.anim.fab_close);
+
+        fab_add = root.findViewById(R.id.fab_add);
+        fab_camera = root.findViewById(R.id.fab_camera);
+        fab_gallery = root.findViewById(R.id.fab_gallery);
+        fab_add.setOnClickListener(this);
+        fab_camera.setOnClickListener(this);
+        fab_gallery.setOnClickListener(this);
+
         return root;
     }
 
@@ -126,7 +141,45 @@ public class ListFragment extends Fragment implements OnBackPressedListener{
                 .setNegativeButton(R.string.dialog_exit_no, null)
                 .show();
     }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.fab_add:
+                anim();
+                break;
+            case R.id.fab_camera:
+                anim();
+                Intent intent = new Intent(this.getActivity(), CameraActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.fab_gallery:
+                anim();
+                break;
+        }
+        Toast.makeText(this.getActivity(), "Hello!", Toast.LENGTH_LONG);
+    }
+
+    public void anim(){
+        if (isFabOpen) {
+            fab_camera.startAnimation(fab_close);
+            fab_gallery.startAnimation(fab_close);
+            fab_camera.setClickable(false);
+            fab_gallery.setClickable(false);
+            isFabOpen = false;
+        } else {
+            fab_camera.startAnimation(fab_open);
+            fab_gallery.startAnimation(fab_open);
+            fab_camera.setClickable(true);
+            fab_gallery.setClickable(true);
+            isFabOpen = true;
+        }
+    }
+
 }
+
+
 
 //RecyclerView Adapter Class
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
