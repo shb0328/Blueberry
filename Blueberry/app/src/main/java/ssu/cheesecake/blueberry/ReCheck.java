@@ -21,24 +21,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
 
 public class ReCheck extends AppCompatActivity {
-    private File cameraFile;
-    private File galleryFile;
-    private File file;
+    private String imagePath;
     private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("blueee", "ReCheck!");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_re_check);
 
         Intent intent = getIntent();
-        String imagePath = intent.getExtras().getString("imagePath");
-        Log.d("blueee", imagePath);
+        imagePath = intent.getExtras().getString("imagePath");
         File imageFile = new File(imagePath);
-        Log.d("blueee", imageFile.toString());
-        //Uri photoUri = intent.getParcelableExtra("imageUri");
-        //Log.d("blueee", photoUri.toString());
+
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
         imageView = findViewById(R.id.business_card);
@@ -114,6 +108,7 @@ public class ReCheck extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toConfirm_intent = new Intent(ReCheck.this, ReCheck2.class);
+                toConfirm_intent.putExtra("imagePath", imagePath);
                 toConfirm_intent.putExtra("selectedValue1", spinner_1.getSelectedItem().toString());
                 toConfirm_intent.putExtra("selectedValue2", spinner_2.getSelectedItem().toString());
                 toConfirm_intent.putExtra("selectedValue3", spinner_3.getSelectedItem().toString());
@@ -123,17 +118,6 @@ public class ReCheck extends AppCompatActivity {
             }
 
         });
-
-        //image 파일하고 값 받는 함수도 만들어야한다
-        //cameraFile = (File)this.getIntent().getSerializableExtra("CameraFile");
-        /*
-        byte[] arr = getIntent().getByteArrayExtra("image");
-        Bitmap image = BitmapFactory.decodeByteArray(arr, 0, arr.length);
-
-
-        imageView = this.findViewById(R.id.business_card);
-        imageView.setImageBitmap(image);
-         */
 
     }
 }

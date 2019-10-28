@@ -1,13 +1,23 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ReCheck2 extends AppCompatActivity {
+import java.io.File;
+
+public class ReCheck2 extends AppCompatActivity implements View.OnClickListener{
+    private static String imagePath;
+    private static File imageFile;
+    private static ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +25,12 @@ public class ReCheck2 extends AppCompatActivity {
         setContentView(R.layout.activity_re_check2);
 
         Intent fromConfirm_intent=getIntent();
+        imagePath = fromConfirm_intent.getExtras().getString("imagePath");
+        imageFile = new File(imagePath);
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+        imageView = findViewById(R.id.business_card_confirm);
+        imageView.setImageBitmap(bitmap);
 
         String selectedValue1=fromConfirm_intent.getExtras().getString("selectedValue1");//null값 설정 나중에 다시 해주기
         EditText editText1=findViewById(R.id.name_confirm);
@@ -51,7 +67,14 @@ public class ReCheck2 extends AppCompatActivity {
         TextView company_confirm2 = findViewById(R.id.company_confirm2);
         company_confirm2.setText(getResources().getString(R.string.recheck2_company2));
 
+        Button saveBtn = findViewById(R.id.ToThePhone);
+        saveBtn.setOnClickListener(this);
+
     }
 
 
+    @Override
+    public void onClick(View v) {
+        finish();
+    }
 }

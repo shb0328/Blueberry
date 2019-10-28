@@ -4,10 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,8 +27,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,10 +45,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import static android.app.Activity.RESULT_CANCELED;
+
 public class ListFragment extends Fragment implements OnBackPressedListener, View.OnClickListener{
-    BitmapDrawable bitmap;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser user;
     private DatabaseReference myRef;
     private RecyclerView recyclerView;
     private ArrayList<DataObject> list = new ArrayList<DataObject>();
@@ -54,6 +55,10 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab_add, fab_camera, fab_gallery;
+
+    private static final int PICK_FROM_ALBUM = 1;
+    private static File tempFile;
+
     private View root;
 
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +82,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
         String path = user.getDisplayName() + "_" + user.getUid();
         myRef = FirebaseDatabase.getInstance().getReference().child("users").child(path);
 
-        recyclerView = (RecyclerView)root.findViewById(R.id.recyclerView);
+        recyclerView = root.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         final RecyclerViewAdapter adapter = new RecyclerViewAdapter(list);
         recyclerView.setAdapter(adapter);
@@ -144,6 +149,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 .show();
     }
 
+    //Fab Button Click Listener
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -157,15 +163,14 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 startActivity(intent);
                 break;
             case R.id.fab_gallery:
-                Fragment navHostFragment = this.getActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController navController = Navigation.findNavController(this.getActivity().findViewById(R.id.nav_host_fragment));
-                navController.navigate(R.id.fragment_gallery);
+                goToGallery();
                 anim();
                 break;
         }
         Toast.makeText(this.getActivity(), "Hello!", Toast.LENGTH_LONG);
     }
 
+    //Fab Button Animation
     public void anim(){
         if (isFabOpen) {
             fab_add.setImageResource(R.drawable.icon_add_simple);
@@ -181,6 +186,45 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
             fab_camera.setClickable(true);
             fab_gallery.setClickable(true);
             isFabOpen = true;
+        }
+    }
+
+    //Gallery로 이동
+    private void goToGallery(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
+
+    //Gallery 이동 후 작업 (goToGallery에서 호출한 startActivityForResult에서  onActivityResult를 호출함)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_CANCELED)
+            return;
+        if (requestCode == PICK_FROM_ALBUM) {
+            Uri photoUri = data.getData();
+            Cursor cursor = null;
+            try {
+                 // Uri 스키마를 content:/// 에서 file:/// 로  변경한다.
+                String[] proj = {MediaStore.Images.Media.DATA};
+                cursor = this.getActivity().getContentResolver().query(photoUri, proj, null, null, null);
+                assert cursor != null;
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+
+                String imagePath = cursor.getString(column_index);
+                tempFile = new File(imagePath);
+
+                Intent intent = new Intent(this.getActivity(), ReCheck.class);
+                intent.putExtra("imagePath", imagePath);
+                startActivity(intent);
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+
         }
     }
 
