@@ -58,14 +58,14 @@
 
         <ImageView
             android:id="@+id/business_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_margin="4dp"
+            android:background="@drawable/borderimage"
             android:adjustViewBounds="true"
             android:contentDescription="@string/imageFile"
-            android:src="@drawable/testcard"
-            android:background="@drawable/borderimage"
             />
+
 
     </LinearLayout>
 

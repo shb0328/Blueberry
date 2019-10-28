@@ -16,10 +16,10 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import ssu.cheesecake.blueberry.R;
@@ -30,21 +30,28 @@ public class GalleryFragment extends Fragment implements OnBackPressedListener{
     public File tempFile;
     private static final int REQUEST_CODE = 0;
     private static final int PICK_FROM_ALBUM = 1;
+    private static Fragment navHostFragment;
+    private static BottomNavigationView navView;
+    private static Menu menu;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_gallery, container, false);
-        goToAlbum();
-
         //Navigation Menu bar Icon 변경
-        Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
-        BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
-        Menu menu = navView.getMenu();
+        navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
+        navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
+        menu = navView.getMenu();
         menu.getItem(0).setChecked(true);
+
+        //Gallery 실행
+        goToGallery();
+        //Navigation Menu Stack에서 GalleryFragment를 Pop함
+        //Gallery에서 Back Button으로 앱으로 되돌아올 시 ListFragment 출력하기 위함
+        //navHostFragment.getChildFragmentManager().popBackStack();
         return root;
     }
 
-    private void goToAlbum(){
+    private void goToGallery(){
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
@@ -76,7 +83,13 @@ public class GalleryFragment extends Fragment implements OnBackPressedListener{
 
                 cursor.moveToFirst();
 
-                tempFile = new File(cursor.getString(column_index));
+                String imagePath = cursor.getString(column_index);
+
+                tempFile = new File(imagePath);
+
+                Intent intent = new Intent(this.getActivity(), ReCheck.class);
+                intent.putExtra("imagePath", imagePath);
+                startActivity(intent);
 
             } finally {
                 if (cursor != null) {
