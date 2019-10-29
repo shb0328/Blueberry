@@ -3,9 +3,12 @@ package ssu.cheesecake.blueberry;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 public class CameraActivity extends AppCompatActivity {
+
+    private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +23,11 @@ public class CameraActivity extends AppCompatActivity {
                     .commit();
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG,"CameraActivity onStop!!!");
     }
 }

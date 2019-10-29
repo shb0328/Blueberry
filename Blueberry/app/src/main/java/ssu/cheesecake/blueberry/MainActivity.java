@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity{
                                 navController.navigate(R.id.fragment_list);
                                 break;
                             case R.id.navigation_button_camera:
-                                Intent intent = new Intent(MainActivity.this, CameraActivity.class);
+                                Intent intent = new Intent(MainActivity.this, EditPhotoActivity.class);
                                 startActivity(intent);
                                 break;
                             case R.id.navigation_button_gallery:
