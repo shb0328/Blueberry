@@ -159,7 +159,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 break;
             case R.id.fab_camera:
                 anim();
-                Intent intent = new Intent(this.getActivity(), CameraActivity.class);
+                Intent intent = new Intent(this.getActivity(), EditPhotoActivity.class);
                 startActivity(intent);
                 break;
             case R.id.fab_gallery:
