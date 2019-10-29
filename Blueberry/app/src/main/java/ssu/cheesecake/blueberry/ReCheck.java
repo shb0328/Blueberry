@@ -1,23 +1,43 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+
 public class ReCheck extends AppCompatActivity {
+    private String imagePath;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_re_check);
 
-        //image 파일하고 값 받는 함수도 만들어야한다
+        Intent intent = getIntent();
+        imagePath = intent.getExtras().getString("imagePath");
+        File imageFile = new File(imagePath);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+        imageView = findViewById(R.id.business_card);
+        imageView.setImageBitmap(bitmap);
+
 
         final Spinner spinner_1 = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.recheck_name, android.R.layout.simple_spinner_item);
@@ -88,6 +108,7 @@ public class ReCheck extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent toConfirm_intent = new Intent(ReCheck.this, ReCheck2.class);
+                toConfirm_intent.putExtra("imagePath", imagePath);
                 toConfirm_intent.putExtra("selectedValue1", spinner_1.getSelectedItem().toString());
                 toConfirm_intent.putExtra("selectedValue2", spinner_2.getSelectedItem().toString());
                 toConfirm_intent.putExtra("selectedValue3", spinner_3.getSelectedItem().toString());
@@ -97,5 +118,6 @@ public class ReCheck extends AppCompatActivity {
             }
 
         });
+
     }
 }

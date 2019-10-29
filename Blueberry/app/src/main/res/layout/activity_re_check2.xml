@@ -70,7 +70,7 @@
             android:contentDescription="@string/imageFile"
             android:maxHeight="263dp"
             android:background="@drawable/borderimage"
-            android:src="@drawable/testcard" />
+            />
 
     </LinearLayout>
 
