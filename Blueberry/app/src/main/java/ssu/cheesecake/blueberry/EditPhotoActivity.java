@@ -107,6 +107,8 @@ public class EditPhotoActivity extends AppCompatActivity {
 
         if (selectedBitmap != null) {
             cropImageView.setImageToCrop(selectedBitmap);
+        }else{
+            Log.i(TAG,"EditPhotoActivity - onActivityResult - selectedBitmap is null");
         }
 
     }
