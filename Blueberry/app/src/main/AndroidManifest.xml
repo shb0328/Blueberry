@@ -30,12 +30,11 @@
             />
         <activity android:name=".CameraActivity"
             android:screenOrientation="portrait" />
+
         <activity android:name=".ReCheck"
             android:screenOrientation="portrait"
             android:exported="true"/>
-        <activity android:name=".ReCheck2"
-            android:screenOrientation="portrait"
-            android:exported="true"/>
+
         <activity android:name=".EditPhotoActivity"
             android:screenOrientation="portrait"/>
 

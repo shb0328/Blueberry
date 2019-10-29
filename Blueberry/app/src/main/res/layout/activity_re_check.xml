@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nanumsquare"
-            android:text="@string/recheck_title"
+            android:text="@string/recheck2_title"
             android:textSize="25sp"
             android:textColor="@color/colorWhite"
             android:layout_marginStart="5dp"
@@ -37,8 +37,8 @@
             android:textColor="@color/colorWhite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/recheck_guiding"
-            android:textSize="12sp"
+            android:text="@string/recheck2_guiding"
+            android:textSize="11sp"
             android:layout_marginStart="5dp"
             />
 
@@ -63,22 +63,33 @@
             android:layout_margin="4dp"
             android:background="@drawable/borderimage"
             android:adjustViewBounds="true"
-            android:contentDescription="@string/imageFile"
             />
 
 
     </LinearLayout>
 
-    <GridLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@drawable/borderselection"
-        android:columnCount="2"
-        android:rowCount="4"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textView1"
@@ -95,16 +106,38 @@
                 android:id="@+id/spinner1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20sp"
                 android:entries="@array/recheck_name"
                 />
+            </LinearLayout>
 
 
+            <EditText
+                android:id="@+id/name_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:textSize="@dimen/recheck2_question1"
+                android:hint="선택한 이름 수정"
+                />
+
+</LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
 
 
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="vertical">
+        <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -120,10 +153,35 @@
                 android:layout_height="wrap_content"
                 android:entries="@array/recheck_phone"
                 />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/phone_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="phone"
+                android:textSize="@dimen/recheck2_question1"
+                android:hint="선택한 번호 수정"
+               />
+
+        </LinearLayout>
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
 
-            <TextView
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="vertical">
+
+        <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,7 +199,35 @@
                 android:entries="@array/recheck_company"
                 />
 
-            <TextView
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/company_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textCapWords"
+                android:textSize="@dimen/recheck2_question1"
+                android:hint="선택한 회사 수정"
+                />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:baselineAligned="true"
+                android:orientation="vertical">
+
+        <TextView
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -158,11 +244,23 @@
                 android:entries="@array/recheck_address"
                 />
 
+            </LinearLayout>
 
 
+            <EditText
+                android:id="@+id/mail_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:importantForAutofill="no"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/recheck2_question1"
+                android:hint="선택한 이메일 수정"
+                 />
+
+</LinearLayout>
 
 
-    </GridLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
