@@ -40,7 +40,7 @@ public class SmartCropActivity extends AppCompatActivity {
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivityForResult(cameraIntent,REQUEST_CODE);
         
-        setContentView(R.layout.cropImageView);
+        setContentView(R.layout.activity_smartcrop);
         SmartCropper.buildImageDetector(this);
 
 //        Intent receivedIntent = getIntent();
