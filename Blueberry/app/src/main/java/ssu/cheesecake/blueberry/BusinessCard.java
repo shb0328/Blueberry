@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Calendar;
 
-public class DataObject {
+public class BusinessCard {
     public String id;
     public String enName;
     public String krName;
@@ -21,10 +21,10 @@ public class DataObject {
     public String imageUrl;
     public String path;
 
-    public DataObject(){
+    public BusinessCard(){
     }
 
-    public DataObject(String enName, String krName, String phoneNumber, String email, String company, String imageUrl){
+    public BusinessCard(String enName, String krName, String phoneNumber, String email, String company, String imageUrl){
         this.enName = enName;
         this.krName = krName;
         this.phoneNumber = phoneNumber;
@@ -37,20 +37,20 @@ public class DataObject {
         makeTImeString();
     }
 
-    String getEnName() {return enName;}
-    String getKrName() { return krName;}
-    String getPhoneNumber() { return phoneNumber;}
-    String getEmail(){return email;}
-    String getCompany(){return company;}
-    String getTime(){return time;}
-    String getImageUrl(){return imageUrl;}
-    String getPath(){return path;}
+    public String getEnName() {return enName;}
+    public String getKrName() { return krName;}
+    public String getPhoneNumber() { return phoneNumber;}
+    public String getEmail(){return email;}
+    public String getCompany(){return company;}
+    public String getTime(){return time;}
+    public String getImageUrl(){return imageUrl;}
+    public String getPath(){return path;}
 
-    void putEnName(String str){this.enName = str;}
-    void putKrName(String str){this.krName = str;}
-    void putPhoneNumber(String str) {this.phoneNumber = str;}
-    void putEmail(String str) {this.email = email;}
-    void putCompany(String str){this.company = company;}
+    public void putEnName(String str){this.enName = str;}
+    public void putKrName(String str){this.krName = str;}
+    public void putPhoneNumber(String str) {this.phoneNumber = str;}
+    public void putEmail(String str) {this.email = email;}
+    public void putCompany(String str){this.company = company;}
 
     public void makeTImeString(){
         Calendar c = Calendar.getInstance();

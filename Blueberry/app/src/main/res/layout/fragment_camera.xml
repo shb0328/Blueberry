@@ -17,7 +17,7 @@
         android:layout_below="@+id/camera_menu_bar"/>
         -->
 
-    <ssu.cheesecake.blueberry.AutoFitTextureView
+    <ssu.cheesecake.blueberry.camera.AutoFitTextureView
         android:id="@+id/CameraTextureView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

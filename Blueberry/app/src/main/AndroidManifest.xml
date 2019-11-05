@@ -23,19 +23,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".menu.MainActivity"
             android:exported="true"
             android:label="@string/title_activity_option"
             android:screenOrientation="portrait"
             />
-        <activity android:name=".CameraActivity"
+        <activity android:name=".camera.CameraActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".ReCheck"
+        <activity android:name=".EditActivity"
             android:screenOrientation="portrait"
             android:exported="true"/>
 
-        <activity android:name=".EditPhotoActivity"
+        <activity android:name=".camera.SmartCropActivity"
             android:screenOrientation="portrait"/>
 
         <meta-data

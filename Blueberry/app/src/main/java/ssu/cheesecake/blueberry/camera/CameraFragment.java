@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.camera;
 
 import android.Manifest;
 import android.app.Activity;
@@ -35,6 +35,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import ssu.cheesecake.blueberry.R;
 
 import android.os.Environment;
 import android.os.Handler;
@@ -725,7 +726,7 @@ public class CameraFragment extends Fragment
                     /**
                      * 드디어!!!!!!!여기야!!!!!!!
                      */
-                    Intent intent = new Intent(activity, EditPhotoActivity.class);
+                    Intent intent = new Intent(activity, SmartCropActivity.class);
                     intent.putExtra("path",path);
                     intent.putExtra("fileName",fileName);
 //                    startActivity(intent);

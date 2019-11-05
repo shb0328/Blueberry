@@ -1,13 +1,10 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.menu;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -29,6 +26,11 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import ssu.cheesecake.blueberry.BusinessCard;
+import ssu.cheesecake.blueberry.EditActivity;
+import ssu.cheesecake.blueberry.OnBackPressedListener;
+import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.camera.SmartCropActivity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ import static android.app.Activity.RESULT_CANCELED;
 public class ListFragment extends Fragment implements OnBackPressedListener, View.OnClickListener{
     private DatabaseReference myRef;
     private RecyclerView recyclerView;
-    private ArrayList<DataObject> list = new ArrayList<DataObject>();
+    private ArrayList<BusinessCard> list = new ArrayList<BusinessCard>();
 
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
@@ -92,7 +94,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 list = new ArrayList<>();
                 for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-                    DataObject object = postSnapshot.getValue(DataObject.class);
+                    BusinessCard object = postSnapshot.getValue(BusinessCard.class);
                     list.add(object);
                     adapter.setData(list);
                     recyclerView.setAdapter(adapter);
@@ -109,7 +111,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
         addBtn.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
-                DataObject object = new DataObject("EnName", "한글이름", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
+                BusinessCard object = new BusinessCard("EnName", "한글이름", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
                 object.postFirebaseDatabase();
             }
         });
@@ -159,7 +161,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 break;
             case R.id.fab_camera:
                 anim();
-                Intent intent = new Intent(this.getActivity(), EditPhotoActivity.class);
+                Intent intent = new Intent(this.getActivity(), SmartCropActivity.class);
                 startActivity(intent);
                 break;
             case R.id.fab_gallery:
@@ -215,7 +217,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
                 String imagePath = cursor.getString(column_index);
                 tempFile = new File(imagePath);
 
-                Intent intent = new Intent(this.getActivity(), ReCheck.class);
+                Intent intent = new Intent(this.getActivity(), EditActivity.class);
                 intent.putExtra("imagePath", imagePath);
                 startActivity(intent);
 
@@ -235,7 +237,7 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
 //RecyclerView Adapter Class
 class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
 
-    private ArrayList<DataObject> mData = null;
+    private ArrayList<BusinessCard> mData = null;
 
     //RecyclerView Adapter Class 내에서 ViewHolder Class 선언
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -261,11 +263,11 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
         }
     }
 
-    RecyclerViewAdapter(ArrayList<DataObject> list){
+    RecyclerViewAdapter(ArrayList<BusinessCard> list){
         mData = list;
     }
 
-    public void setData(ArrayList<DataObject> Data) { this.mData = Data; }
+    public void setData(ArrayList<BusinessCard> Data) { this.mData = Data; }
 
     // onCreateViewHolder() - 아이템 뷰를 위한 뷰홀더 객체 생성하여 리턴
     @Override
@@ -284,7 +286,7 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
     public void onBindViewHolder(final RecyclerViewAdapter.ViewHolder holder, int position) {
         FirebaseStorage storage = FirebaseStorage.getInstance("gs://blueberry-cheesecake-ssu.appspot.com/");
         StorageReference storageRef = storage.getReference();
-        DataObject object = mData.get(position);
+        BusinessCard object = mData.get(position);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         //String path = user.getDisplayName() + "_" + user.getUid();

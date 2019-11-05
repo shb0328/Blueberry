@@ -8,21 +8,15 @@
         android:icon="@drawable/icon_list"
         android:title="@string/title_list" />
 
-    <!--
     <item
-        android:id="@+id/navigation_button_camera"
-        android:icon="@drawable/icon_camera"
-        android:title="@string/title_camera" />
+        android:id="@+id/navigation_button_group"
+        android:icon="@drawable/icon_gallery"
+        android:title="@string/title_group" />
 
     <item
-        android:id="@+id/navigation_button_gallery"
-        android:icon="@drawable/icon_gallery"
-        android:title="@string/title_gallery" />
-    -->
-    <item
-        android:id="@+id/navigation_button_create"
+        android:id="@+id/navigation_button_favorite"
         android:icon="@drawable/icon_add"
-        android:title="Create" />
+        android:title="@string/title_favorite" />
 
     <item
         android:id="@+id/navigation_button_option"

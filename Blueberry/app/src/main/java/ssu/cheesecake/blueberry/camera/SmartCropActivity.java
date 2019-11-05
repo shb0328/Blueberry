@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.camera;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,8 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
+import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.EditActivity;
 
-public class EditPhotoActivity extends AppCompatActivity {
+public class SmartCropActivity extends AppCompatActivity {
 
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
     private static final int REQUEST_CODE = 1020;
@@ -38,7 +40,7 @@ public class EditPhotoActivity extends AppCompatActivity {
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivityForResult(cameraIntent,REQUEST_CODE);
         
-        setContentView(R.layout.activity_crop);
+        setContentView(R.layout.cropImageView);
         SmartCropper.buildImageDetector(this);
 
 //        Intent receivedIntent = getIntent();
@@ -64,14 +66,14 @@ public class EditPhotoActivity extends AppCompatActivity {
                     Bitmap crop = cropImageView.crop();
                     if (crop != null) {
                         saveImage(crop, mFile);
-                        Intent intent = new Intent(EditPhotoActivity.this,ReCheck.class);
+                        Intent intent = new Intent(SmartCropActivity.this, EditActivity.class);
                         startActivity(intent);
                     } else {
                         Log.d(TAG,"Bitmap crop is null...");
                     }
                     finish();
                 } else {
-                    Toast.makeText(EditPhotoActivity.this, "cannot crop correctly", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SmartCropActivity.this, "cannot crop correctly", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -108,7 +110,7 @@ public class EditPhotoActivity extends AppCompatActivity {
         if (selectedBitmap != null) {
             cropImageView.setImageToCrop(selectedBitmap);
         }else{
-            Log.i(TAG,"EditPhotoActivity - onActivityResult - selectedBitmap is null");
+            Log.i(TAG,"SmartCropActivity - onActivityResult - selectedBitmap is null");
         }
 
     }

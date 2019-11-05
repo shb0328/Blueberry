@@ -18,8 +18,8 @@
     <string name="title_activity_option">OptionActivity</string>
     <string name="title_list">List</string>
     <string name="title_camera">Camera</string>
-    <string name="title_gallery">Gallery</string>
-    <string name="title_create">Create</string>
+    <string name="title_group">Group</string>
+    <string name="title_favorite">Favorite</string>
     <string name="title_option">Option</string>
     <string name="image01">image01</string>
     <string name="information">BlueBerry ver0.1\n\nMade by CheeseCake\nshb0328\t소혜빈\nzzarbttoo\t배유진\ncpuman7\t김한수\n"</string>

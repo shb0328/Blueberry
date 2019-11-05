@@ -1,6 +1,7 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.camera;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ssu.cheesecake.blueberry.R;
 
 import android.os.Bundle;
 import android.util.Log;

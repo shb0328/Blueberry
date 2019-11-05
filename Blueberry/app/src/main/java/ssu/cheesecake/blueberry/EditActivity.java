@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ReCheck extends AppCompatActivity implements View.OnClickListener {
+public class EditActivity extends AppCompatActivity implements View.OnClickListener {
     private String imagePath;
     private ImageView imageView;
 
@@ -34,7 +34,7 @@ public class ReCheck extends AppCompatActivity implements View.OnClickListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_re_check);
+        setContentView(R.layout.activity_edit);
 
         Intent intent = getIntent();
         imagePath = intent.getExtras().getString("imagePath");
