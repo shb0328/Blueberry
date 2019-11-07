@@ -1,9 +1,12 @@
 package ssu.cheesecake.blueberry.camera;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -23,8 +26,10 @@ import ssu.cheesecake.blueberry.EditActivity;
 
 public class SmartCropActivity extends AppCompatActivity {
 
+    private static final int CAMREQUESTCODE = 1;
+    private static final int GALLERYREQUESTCODE = 2;
+
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
-    private static final int REQUEST_CODE = 1020;
 
     private String path;
     private String fileName;
@@ -37,9 +42,17 @@ public class SmartCropActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent cameraIntent = new Intent(this, CameraActivity.class);
-        startActivityForResult(cameraIntent,REQUEST_CODE);
-        
+        Intent intent = getIntent();
+
+        if(intent.getIntExtra("key",0) == CAMREQUESTCODE){
+            Intent cameraIntent = new Intent(this, CameraActivity.class);
+            startActivityForResult(cameraIntent,CAMREQUESTCODE);
+        }else if(intent.getIntExtra("key",0) == GALLERYREQUESTCODE){
+            Intent galleryIntent = new Intent(Intent.ACTION_PICK);
+            galleryIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            startActivityForResult(galleryIntent, GALLERYREQUESTCODE);
+        }
+
         setContentView(R.layout.activity_smartcrop);
         SmartCropper.buildImageDetector(this);
 
@@ -67,13 +80,15 @@ public class SmartCropActivity extends AppCompatActivity {
                     if (crop != null) {
                         saveImage(crop, mFile);
                         Intent intent = new Intent(SmartCropActivity.this, EditActivity.class);
+                        intent.putExtra("imagePath",mFile.getPath());
                         startActivity(intent);
+                        finish();
                     } else {
                         Log.d(TAG,"Bitmap crop is null...");
                     }
                     finish();
                 } else {
-                    Toast.makeText(SmartCropActivity.this, "cannot crop correctly", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SmartCropActivity.this, "cannot crop correctly, please re crop", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -98,19 +113,54 @@ public class SmartCropActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            if(requestCode == CAMREQUESTCODE){
 
-//        Intent receivedIntent = getIntent();
-        path = data.getExtras().getString("path");
-        fileName = data.getExtras().getString("fileName");
-        mFile = new File(path,fileName+"_edit");
+                path = data.getExtras().getString("path");
+                fileName = data.getExtras().getString("fileName");
+                mFile = new File(path,fileName+"_edit");
 
-        Bitmap selectedBitmap = null;
-        selectedBitmap = BitmapFactory.decodeFile(path+fileName);
+                Bitmap selectedBitmap = null;
+                selectedBitmap = BitmapFactory.decodeFile(path+fileName);
 
-        if (selectedBitmap != null) {
-            cropImageView.setImageToCrop(selectedBitmap);
-        }else{
-            Log.i(TAG,"SmartCropActivity - onActivityResult - selectedBitmap is null");
+                if (selectedBitmap != null) {
+                    cropImageView.setImageToCrop(selectedBitmap);
+                }else{
+                    Log.i(TAG,"SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
+                }
+
+            }else if(requestCode == GALLERYREQUESTCODE){
+                Uri photoUri = data.getData();
+                Cursor cursor = null;
+                try {
+                    // Uri 스키마를 content:/// 에서 file:/// 로  변경한다.
+                    String[] proj = {MediaStore.Images.Media.DATA};
+                    cursor = this.getContentResolver().query(photoUri, proj, null, null, null);
+                    assert cursor != null;
+                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                    cursor.moveToFirst();
+                    String imagePath = cursor.getString(column_index);
+                    mFile = new File(imagePath);
+
+                    Bitmap selectedBitmap = null;
+                    selectedBitmap = BitmapFactory.decodeFile(imagePath);
+                    if (selectedBitmap != null) {
+                        cropImageView.setImageToCrop(selectedBitmap);
+                    }else{
+                        Log.i(TAG,"SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
+                    }
+                } finally {
+                    if (cursor != null) {
+                        cursor.close();
+                    }
+                }
+            }
+            else{
+                Toast.makeText(this,"requestCode is null",Toast.LENGTH_SHORT).show();
+            }
+        }else {//RESULT_CANCELED
+            Toast.makeText(this,"result cancle",Toast.LENGTH_SHORT).show();
+            onDestroy();
         }
 
     }

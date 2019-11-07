@@ -50,6 +50,10 @@ import com.google.firebase.storage.StorageReference;
 import static android.app.Activity.RESULT_CANCELED;
 
 public class ListFragment extends Fragment implements OnBackPressedListener, View.OnClickListener{
+
+    private static final int CAMREQUESTCODE = 1;
+    private static final int GALLERYREQUESTCODE = 2;
+
     private DatabaseReference myRef;
     private RecyclerView recyclerView;
     private ArrayList<BusinessCard> list = new ArrayList<BusinessCard>();
@@ -57,9 +61,6 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab_add, fab_camera, fab_gallery;
-
-    private static final int PICK_FROM_ALBUM = 1;
-    private static File tempFile;
 
     private View root;
 
@@ -162,11 +163,14 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
             case R.id.fab_camera:
                 anim();
                 Intent intent = new Intent(this.getActivity(), SmartCropActivity.class);
+                intent.putExtra("key",CAMREQUESTCODE);
                 startActivity(intent);
                 break;
             case R.id.fab_gallery:
-                goToGallery();
                 anim();
+                Intent intent2 = new Intent(this.getActivity(), SmartCropActivity.class);
+                intent2.putExtra("key",GALLERYREQUESTCODE);
+                startActivity(intent2);
                 break;
         }
         Toast.makeText(this.getActivity(), "Hello!", Toast.LENGTH_LONG);
@@ -188,45 +192,6 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
             fab_camera.setClickable(true);
             fab_gallery.setClickable(true);
             isFabOpen = true;
-        }
-    }
-
-    //Gallery로 이동
-    private void goToGallery(){
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        startActivityForResult(intent, PICK_FROM_ALBUM);
-    }
-
-    //Gallery 이동 후 작업 (goToGallery에서 호출한 startActivityForResult에서  onActivityResult를 호출함)
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_CANCELED)
-            return;
-        if (requestCode == PICK_FROM_ALBUM) {
-            Uri photoUri = data.getData();
-            Cursor cursor = null;
-            try {
-                 // Uri 스키마를 content:/// 에서 file:/// 로  변경한다.
-                String[] proj = {MediaStore.Images.Media.DATA};
-                cursor = this.getActivity().getContentResolver().query(photoUri, proj, null, null, null);
-                assert cursor != null;
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-
-                String imagePath = cursor.getString(column_index);
-                tempFile = new File(imagePath);
-
-                Intent intent = new Intent(this.getActivity(), EditActivity.class);
-                intent.putExtra("imagePath", imagePath);
-                startActivity(intent);
-
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
-            }
-
         }
     }
 

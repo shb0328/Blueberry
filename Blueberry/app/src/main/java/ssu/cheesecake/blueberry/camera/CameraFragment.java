@@ -730,7 +730,7 @@ public class CameraFragment extends Fragment
                     intent.putExtra("path",path);
                     intent.putExtra("fileName",fileName);
 //                    startActivity(intent);
-                    activity.setResult(1020,intent);
+                    activity.setResult(Activity.RESULT_OK,intent);
                     activity.finish();
 
                 }
