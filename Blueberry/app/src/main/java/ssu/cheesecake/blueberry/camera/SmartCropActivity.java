@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -113,23 +115,24 @@ public class SmartCropActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK){
-            if(requestCode == CAMREQUESTCODE){
+        if (resultCode == RESULT_OK) {
+            if (requestCode == CAMREQUESTCODE) {
 
                 path = data.getExtras().getString("path");
                 fileName = data.getExtras().getString("fileName");
-                mFile = new File(path,fileName+"_edit");
-
+                mFile = new File(path, fileName + "_edit");
+                String imagePath = path + fileName;
                 Bitmap selectedBitmap = null;
-                selectedBitmap = BitmapFactory.decodeFile(path+fileName);
+                selectedBitmap = BitmapFactory.decodeFile(imagePath);
 
                 if (selectedBitmap != null) {
+                    selectedBitmap = rotateBitmap(selectedBitmap,imagePath);
                     cropImageView.setImageToCrop(selectedBitmap);
-                }else{
-                    Log.i(TAG,"SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
+                } else {
+                    Log.i(TAG, "SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
                 }
 
-            }else if(requestCode == GALLERYREQUESTCODE){
+            } else if (requestCode == GALLERYREQUESTCODE) {
                 Uri photoUri = data.getData();
                 Cursor cursor = null;
                 try {
@@ -144,25 +147,55 @@ public class SmartCropActivity extends AppCompatActivity {
 
                     Bitmap selectedBitmap = null;
                     selectedBitmap = BitmapFactory.decodeFile(imagePath);
+
                     if (selectedBitmap != null) {
+                        selectedBitmap = rotateBitmap(selectedBitmap,imagePath);
                         cropImageView.setImageToCrop(selectedBitmap);
-                    }else{
-                        Log.i(TAG,"SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
+                    } else {
+                        Log.i(TAG, "SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
                     }
                 } finally {
                     if (cursor != null) {
                         cursor.close();
                     }
                 }
+            } else {
+                Toast.makeText(this, "requestCode is null", Toast.LENGTH_SHORT).show();
             }
-            else{
-                Toast.makeText(this,"requestCode is null",Toast.LENGTH_SHORT).show();
-            }
-        }else {//RESULT_CANCELED
-            Toast.makeText(this,"result cancle",Toast.LENGTH_SHORT).show();
+        } else {//RESULT_CANCELED
+            Toast.makeText(this, "result cancle", Toast.LENGTH_SHORT).show();
             onDestroy();
         }
 
+    }
+
+    private Bitmap rotateBitmap(Bitmap bitmap, String path) {
+        Matrix matrix = new Matrix();
+
+        try {
+            ExifInterface ei = null;
+            ei = new ExifInterface(path);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    matrix.postRotate(90);
+                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    matrix.postRotate(180);
+                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    matrix.postRotate(270);
+                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+//                case ExifInterface.ORIENTATION_NORMAL:
+//                default:
+//                    return bitmap;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
     @Override
