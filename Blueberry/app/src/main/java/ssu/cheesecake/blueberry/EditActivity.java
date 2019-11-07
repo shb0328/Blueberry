@@ -14,10 +14,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import net.steamcrafted.loadtoast.LoadToast;
+
 import java.io.File;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import ssu.cheesecake.blueberry.camera.ocr.MessageHandler;
 
 public class EditActivity extends AppCompatActivity implements View.OnClickListener {
     private String imagePath;
@@ -29,6 +32,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     public String mail_finValue;
     public String company_finValue;
 
+    private MessageHandler messageHandler;
 
     @Override
 
@@ -45,6 +49,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         imageView = findViewById(R.id.business_card);
         imageView.setImageBitmap(bitmap);
 
+        //TODO: start AsyncTesseract!
+        //TODO: if success, the below can be execute ...
+        //TODO: if not? Activity onDestroy()
 
         //스피너로 앞에서 받은 값 지정해주기
         final Spinner spinner_1 = findViewById(R.id.spinner1);
