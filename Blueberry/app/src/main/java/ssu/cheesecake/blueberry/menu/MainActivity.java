@@ -1,8 +1,6 @@
 package ssu.cheesecake.blueberry.menu;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -14,8 +12,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import ssu.cheesecake.blueberry.OnBackPressedListener;
 import ssu.cheesecake.blueberry.R;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
     NavController navController;
