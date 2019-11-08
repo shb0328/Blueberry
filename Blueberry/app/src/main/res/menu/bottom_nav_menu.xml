@@ -10,12 +10,12 @@
 
     <item
         android:id="@+id/navigation_button_group"
-        android:icon="@drawable/icon_gallery"
+        android:icon="@drawable/icon_group"
         android:title="@string/title_group" />
 
     <item
         android:id="@+id/navigation_button_favorite"
-        android:icon="@drawable/icon_add"
+        android:icon="@drawable/icon_favorite"
         android:title="@string/title_favorite" />
 
     <item

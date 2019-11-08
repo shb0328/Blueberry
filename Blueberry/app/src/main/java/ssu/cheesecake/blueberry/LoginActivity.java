@@ -87,7 +87,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 startActivity(intent);
                 finish();
             } catch (ApiException e) {
-                Toast.makeText(LoginActivity.this, "예외처리!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Exception!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -133,7 +133,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(LoginActivity.this, "Test", Toast.LENGTH_LONG).show();
+        Toast.makeText(LoginActivity.this, "Connection Failed", Toast.LENGTH_LONG).show();
     }
 }
 

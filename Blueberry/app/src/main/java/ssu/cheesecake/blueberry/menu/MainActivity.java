@@ -1,19 +1,21 @@
 package ssu.cheesecake.blueberry.menu;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import ssu.cheesecake.blueberry.OnBackPressedListener;
+
 import ssu.cheesecake.blueberry.R;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     NavController navController;
 
     @Override
@@ -22,15 +24,13 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
-        MenuItem item;
         navView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         int id = menuItem.getItemId();
-                        switch(id){
+                        switch (id) {
                             case R.id.navigation_button_list:
                                 navController.navigate(R.id.fragment_list);
                                 break;
@@ -53,13 +53,20 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        Fragment navHostFragment = getSupportFragmentManager().getFragments().get(0);
-        Fragment nowFragment = navHostFragment.getChildFragmentManager().getFragments().get(0);
-        if(nowFragment != null){
-            if(nowFragment instanceof OnBackPressedListener){
-                ((OnBackPressedListener)nowFragment).onBackPressed();
-            }
-        }
+        final Activity root = this;
+        new AlertDialog.Builder(root)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle(R.string.dialog_exit_title)
+                .setMessage(R.string.dialog_exit_question)
+                .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        root.finish();
+                    }
+
+                })
+                .setNegativeButton(R.string.dialog_exit_no, null)
+                .show();
     }
 
 }

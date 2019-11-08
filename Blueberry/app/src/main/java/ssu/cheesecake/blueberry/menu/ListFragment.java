@@ -1,15 +1,10 @@
 package ssu.cheesecake.blueberry.menu;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -22,13 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import ssu.cheesecake.blueberry.BusinessCard;
-import ssu.cheesecake.blueberry.EditActivity;
-import ssu.cheesecake.blueberry.OnBackPressedListener;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.camera.SmartCropActivity;
 
@@ -47,9 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import static android.app.Activity.RESULT_CANCELED;
-
-public class ListFragment extends Fragment implements OnBackPressedListener, View.OnClickListener{
+public class ListFragment extends Fragment implements  View.OnClickListener{
 
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
@@ -129,27 +119,6 @@ public class ListFragment extends Fragment implements OnBackPressedListener, Vie
         fab_gallery.setOnClickListener(this);
 
         return root;
-    }
-
-    //back button 누를 시 App 종료
-    @Override
-    public void onBackPressed() {
-        Log.d("blueee", "List Fragment BackPressed!!");
-        final Activity root = this.getActivity();
-        new AlertDialog.Builder(root)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.dialog_exit_title)
-                .setMessage(R.string.dialog_exit_question)
-                .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        root.finish();
-                    }
-
-                })
-                .setNegativeButton(R.string.dialog_exit_no, null)
-                .show();
     }
 
     //Fab Button Click Listener
@@ -269,26 +238,6 @@ class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewH
                 dir.mkdirs();
             }
 
-            /*
-            //Firebase에서 image download해 ImageView에 출력
-            final FileDownloadTask fileDownloadTask = pathReference.getFile(file);
-            fileDownloadTask.addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                    holder.imageUrlTextView.setText(file.getAbsolutePath());
-                    holder.imageView.setImageURI(Uri.fromFile(file));
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-                    Log.e("fail","fail");
-                }
-            }).addOnProgressListener(new OnProgressListener<FileDownloadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                }
-            });
-        */
         } catch (Exception e) {
             e.printStackTrace();
         }
