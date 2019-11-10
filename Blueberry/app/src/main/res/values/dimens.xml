@@ -19,4 +19,6 @@
     <dimen name="activity_recheck12_selectionMargin">3dp</dimen>
     <dimen name="activity_recheck_title_horizontal">15dp</dimen>
 
+    <dimen name="swipeWidth">85dp</dimen>
+
 </resources>
