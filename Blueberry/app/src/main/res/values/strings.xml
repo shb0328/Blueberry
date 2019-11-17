@@ -48,6 +48,8 @@
     <string name="dialog_exit_yes">예</string>
     <string name="dialog_exit_no">아니오</string>
 
+    <string name="defaultGroupString">"None"</string>
+
 
 
     <string-array name="recheck_name">

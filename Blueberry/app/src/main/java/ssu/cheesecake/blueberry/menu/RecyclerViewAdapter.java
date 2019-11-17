@@ -2,9 +2,9 @@ package ssu.cheesecake.blueberry.menu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,27 +15,27 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import java.io.File;
-import java.util.List;
+import java.util.Vector;
 
 import ssu.cheesecake.blueberry.BusinessCard;
 import ssu.cheesecake.blueberry.R;
-
-import static androidx.constraintlayout.widget.Constraints.TAG;
+import ssu.cheesecake.blueberry.RealmController;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainViewHolder> {
     LayoutInflater inflater;
-    List<BusinessCard> modelList;
+    Vector<BusinessCard> cards;
+    Context context;
+    static RealmController realmController;
 
-    public RecyclerViewAdapter(Context context, List<BusinessCard> list) {
-        inflater = LayoutInflater.from(context);
-        modelList = list;
+    public Vector<BusinessCard> getCards(){ return cards;}
+
+    public RecyclerViewAdapter(Context context, Vector<BusinessCard> cards, RealmController realmController) {
+        this.inflater = LayoutInflater.from(context);
+        this.cards = cards;
+        this.realmController = realmController;
     }
 
     @Override
@@ -46,12 +46,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
-        holder.bindData(modelList.get(position));
+        holder.bindData(cards.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return modelList.size();
+        return cards.size();
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder {
@@ -63,6 +63,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView emailTextView;
         TextView companyTextView;
         TextView dateTextView;
+        ImageView favoriteBtnImage;
 
         public MainViewHolder(View itemView) {
             super(itemView);
@@ -75,18 +76,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             companyTextView = itemView.findViewById(R.id.item_company);
             dateTextView = itemView.findViewById(R.id.item_date);
             imageUrlTextView = itemView.findViewById(R.id.item_image_url);
+            favoriteBtnImage = itemView.findViewById(R.id.item_button_favorite_imageview);
+            context = itemView.getContext();
         }
 
         public void bindData(BusinessCard object) {
             //image 출력
-            FirebaseStorage storage = FirebaseStorage.getInstance("gs://blueberry-cheesecake-ssu.appspot.com/");
-            StorageReference storageRef = storage.getReference();
-            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            //String path = user.getDisplayName() + "_" + user.getUid();
-            String path = "sample";
             String fileName = object.getImageUrl();
-            StorageReference pathReference = storageRef.child(path + "/" + fileName);
 
             //Image Loading
             File file = null;
@@ -106,18 +102,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageUrlTextView.setText(file.getAbsolutePath());
             imageView.setImageURI(Uri.parse(file.getAbsolutePath()));
 
-
             enNameTextView.setText(object.getEnName());
             krNameTextView.setText(object.getKrName());
             phoneTextView.setText(object.getPhoneNumber());
             emailTextView.setText(object.getEmail());
             companyTextView.setText(object.getCompany());
             dateTextView.setText(object.getTime());
+
+            if(object.getIsFavorite()){
+                favoriteBtnImage.setColorFilter(Color.argb(255, 255, 255, 0));
+            }
         }
     }
 
     //RecyclerView에 TouchListener 설정 함수
-     public static void setTouchListener(final Context context, Activity activity, RecyclerView recyclerView) {
+     public static void setTouchListener(final Context context, Activity activity, final RecyclerView recyclerView) {
         RecyclerTouchListener onTouchListener = new RecyclerTouchListener(activity, recyclerView);
         onTouchListener
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
@@ -138,15 +137,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     @Override
                     public void onSwipeOptionClicked(int viewID, int position) {
                         if (viewID == R.id.item_button_favorite) {
-                            Toast toast = Toast.makeText(context, "Favorite!", Toast.LENGTH_SHORT);
-                            toast.show();
+                            BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
+                            if(realmController != null){
+                                realmController.changeIsFavorite(card);
+                            }
                         } else if (viewID == R.id.item_button_edit) {
                             Toast toast = Toast.makeText(context, "Edit!", Toast.LENGTH_SHORT);
                             toast.show();
                         } else if (viewID == R.id.item_button_delete) {
-                            Toast toast = Toast.makeText(context, "Delete!", Toast.LENGTH_SHORT);
-                            toast.show();
+                            BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
+                            if(realmController != null){
+                                realmController.deleteBusinessCard(card);
+                            }
                         }
+                        recyclerView.getAdapter().notifyItemChanged(position);
                     }
                 });
         recyclerView.addOnItemTouchListener(onTouchListener);
@@ -159,8 +163,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onRefresh() {
                 //새로 고침할 작업 나중에 추가하기
                 swipeRefreshLayout.setRefreshing(false);
-                Log.d(TAG, "recyclerview: swipe&Refresh");
-
             }
         });
     }

@@ -83,9 +83,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 // 구글 로그인 성공
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
             } catch (ApiException e) {
                 Toast.makeText(LoginActivity.this, "Exception!", Toast.LENGTH_SHORT).show();
             }
@@ -103,6 +101,9 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                         if (task.isSuccessful()) {
                             // 로그인 성공
                             Toast.makeText(LoginActivity.this, R.string.success_login, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
                         } else {
                             // 로그인 실패
                             Toast.makeText(LoginActivity.this, R.string.failed_login, Toast.LENGTH_SHORT).show();

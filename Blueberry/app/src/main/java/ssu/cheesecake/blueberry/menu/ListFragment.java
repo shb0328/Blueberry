@@ -3,6 +3,8 @@ package ssu.cheesecake.blueberry.menu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,22 +21,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import io.realm.Realm;
 import ssu.cheesecake.blueberry.BusinessCard;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.RealmController;
 import ssu.cheesecake.blueberry.camera.SmartCropActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
@@ -43,19 +38,24 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
 
-    private DatabaseReference myRef;
-
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnActivityTouchListener touchListener;
-
-    private ArrayList<BusinessCard> list = new ArrayList<BusinessCard>();
 
     private Animation fab_open, fab_close;
     private Boolean isFabOpen = false;
     private FloatingActionButton fab_add, fab_camera, fab_gallery;
 
+    private EditText editTextSearch;
+    private Button buttonSearch;
+    private String searchStr;
+    private RealmController.WhichResult whichResult;
+
+    private Realm mRealm;
+
     private View root;
+
+    RealmController realmController;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = this.getContext();
@@ -68,19 +68,40 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         //MainActivity
         root = inflater.inflate(R.layout.fragment_list, container, false);
 
-        //Firebase
-        FirebaseAuth firebaseAuth = null;
-        FirebaseUser user = null;
-        while (user == null) {
-            firebaseAuth = FirebaseAuth.getInstance();
-            user = firebaseAuth.getCurrentUser();
-        }
-        String path = user.getDisplayName() + "_" + user.getUid();
-        myRef = FirebaseDatabase.getInstance().getReference().child("users").child(path);
+        //Realm
+        whichResult = RealmController.WhichResult.List;
+        Realm.init(this.getActivity());
+        mRealm = Realm.getDefaultInstance();
+        realmController = new RealmController(mRealm, whichResult);
+
+        editTextSearch = root.findViewById(R.id.edit_text_search);
+        buttonSearch = root.findViewById(R.id.button_search);
+        editTextSearch.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    buttonSearch.callOnClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+        searchStr = null;
+        buttonSearch.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                searchStr = editTextSearch.getText().toString();
+                whichResult = RealmController.WhichResult.Search;
+                realmController = new RealmController(mRealm, whichResult, searchStr);
+                recyclerView.setAdapter(new RecyclerViewAdapter(context, realmController.getCards(), realmController));
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+            }
+        });
 
         //Recycler View
-        recyclerView = root.findViewById(R.id.recyclerView);
-        adapter = new RecyclerViewAdapter(context, getData());
+        recyclerView = root.findViewById(R.id.recyclerView_list);
+        adapter = new RecyclerViewAdapter(context, realmController.getCards(), realmController);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
@@ -90,32 +111,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         //Refresh 설정
         RecyclerViewAdapter.SetRefresh((SwipeRefreshLayout)root.findViewById(R.id.swipe_fragment_list));
 
-        //firebase에 변동이 있을 시
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<>();
-                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                        BusinessCard object = postSnapshot.getValue(BusinessCard.class);
-                        list.add(object);
-                        adapter = new RecyclerViewAdapter(context, list);
-                        //mAdapter.setData(list);
-                        recyclerView.setAdapter(adapter);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         final Button addBtn = root.findViewById(R.id.add_button);
         addBtn.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BusinessCard object = new BusinessCard("EnName", "한글이름", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
-                object.postFirebaseDatabase();
+                BusinessCard object = new BusinessCard("EnName", "안녕!", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
+                realmController.addBusinessCard(object);
+                recyclerView.getAdapter().notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
             }
         });
 
@@ -131,11 +134,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         fab_gallery.setOnClickListener(this);
 
         return root;
-    }
-
-    private List<BusinessCard> getData() {
-        List<BusinessCard> list = new ArrayList<>();
-        return list;
     }
 
     @Override
@@ -164,7 +162,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
                 startActivity(intent2);
                 break;
         }
-        Toast.makeText(this.getActivity(), "Hello!", Toast.LENGTH_LONG);
     }
 
     //Fab Button Animation
