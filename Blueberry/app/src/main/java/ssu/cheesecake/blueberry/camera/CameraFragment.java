@@ -28,6 +28,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -72,7 +73,7 @@ public class CameraFragment extends Fragment
     private static final String TAG = "\n*****[ Blueberry : CameraFragment ]*****\n";
     private static final String FRAGMENT_DIALOG = "dialog";
 
-    Activity activity;
+    private Context activity;
 
     /**
      * Constructor
@@ -266,14 +267,16 @@ public class CameraFragment extends Fragment
      */
 
     private File dir;
-    private  String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/blueberry/";
+    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/blueberry/";
     private String fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
+    private File file;
 
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
             = new ImageReader.OnImageAvailableListener() {
         @Override
         public void onImageAvailable(ImageReader reader) {
-            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), new File(dir,fileName)));
+            file = new File(dir,fileName);
+            mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), file));
         }
     };
 
@@ -605,8 +608,7 @@ public class CameraFragment extends Fragment
                     CameraMetadata.CONTROL_AF_TRIGGER_START);
             // Tell #mCaptureCallback to wait for the lock.
             mState = STATE_WAITING_LOCK;
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
+            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -619,12 +621,10 @@ public class CameraFragment extends Fragment
             mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
                     CameraMetadata.CONTROL_AF_TRIGGER_CANCEL);
             setAutoFlash(mPreviewRequestBuilder);
-            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
-                    mBackgroundHandler);
+            mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback, mBackgroundHandler);
             // After this, the camera will go back to the normal state of preview.
             mState = STATE_PREVIEW;
-            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback,
-                    mBackgroundHandler);
+            mCaptureSession.setRepeatingRequest(mPreviewRequest, mCaptureCallback, mBackgroundHandler);
         } catch (CameraAccessException e) {
             e.printStackTrace();
         }
@@ -730,6 +730,7 @@ public class CameraFragment extends Fragment
                     Intent intent = new Intent(activity, SmartCropActivity.class);
                     intent.putExtra("path",path);
                     intent.putExtra("fileName",fileName);
+                    activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
                     activity.setResult(Activity.RESULT_OK,intent);
                     activity.finish();
 
