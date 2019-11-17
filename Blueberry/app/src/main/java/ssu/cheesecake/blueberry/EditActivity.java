@@ -53,6 +53,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         //TODO: if success, the below can be execute ...
         //TODO: if not? Activity onDestroy()
 
+
         //스피너로 앞에서 받은 값 지정해주기
         final Spinner spinner_1 = findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this, R.array.recheck_name, android.R.layout.simple_spinner_item);
@@ -126,7 +127,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         //if 문으로 option에 따라 다르게 하도록 하기, option에도 listener 달아야함
-
 
         // Creates a new intent for sending to the device's contacts application
         Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
