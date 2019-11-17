@@ -46,8 +46,6 @@ public class FavoriteFragment extends Fragment{
         //TouchEventListener 설정
         RecyclerViewAdapter.setTouchListener(this.getContext(), this.getActivity(), recyclerView);
 
-        //Refresh 설정
-        RecyclerViewAdapter.SetRefresh((SwipeRefreshLayout)root.findViewById(R.id.swipe_fragment_favorite));
 
         return root;
     }

@@ -29,7 +29,7 @@
             android:paddingTop="@dimen/activity_login_box_vertical"
             android:paddingRight="@dimen/activity_login_box_horizontal"
             android:paddingBottom="@dimen/activity_login_box_vertical"
-            android:text="BlueBerry"
+            android:text="@string/app_name"
             android:textColor="@color/colorWhite"
             android:textSize="60sp"
 

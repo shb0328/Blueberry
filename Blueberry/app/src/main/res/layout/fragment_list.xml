@@ -18,15 +18,16 @@
             <EditText
                 android:id="@+id/edit_text_search"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:autofillHints="검색어를 입력하세요"
+                android:layout_weight="1"
+                android:hint="@string/hint_search"
                 android:inputType="text" />
+
             <Button
                 android:id="@+id/button_search"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="검색" />
+                android:text="@string/button_search"/>
 
         </LinearLayout>
 
@@ -37,17 +38,10 @@
             android:text="추가"
             android:textAlignment="center" />
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_fragment_list"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
