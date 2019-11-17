@@ -1,5 +1,6 @@
 package ssu.cheesecake.blueberry.camera;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -8,6 +9,7 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,15 +20,19 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
-import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.EditActivity;
+import ssu.cheesecake.blueberry.R;
 
 public class SmartCropActivity extends AppCompatActivity {
+
+    private Context activity = this;
 
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
@@ -124,13 +130,23 @@ public class SmartCropActivity extends AppCompatActivity {
                     int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
                     cursor.moveToFirst();
                     String imagePath = cursor.getString(column_index);
-                    mFile = new File(imagePath);
+
+                    path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/blueberry/";
+                    fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
+                    File dir = new File(path);
+                    if(!dir.exists()&&dir.mkdir()){
+                        dir.setWritable(true);
+                    }
+                    mFile = new File(path,fileName);
+
+                    Bitmap originImage = BitmapFactory.decodeFile(imagePath);
+                    saveImage(originImage, mFile);
 
                     Bitmap selectedBitmap = null;
-                    selectedBitmap = BitmapFactory.decodeFile(imagePath);
+                    selectedBitmap = BitmapFactory.decodeFile(mFile.getPath());
 
                     if (selectedBitmap != null) {
-                        selectedBitmap = rotateBitmap(selectedBitmap,imagePath);
+                        selectedBitmap = rotateBitmap(selectedBitmap,mFile.getPath());
                         cropImageView.setImageToCrop(selectedBitmap);
                     } else {
                         Log.i(TAG, "SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
@@ -144,7 +160,7 @@ public class SmartCropActivity extends AppCompatActivity {
                 Toast.makeText(this, "requestCode is null", Toast.LENGTH_SHORT).show();
             }
         } else {//RESULT_CANCELED
-            Toast.makeText(this, "result cancle", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "result cancel", Toast.LENGTH_SHORT).show();
             onDestroy();
         }
     }
@@ -191,6 +207,8 @@ public class SmartCropActivity extends AppCompatActivity {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            activity.sendBroadcast(new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(saveFile)));
         }
     }
 
