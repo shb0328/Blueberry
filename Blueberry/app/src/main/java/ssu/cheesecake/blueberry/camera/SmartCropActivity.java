@@ -58,15 +58,10 @@ public class SmartCropActivity extends AppCompatActivity {
         setContentView(R.layout.activity_smartcrop);
         SmartCropper.buildImageDetector(this);
 
-//        Intent receivedIntent = getIntent();
-//        path = receivedIntent.getExtras().getString("path");
-//        fileName = receivedIntent.getExtras().getString("fileName");
-//        mFile = new File(path,fileName+"_edit");
+        cropImageView = findViewById(R.id.iv_crop);
 
-        cropImageView = (CropImageView) findViewById(R.id.iv_crop);
-
-        btnCancel = (Button) findViewById(R.id.btn_cancel);
-        btnOk = (Button) findViewById(R.id.btn_ok);
+        btnCancel = findViewById(R.id.btn_cancel);
+        btnOk = findViewById(R.id.btn_ok);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,20 +91,6 @@ public class SmartCropActivity extends AppCompatActivity {
             }
         });
 
-//        ContentResolver cr = getContentResolver();
-//        Uri bmpUri = data.getData();
-//        try {
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            options.inJustDecodeBounds = true;
-//            BitmapFactory.decodeStream(cr.openInputStream(bmpUri), new Rect(), options);
-//            options.inJustDecodeBounds = false;
-//            options.inSampleSize = calculateSampleSize(options);
-//            selectedBitmap = BitmapFactory.decodeStream(cr.openInputStream(bmpUri), new Rect(), options);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-
     }
 
     @Override
@@ -120,7 +101,7 @@ public class SmartCropActivity extends AppCompatActivity {
 
                 path = data.getExtras().getString("path");
                 fileName = data.getExtras().getString("fileName");
-                mFile = new File(path, fileName + "_edit");
+                mFile = new File(path, fileName);
                 String imagePath = path + fileName;
                 Bitmap selectedBitmap = null;
                 selectedBitmap = BitmapFactory.decodeFile(imagePath);
@@ -166,7 +147,6 @@ public class SmartCropActivity extends AppCompatActivity {
             Toast.makeText(this, "result cancle", Toast.LENGTH_SHORT).show();
             onDestroy();
         }
-
     }
 
     private Bitmap rotateBitmap(Bitmap bitmap, String path) {
@@ -203,7 +183,6 @@ public class SmartCropActivity extends AppCompatActivity {
         return super.onTouchEvent(event);
     }
 
-
     private void saveImage(Bitmap bitmap, File saveFile) {
         try {
             FileOutputStream fos = new FileOutputStream(saveFile);
@@ -213,25 +192,6 @@ public class SmartCropActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private int calculateSampleSize(BitmapFactory.Options options) {
-        int outHeight = options.outHeight;
-        int outWidth = options.outWidth;
-        int sampleSize = 1;
-        int destHeight = 1000;
-        int destWidth = 1000;
-        if (outHeight > destHeight || outWidth > destHeight) {
-            if (outHeight > outWidth) {
-                sampleSize = outHeight / destHeight;
-            } else {
-                sampleSize = outWidth / destWidth;
-            }
-        }
-        if (sampleSize < 1) {
-            sampleSize = 1;
-        }
-        return sampleSize;
     }
 
 }

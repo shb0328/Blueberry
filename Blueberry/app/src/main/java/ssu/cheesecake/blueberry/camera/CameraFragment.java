@@ -29,14 +29,6 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-import ssu.cheesecake.blueberry.R;
-
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -65,6 +57,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import ssu.cheesecake.blueberry.R;
 
 
 public class CameraFragment extends Fragment
@@ -267,9 +266,7 @@ public class CameraFragment extends Fragment
      */
 
     private File dir;
-//    private String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/blueberry/";
-    private  String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)+"/blueberry/";
-
+    private  String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/blueberry/";
     private String fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
 
     private final ImageReader.OnImageAvailableListener mOnImageAvailableListener
@@ -286,12 +283,47 @@ public class CameraFragment extends Fragment
         dir = new File(path);
         if(!dir.exists()){
             dir.mkdir();
+            dir.setWritable(true);
         }
-        dir.setWritable(true);
         Log.i(TAG,"dir.getAbsolutePath() : "+dir.getAbsolutePath());
         Log.i(TAG,"dir.getPath() : "+dir.getPath());
     }
 
+    //thread to save image into gallery
+    private static class ImageSaver implements Runnable {
+
+        private final Image mImage;
+        private final File mFile;
+
+        ImageSaver(Image image, File file) {
+            mImage = image;
+            mFile = file;
+        }
+
+        @Override
+        public void run() {
+            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.remaining()];
+            buffer.get(bytes);
+            FileOutputStream output = null;
+            try {
+                output = new FileOutputStream(mFile);
+                output.write(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                mImage.close();
+                if (null != output) {
+                    try {
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+    }
 
     /**
      * Preview
@@ -314,10 +346,10 @@ public class CameraFragment extends Fragment
             }
         });
 
-        mTextureView = (AutoFitTextureView) view.findViewById(R.id.CameraTextureView);
+        mTextureView = view.findViewById(R.id.CameraTextureView);
 
         //draw rect
-        surfaceView = (SurfaceView) view.findViewById(R.id.surfaceView);
+        surfaceView = view.findViewById(R.id.surfaceView);
         surfaceView.setZOrderOnTop(true);
         SurfaceHolder mHolder = surfaceView.getHolder();
         mHolder.setFormat(PixelFormat.TRANSPARENT);
@@ -425,9 +457,6 @@ public class CameraFragment extends Fragment
                     maxPreviewHeight = MAX_PREVIEW_HEIGHT;
                 }
 
-                // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
-                // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
-                // garbage capture data.
                 mPreviewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class),
                         rotatedPreviewWidth, rotatedPreviewHeight, maxPreviewWidth,
                         maxPreviewHeight, largest);
@@ -458,31 +487,6 @@ public class CameraFragment extends Fragment
                     .show(getChildFragmentManager(), FRAGMENT_DIALOG);
         }
     }
-
-//    private void configureTransform(int viewWidth, int viewHeight) {
-//        Activity activity = getActivity();
-//        if (null == mTextureView || null == mPreviewSize || null == activity) {
-//            return;
-//        }
-//        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-//        Matrix matrix = new Matrix();
-//        RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
-//        RectF bufferRect = new RectF(0, 0, mPreviewSize.getHeight(), mPreviewSize.getWidth());
-//        float centerX = viewRect.centerX();
-//        float centerY = viewRect.centerY();
-//        if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-//            bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
-//            matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
-//            float scale = Math.max(
-//                    (float) viewHeight / mPreviewSize.getHeight(),
-//                    (float) viewWidth / mPreviewSize.getWidth());
-//            matrix.postScale(scale, scale, centerX, centerY);
-//            matrix.postRotate(90 * (rotation - 2), centerX, centerY);
-//        } else if (Surface.ROTATION_180 == rotation) {
-//            matrix.postRotate(180, centerX, centerY);
-//        }
-//        mTextureView.setTransform(matrix);
-//    }
 
     private void createCameraPreviewSession() {
         try {
@@ -548,11 +552,9 @@ public class CameraFragment extends Fragment
     private void openCamera(int width, int height) {
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
-//            requestCameraPermission();
             return;
         }
         setUpCameraOutputs(width, height);
-//        configureTransform(width, height);
         Activity activity = getActivity();
         //CameraManager : A system service manager for detecting, characterizing, and connecting to CameraDevice.
         CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
@@ -719,7 +721,6 @@ public class CameraFragment extends Fragment
                 public void onCaptureCompleted(@NonNull CameraCaptureSession session,
                                                @NonNull CaptureRequest request,
                                                @NonNull TotalCaptureResult result) {
-                    showToast("Saved: " + dir+fileName);
                     Log.d(TAG, "Saved: " +dir.toString());
                     unlockFocus();
 
@@ -729,7 +730,6 @@ public class CameraFragment extends Fragment
                     Intent intent = new Intent(activity, SmartCropActivity.class);
                     intent.putExtra("path",path);
                     intent.putExtra("fileName",fileName);
-//                    startActivity(intent);
                     activity.setResult(Activity.RESULT_OK,intent);
                     activity.finish();
 
@@ -813,42 +813,6 @@ public class CameraFragment extends Fragment
     /**
      * Class
      */
-
-    //thread to save image into gallery
-    private static class ImageSaver implements Runnable {
-
-        private final Image mImage;
-        private final File mFile;
-
-        ImageSaver(Image image, File file) {
-            mImage = image;
-            mFile = file;
-        }
-
-        @Override
-        public void run() {
-            ByteBuffer buffer = mImage.getPlanes()[0].getBuffer();
-            byte[] bytes = new byte[buffer.remaining()];
-            buffer.get(bytes);
-            FileOutputStream output = null;
-            try {
-                output = new FileOutputStream(mFile);
-                output.write(bytes);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                mImage.close();
-                if (null != output) {
-                    try {
-                        output.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-
-    }
 
     //Compares two Sizes based on their areas.
     static class CompareSizesByArea implements Comparator<Size> {
