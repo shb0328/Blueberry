@@ -118,7 +118,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         //EditText로 spinner에서 받은 값 수정 및 연락처로 옮길 값 받기
-        EditText name_editText = findViewById(R.id.name_confirm);
+        /*EditText name_editText = findViewById(R.id.name_confirm);
         name_editText.setText(spinner_1.getSelectedItem().toString());
         name_finValue = name_editText.getText().toString();
 
@@ -137,7 +137,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
-        ToFinValue.setOnClickListener(this);
+        ToFinValue.setOnClickListener(this);*/
 
     }
 

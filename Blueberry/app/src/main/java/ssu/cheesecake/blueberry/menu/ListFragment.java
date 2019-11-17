@@ -86,7 +86,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
 
         //TouchEventListener 설정
         RecyclerViewAdapter.setTouchListener(context, this.getActivity(), recyclerView);
-        
+
         //Refresh 설정
         RecyclerViewAdapter.SetRefresh((SwipeRefreshLayout)root.findViewById(R.id.swipe_fragment_list));
 
