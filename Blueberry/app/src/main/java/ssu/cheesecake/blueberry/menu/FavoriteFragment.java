@@ -14,12 +14,27 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import java.util.Vector;
+
+import ssu.cheesecake.blueberry.BusinessCard;
 import ssu.cheesecake.blueberry.R;
 
 public class FavoriteFragment extends Fragment implements View.OnTouchListener {
     TextView textView;
     Animation item_menu_open;
     float initX;
+
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
+
+    private Vector<BusinessCard> cards;
+
+
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +47,11 @@ public class FavoriteFragment extends Fragment implements View.OnTouchListener {
         menu.getItem(2).setChecked(true);
 
         return root;
+
+
+
+
+
     }
 
     @Override

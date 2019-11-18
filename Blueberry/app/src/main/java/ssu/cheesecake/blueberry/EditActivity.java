@@ -132,12 +132,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         EditText company_editText = findViewById(R.id.company_confirm);
         company_editText.setText(spinner_4.getSelectedItem().toString());
-        company_finValue = company_editText.getText().toString();
+        company_finValue = company_editText.getText().toString();*/
 
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
-        ToFinValue.setOnClickListener(this);*/
+        ToFinValue.setOnClickListener(this);
 
     }
 
