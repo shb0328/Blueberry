@@ -21,22 +21,25 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import ssu.cheesecake.blueberry.GroupSub;
 import ssu.cheesecake.blueberry.R;
 
 
 public class GroupFragment extends Fragment{
 
 
-    String[] data={"group1", "group2", "group3", "group4"};
-    ArrayList<String> Group;
-
+    //String[] data={"group1", "group2", "group3", "group4"};
+//    ArrayList<String> Group;
 //    GridView gridView_group;
+
+    LinearLayout linear=null;
     private FloatingActionButton fab_add_2;
 
 
@@ -45,24 +48,11 @@ public class GroupFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_group, container, false);
+        linear=root.findViewById(R.id.GroupGrid_1);
+        //        gridView_group= root.findViewById(R.id.GroupGrid_1);
+        Log.e("므아아아아ㅟ넝ㅎ너우힌아ㅜ린망ㄹ", "onCreateView: 아니 어디가 문제인건데1");
 
-
-        LinearLayout linear=new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params= new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
-        linear.setOrientation(LinearLayout.VERTICAL);
-
-
-//        gridView_group= root.findViewById(R.id.GroupGrid_1);
-
-
-        for(int i=0;i<data.length;i++) {
-
-            Button btn=new Button (getActivity());
-            btn.setId(i+1);
-            btn.setText("우왕");
-            btn.setLayoutParams(params);
-
-        }
+//        for(int i=0;i<data.length;i++)
 
 
         //fab버튼 누르면 dialog 뜸
@@ -81,14 +71,17 @@ public class GroupFragment extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        dialog.dismiss();
+
+//                        GroupSub groupAddButton = new GroupSub(getActivity());
+                        Button btn=new Button (getContext());
+                        btn.setText("B");
+                        linear.addView(btn);
 
                     }
                 });
                 groupBuild.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
                     }
                 });
 
