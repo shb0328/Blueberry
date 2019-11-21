@@ -38,12 +38,10 @@ public class GroupFragment extends Fragment{
 
     String[] data={"group1", "group2", "group3", "group4"};
     ArrayList<String> Group;
-
+    Button[] myButton = new Button[data.length];
 
     GridLayout grid=null;
     private FloatingActionButton fab_add_2;
-
-
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,6 +51,19 @@ public class GroupFragment extends Fragment{
         grid.setColumnCount(3);
         grid.setOrientation(GridLayout.HORIZONTAL);
 
+
+        Log.e("왜 안될까요 1", "허허허허허허허허허허허허허ㅓ허허헣" );
+
+        for (int index = 0; index < data.length ; index++) {
+
+            myButton[index] = new Button(getActivity()); //initialize the button here
+            myButton[index].setText(data[index]);
+            myButton[index].setHeight(100);
+            myButton[index].setWidth(100);
+            myButton[index].setTag(index);
+
+           grid.addView(myButton[index]);
+        }
 
 
         //fab버튼 누르면 dialog 뜸
@@ -72,13 +83,13 @@ public class GroupFragment extends Fragment{
                     public void onClick(DialogInterface dialog, int which) {
 
                         Button btn=new Button (getContext());
-                        btn.setText("B");
+                        btn.setText(editGroup.getText());
                         grid.addView(btn);
 
                     }
                 });
-                groupBuild.setNegativeButton("No", null);
 
+                groupBuild.setNegativeButton("No", null);
                 groupBuild.show();
             }
         });
