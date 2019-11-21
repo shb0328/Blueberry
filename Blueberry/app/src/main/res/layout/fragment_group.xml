@@ -4,13 +4,11 @@
     android:layout_height="match_parent"
     >
 
-    <LinearLayout
+    <GridLayout
         android:id="@+id/GroupGrid_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:rowCount="3"
-        android:orientation="vertical"
         >
 
 <!--        <Button-->
@@ -24,7 +22,7 @@
 <!--            android:text="111111"/>-->
 
 
-    </LinearLayout>
+    </GridLayout>
 
 
 

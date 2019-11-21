@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,11 +36,11 @@ import ssu.cheesecake.blueberry.R;
 public class GroupFragment extends Fragment{
 
 
-    //String[] data={"group1", "group2", "group3", "group4"};
-//    ArrayList<String> Group;
-//    GridView gridView_group;
+    String[] data={"group1", "group2", "group3", "group4"};
+    ArrayList<String> Group;
 
-    LinearLayout linear=null;
+
+    GridLayout grid=null;
     private FloatingActionButton fab_add_2;
 
 
@@ -48,11 +49,10 @@ public class GroupFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_group, container, false);
-        linear=root.findViewById(R.id.GroupGrid_1);
-        //        gridView_group= root.findViewById(R.id.GroupGrid_1);
-        Log.e("므아아아아ㅟ넝ㅎ너우힌아ㅜ린망ㄹ", "onCreateView: 아니 어디가 문제인건데1");
+        grid=root.findViewById(R.id.GroupGrid_1);
+        grid.setColumnCount(3);
+        grid.setOrientation(GridLayout.HORIZONTAL);
 
-//        for(int i=0;i<data.length;i++)
 
 
         //fab버튼 누르면 dialog 뜸
@@ -71,19 +71,13 @@ public class GroupFragment extends Fragment{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-
-//                        GroupSub groupAddButton = new GroupSub(getActivity());
                         Button btn=new Button (getContext());
                         btn.setText("B");
-                        linear.addView(btn);
+                        grid.addView(btn);
 
                     }
                 });
-                groupBuild.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
+                groupBuild.setNegativeButton("No", null);
 
                 groupBuild.show();
             }
