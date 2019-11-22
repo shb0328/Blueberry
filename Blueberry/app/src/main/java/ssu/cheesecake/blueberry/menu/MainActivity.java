@@ -18,6 +18,8 @@ import ssu.cheesecake.blueberry.R;
 public class MainActivity extends AppCompatActivity {
     NavController navController;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
