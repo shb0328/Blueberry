@@ -1,20 +1,22 @@
 package ssu.cheesecake.blueberry;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.HashMap;
 
-public class OCRResultParsing {
+public class OCRResult {
     private final String originString;
 
-    public OCRResultParsing(String originString){
+    public OCRResult(String originString){
         this.originString = originString;
     }
 
-    public Map parsing() {
+    public HashMap<String,String> parsing() {
+        HashMap<String,String> map = new HashMap<>();
         //TODO
         //key : name, email, phone ...
         //value : ex) hyebeen, shb0328@gmail.com, 01055074148 ...
         //using split()!
+        return map;
     }
     
     private ArrayList<String> split(){
