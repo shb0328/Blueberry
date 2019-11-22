@@ -1,25 +1,27 @@
 package ssu.cheesecake.blueberry.menu;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import ssu.cheesecake.blueberry.R;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class FavoriteFragment extends Fragment implements View.OnTouchListener {
-    TextView textView;
-    Animation item_menu_open;
-    float initX;
+import io.realm.Realm;
+import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.RealmController;
+
+public class FavoriteFragment extends Fragment{
+    private RealmController realmController;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -31,22 +33,21 @@ public class FavoriteFragment extends Fragment implements View.OnTouchListener {
         Menu menu = navView.getMenu();
         menu.getItem(2).setChecked(true);
 
+        Realm.init(this.getActivity());
+        Realm mRealm = Realm.getDefaultInstance();
+        realmController = new RealmController(mRealm, RealmController.WhichResult.Favorite);
+
+        //Recycler View
+        recyclerView = root.findViewById(R.id.recyclerView_favorite);
+        adapter = new RecyclerViewAdapter(this.getContext(), realmController.getCards(), realmController);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+
+        //TouchEventListener 설정
+        RecyclerViewAdapter.setTouchListener(this.getContext(), this.getActivity(), recyclerView);
+
+
         return root;
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(event.getAction() == MotionEvent.ACTION_DOWN){
-            Log.d("EVENT!!", "Down!");
-            initX = event.getRawX();
-        }
-        else if(event.getAction() == MotionEvent.ACTION_MOVE){
-            Log.d("EVENT!!", "Move!");
-            if(initX > event.getRawX()){
-                Log.d("EVENT!!", "MoveIf!");
-                textView.startAnimation(item_menu_open);
-            }
-        }
-        return true;
-    }
 }
