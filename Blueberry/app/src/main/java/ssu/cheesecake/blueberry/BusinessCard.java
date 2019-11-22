@@ -6,8 +6,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 
+import io.realm.RealmModel;
 import io.realm.RealmObject;
 
+import java.security.acl.Group;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Calendar;
@@ -46,7 +48,7 @@ public class BusinessCard extends RealmObject {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         this.path = user.getDisplayName() + "_" + user.getUid();
-        makeTImeString();
+        this.time = makeTImeString();
     }
 
     public String getId() {return id;}
@@ -69,7 +71,7 @@ public class BusinessCard extends RealmObject {
     public void setGroup(String group){this.group = group;}
     public void setIsFavorite(boolean isFavorite){this.isFavorite = isFavorite;}
 
-    public void makeTImeString(){
+    public static String makeTImeString(){
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
@@ -77,32 +79,32 @@ public class BusinessCard extends RealmObject {
         int hour = c.get(Calendar.HOUR_OF_DAY);
         int minute = c.get(Calendar.MINUTE);
         int second = c.get(Calendar.SECOND);
-        this.time = String.valueOf(year);
+        String timeStr = String.valueOf(year);
         if(month < 10)
-            this.time = this.time + "-0" + month;
+            timeStr = timeStr + "-0" + month;
         else
-            this.time = this.time + "-" + month;
+            timeStr = timeStr + "-" + month;
 
         if(day < 10)
-            this.time = this.time + "-0" + day;
+            timeStr = timeStr + "-0" + day;
         else
-            this.time = this.time + "-" + day;
+            timeStr = timeStr + "-" + day;
 
         if(hour < 10)
-            this.time = this.time + "-0" + hour;
+            timeStr = timeStr + "-0" + hour;
         else
-            this.time = this.time + "-" + hour;
+            timeStr = timeStr + "-" + hour;
 
         if(minute < 10)
-            this.time = this.time + ":0" + minute;
+            timeStr = timeStr + ":0" + minute;
         else
-            this.time = this.time + ":" + minute;
+            timeStr = timeStr + ":" + minute;
 
         if(second < 10)
-            this.time = this.time + ":0" + second;
+            timeStr = timeStr + ":0" + second;
         else
-            this.time = this.time + ":" + second;
-
+            timeStr = timeStr + ":" + second;
+        return timeStr;
     }
 
     public void Copy(BusinessCard src){
@@ -141,6 +143,5 @@ public class BusinessCard extends RealmObject {
         result += this.company;
         return result;
     }
-
 }
 

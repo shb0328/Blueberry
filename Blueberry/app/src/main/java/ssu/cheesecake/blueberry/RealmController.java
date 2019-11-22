@@ -2,6 +2,8 @@ package ssu.cheesecake.blueberry;
 
 import android.util.Log;
 
+import com.google.android.gms.common.util.Strings;
+
 import java.util.Vector;
 
 import io.realm.Realm;
@@ -19,6 +21,7 @@ public class RealmController {
     WhichResult whichResult;
     String group;
     String searchWord;
+    Vector<CustomGroup> groups;
 
     //RealmController의 생성자
     public RealmController(Realm mRealm, WhichResult whichResult) {
@@ -27,13 +30,15 @@ public class RealmController {
         this.whichResult = whichResult;
         this.group = null;
         this.searchWord = null;
+        this.groups = new Vector<CustomGroup>();
         loadCard();
+        loadGroup();
     }
 
     public RealmController() {
     }
 
-    //Search, Group 관리하는 RealmController의 생성자
+    //Search, Group의 결과 List 관리하는 RealmController의 생성자
     public RealmController(Realm mRealm, WhichResult whichResult, String str) {
         if (whichResult == Group) {
             this.cards = new Vector<BusinessCard>();
@@ -53,7 +58,7 @@ public class RealmController {
     //RealmController 생성 시 Realm에 등록되어 있는 BusinessCard를 Vector로 받아옴
     public void loadCard() {
         RealmResults<BusinessCard> result = null;
-        if(whichResult != Search) {
+        if (whichResult != Search) {
             switch (this.whichResult) {
                 case List:
                     result = mRealm.where(BusinessCard.class).findAll();
@@ -71,13 +76,74 @@ public class RealmController {
                     cards.add(result.get(i));
                 }
             }
-        }
-        else{
+        } else {
             searchBusinessCard();
         }
     }
 
-    //Realm에 추가하는 함수
+    //RealmController 생성 시 Realm에 등록되어 있는 GroupList를 Vector로 받아옴
+    public void loadGroup() {
+        RealmResults<CustomGroup> result = null;
+        result = mRealm.where(CustomGroup.class).findAll();
+        if (result != null) {
+            int len = result.size();
+            for (int i = 0; i < len; i++) {
+                groups.add(result.get(i));
+            }
+        }
+    }
+
+    //Realm에 CustomGroup 추가하는 함수
+    public boolean addCustomGroup(final String groupName) {
+        int len = groups.size();
+        for (int i = 0; i < len; i++)
+            if (((groups.get(i)).getGroupName()).compareTo(groupName) == 0) {
+                return false;
+            }
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                CustomGroup group = new CustomGroup(groupName);
+                CustomGroup addGroup = realm.createObject(CustomGroup.class);
+                addGroup.Copy(group);
+                groups.add(addGroup);
+            }
+        });
+        return true;
+    }
+
+    //Realm에 CustomGroup 수정하는 함수
+    public boolean editCustomGroup(final String srcGroupName, final String changedGroupName) {
+        int len = groups.size();
+        for (int i = 0; i < len; i++)
+            if (((groups.get(i)).getGroupName()).compareTo(changedGroupName) == 0) {
+                return false;
+            }
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                CustomGroup group = new CustomGroup(srcGroupName);
+                CustomGroup editGroup = realm.where(CustomGroup.class).equalTo("groupName", srcGroupName).findFirst();
+                editGroup.setGroupName(changedGroupName);
+            }
+        });
+        return true;
+    }
+
+    //Realm에 CustomGroup 삭제하는 함수
+    public void deleteCustomGroup(final String groupName) {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                CustomGroup group = new CustomGroup(groupName);
+                CustomGroup deleteGroup = realm.where(CustomGroup.class).equalTo("groupName", groupName).findFirst();
+                groups.remove(deleteGroup);
+                deleteGroup.deleteFromRealm();
+            }
+        });
+    }
+
+    //Realm에 BusinessCard 추가하는 함수
     public void addBusinessCard(final BusinessCard card) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -176,15 +242,15 @@ public class RealmController {
         });
     }
 
-    public void searchBusinessCard(){
+    public void searchBusinessCard() {
         cards = new Vector<BusinessCard>();
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 RealmResults<BusinessCard> results = mRealm.where(BusinessCard.class).findAll();
                 int len = results.size();
-                for(int i = 0; i < len; i++){
-                    if(results.get(i).toString().contains(searchWord))
+                for (int i = 0; i < len; i++) {
+                    if (results.get(i).toString().contains(searchWord))
                         cards.add(results.get(i));
                 }
             }
