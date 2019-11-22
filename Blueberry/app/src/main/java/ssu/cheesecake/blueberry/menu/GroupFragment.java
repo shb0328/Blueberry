@@ -24,12 +24,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import ssu.cheesecake.blueberry.GroupSub;
 import ssu.cheesecake.blueberry.R;
 
 
@@ -37,23 +36,25 @@ public class GroupFragment extends Fragment{
 
 
     String[] data={"group1", "group2", "group3", "group4"};
-    ArrayList<String> Group;
     Button[] myButton = new Button[data.length];
 
     GridLayout grid=null;
-    private FloatingActionButton fab_add_2;
 
+
+    private FloatingActionButton fab_add_2;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_group, container, false);
+
+        //gridlayout 설정
         grid=root.findViewById(R.id.GroupGrid_1);
         grid.setColumnCount(3);
         grid.setOrientation(GridLayout.HORIZONTAL);
 
 
-        Log.e("왜 안될까요 1", "허허허허허허허허허허허허허ㅓ허허헣" );
 
+//배열에 있는 버튼들 미리 만들어놓기
         for (int index = 0; index < data.length ; index++) {
 
             myButton[index] = new Button(getActivity()); //initialize the button here
@@ -62,6 +63,14 @@ public class GroupFragment extends Fragment{
             myButton[index].setWidth(100);
             myButton[index].setTag(index);
 
+            //버튼 누르면 fragment로 이동하도록 설정
+            myButton[index].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+//gridlayout에 버튼 추가하기
            grid.addView(myButton[index]);
         }
 
