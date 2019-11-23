@@ -1,6 +1,7 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +10,13 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -21,9 +27,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ListAdapter;
+
 import ssu.cheesecake.blueberry.camera.OCRTask;
 
-public class EditActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditActivity extends AppCompatActivity implements View.OnClickListener{
 
     private EditActivity editActivity = this;
 
@@ -47,20 +55,80 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        Intent intent = getIntent();
-        imagePath = intent.getExtras().getString("imagePath");
-        File imageFile = new File(imagePath);
+//        Intent intent = getIntent();
+//        imagePath = intent.getExtras().getString("imagePath");
+//        File imageFile = new File(imagePath);
+//
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+//        imageView = findViewById(R.id.business_card);
+//        imageView.setImageBitmap(bitmap);
+//
+//        asyncTesseract = new AsyncTesseract();
+//        asyncTesseract.execute(bitmap);
+//
+//        //TODO: Parse result string - name,phone,email ...
+//        //TODO: Insert parsing results into each spinners
+//
+//        //TODO 이전까지 건들지 말기 !!!!!!!~~~~~------------------------------------
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-        imageView = findViewById(R.id.business_card);
-        imageView.setImageBitmap(bitmap);
 
-        asyncTesseract = new AsyncTesseract();
-        asyncTesseract.execute(bitmap);
+        //앞으로 옮겨죠요 ...
+         EditSpinner editname;
+         EditSpinner editphone;
+         EditSpinner editcompany;
+         EditSpinner editemail;
 
-        //TODO: Parse result string - name,phone,email ...
-        //TODO: Insert parsing results into each spinners
+        editname=findViewById(R.id.edit_name);
+        editphone=findViewById(R.id.edit_phone);
+        editcompany=findViewById(R.id.edit_company);
+        editemail=findViewById(R.id.edit_address);
+
+
+        ArrayAdapter name_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_name));
+        editname.setAdapter(name_adapter);
+
+        ArrayAdapter phone_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_phone));
+        editphone.setAdapter(phone_adapter);
+
+        ArrayAdapter company_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_company));
+        editcompany.setAdapter(company_adapter);
+
+        ArrayAdapter email_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_address));
+        editemail.setAdapter(email_adapter);
+
+
+        editname.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                showToast("아이템이 선택됐슴!!!");
+            }
+        });
+
+        editphone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+
+        editcompany.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
+
+        editemail.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            }
+        });
+
+        name_finValue=editname.getText().toString();
+        phone_finValue=editphone.getText().toString();
+        company_finValue=editcompany.getText().toString();
+        mail_finValue=editemail.getText().toString();
+
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
@@ -151,4 +219,21 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onDestroy();
     }
+
+//    private void showSoftInputPanel(View view) {
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        if (imm != null) {
+//            imm.showSoftInput(view, 0);
+//        }
+//    }
+
+    private void showToast(String message){
+        Toast toast=Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        toast.show();
+
+    }
+
 }
+
+
+
