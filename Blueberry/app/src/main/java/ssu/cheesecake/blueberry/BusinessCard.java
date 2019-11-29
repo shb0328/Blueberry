@@ -20,7 +20,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class BusinessCard extends RealmObject {
     @PrimaryKey
-    public String id;
+    public int id;
 
     public String enName;
     public String krName;
@@ -51,7 +51,18 @@ public class BusinessCard extends RealmObject {
         this.time = makeTImeString();
     }
 
-    public String getId() {return id;}
+    public BusinessCard(Map<String, Object> map){
+        this.krName = (String)map.get("krName");
+        this.enName = (String)map.get("enName");
+        this.phoneNumber = (String)map.get("phoneNumber");
+        this.email = (String)map.get("email");
+        this.company = (String)map.get("company");
+        this.imageUrl = (String)map.get("imageUrl");
+        this.group = (String)map.get("group");
+        this.isFavorite = (boolean)map.get("isFavorite");
+    }
+
+    public int getId() {return id;}
     public String getEnName() {return enName;}
     public String getKrName() { return krName;}
     public String getPhoneNumber() { return phoneNumber;}
@@ -63,11 +74,15 @@ public class BusinessCard extends RealmObject {
     public String getGroup(){return group;}
     public boolean getIsFavorite(){return isFavorite;}
 
+    public void setId(int id){this.id = id;}
     public void setEnName(String str){this.enName = str;}
     public void setKrName(String str){this.krName = str;}
     public void setPhoneNumber(String str) {this.phoneNumber = str;}
     public void setEmail(String str) {this.email = email;}
     public void setCompany(String str){this.company = company;}
+    public void setTime(String time){this.time = time;}
+    public void setImageUrl(String imageUrl){this.imageUrl = imageUrl;}
+    public void setPath(String path){this.path = path;}
     public void setGroup(String group){this.group = group;}
     public void setIsFavorite(boolean isFavorite){this.isFavorite = isFavorite;}
 
@@ -131,16 +146,34 @@ public class BusinessCard extends RealmObject {
         result.put("company", company);
         result.put("time", time);
         result.put("imageUrl", imageUrl);
+        result.put("path", path);
+        result.put("group", group);
+        result.put("isFavorite", isFavorite);
         return result;
     }
 
     public String toString(){
         String result = new String();
-        result += this.enName + '\t';
-        result += this.krName + '\t';
-        result += this.phoneNumber + '\t';
-        result += this.email + '\t';
+        result += "enName: ";
+        result += this.enName + ',';
+        result += "krName: ";
+        result += this.krName + ',';
+        result += "phoneNumber: ";
+        result += this.phoneNumber + ',';
+        result += "email: ";
+        result += this.email + ',';
+        result += "company: ";
         result += this.company;
+        result += "time: ";
+        result += this.time;
+        result += "imageUrl: ";
+        result += this.imageUrl;
+        result += "path: ";
+        result += this.path;
+        result += "group: ";
+        result += this.group;
+        result += "isFavorite: ";
+        result += this.isFavorite;
         return result;
     }
 }

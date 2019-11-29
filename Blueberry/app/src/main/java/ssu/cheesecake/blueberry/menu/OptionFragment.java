@@ -12,7 +12,10 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import io.realm.Realm;
+import ssu.cheesecake.blueberry.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.RealmController;
 
 public class OptionFragment extends Fragment implements View.OnClickListener{
     Button backupBtn;
@@ -39,8 +42,16 @@ public class OptionFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View button) {
         if (backupBtn.equals(button)) {
+            Realm.init(this.getActivity());
+            RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+            FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
+            firebaseHelper.Backup(realmController);
         }
         else if (restoreBtn.equals(button)) {
+            Realm.init(this.getActivity());
+            RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+            FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
+            firebaseHelper.Restore(realmController);
         }
     }
 }
