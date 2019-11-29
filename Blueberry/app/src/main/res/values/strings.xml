@@ -78,6 +78,11 @@
         <item>해당없음</item>
     </string-array>
 
+    <string-array name="recheck_group">
+        <item>그룹1</item>
+        <item>그룹을 추가하세요</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

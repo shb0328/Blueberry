@@ -1,6 +1,7 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,8 +10,15 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
@@ -19,11 +27,14 @@ import net.steamcrafted.loadtoast.LoadToast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ListAdapter;
+
 import ssu.cheesecake.blueberry.camera.OCRTask;
 
-public class EditActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditActivity extends AppCompatActivity {
 
     private EditActivity editActivity = this;
 
@@ -47,59 +58,144 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        Intent intent = getIntent();
-        imagePath = intent.getExtras().getString("imagePath");
-        File imageFile = new File(imagePath);
+//        Intent intent = getIntent();
+//        imagePath = intent.getExtras().getString("imagePath");
+//        File imageFile = new File(imagePath);
+//
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+//        imageView = findViewById(R.id.business_card);
+//        imageView.setImageBitmap(bitmap);
+//
+//        asyncTesseract = new AsyncTesseract();
+//        asyncTesseract.execute(bitmap);
+//
+//        //TODO: Parse result string - name,phone,email ...
+//        //TODO: Insert parsing results into each spinners
+//
+//        //TODO 이전까지 건들지 말기 !!!!!!!~~~~~------------------------------------
 
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-        imageView = findViewById(R.id.business_card);
-        imageView.setImageBitmap(bitmap);
 
-        asyncTesseract = new AsyncTesseract();
-        asyncTesseract.execute(bitmap);
+        //앞으로 옮겨죠요 ...
+        final EditSpinner editname;
+        final EditSpinner editphone;
+        final EditSpinner editcompany;
+        final  EditSpinner editemail;
+        final EditSpinner editgroup;
 
-        //TODO: Parse result string - name,phone,email ...
-        //TODO: Insert parsing results into each spinners
+
+        String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
+
+
+        editname=findViewById(R.id.edit_name);
+        editphone=findViewById(R.id.edit_phone);
+        editcompany=findViewById(R.id.edit_company);
+        editemail=findViewById(R.id.edit_address);
+        editgroup=findViewById(R.id.edit_group);
+
+
+        ArrayAdapter name_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_name));
+        editname.setAdapter(name_adapter);
+
+        ArrayAdapter phone_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_phone));
+        editphone.setAdapter(phone_adapter);
+
+        ArrayAdapter company_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_company));
+        editcompany.setAdapter(company_adapter);
+
+        ArrayAdapter email_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_address));
+        editemail.setAdapter(email_adapter);
+
+        ArrayAdapter group_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_group));
+        editemail.setAdapter(group_adapter);
+
+
+
+
+
+
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
-        ToFinValue.setOnClickListener(this);
+        ToFinValue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-    }
+                name_finValue=editname.getText().toString();
+                phone_finValue=editphone.getText().toString();
+                company_finValue= editcompany.getText().toString();
+                mail_finValue=editemail.getText().toString();
+//                group_finValue=editgroup.getText().toString();
 
-    @Override
-    public void onClick(View view) {
-        //if 문으로 option에 따라 다르게 하도록 하기, option에도 listener 달아야함
-        Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-        insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-        insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
-        insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
 
-        ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
+                Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
+                insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
 
-        ContentValues rawContactRow = new ContentValues();
-        contactData.add(rawContactRow);
+                ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
 
-        ContentValues phoneRow = new ContentValues();
-        phoneRow.put(
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-        );
-        phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
-        contactData.add(phoneRow);
+                ContentValues rawContactRow = new ContentValues();
+                contactData.add(rawContactRow);
 
-        ContentValues emailRow = new ContentValues();
-        emailRow.put(
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-        );
-        emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, mail_finValue);
-        contactData.add(emailRow);
+                ContentValues phoneRow = new ContentValues();
+                phoneRow.put(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+                );
+                phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
+                contactData.add(phoneRow);
 
-        insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-        startActivity(insertIntent);
-    }
+                ContentValues emailRow = new ContentValues();
+                emailRow.put(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                );
+                emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, mail_finValue);
+                contactData.add(emailRow);
+
+                insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+                startActivity(insertIntent);
+
+
+
+    }});}
+
+//    @Override
+//    public void onClick(View view) {
+//
+//
+//
+//        Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+//        insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+//        insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
+//        insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
+//
+//        ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
+//
+//        ContentValues rawContactRow = new ContentValues();
+//        contactData.add(rawContactRow);
+//
+//        ContentValues phoneRow = new ContentValues();
+//        phoneRow.put(
+//                ContactsContract.Data.MIMETYPE,
+//                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+//        );
+//        phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
+//        contactData.add(phoneRow);
+//
+//        ContentValues emailRow = new ContentValues();
+//        emailRow.put(
+//                ContactsContract.Data.MIMETYPE,
+//                ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+//        );
+//        emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, mail_finValue);
+//        contactData.add(emailRow);
+//
+//        insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+//        startActivity(insertIntent);
+//    }
+
 
     public class AsyncTesseract extends AsyncTask<Bitmap, Integer, String> {
 
@@ -151,4 +247,21 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         super.onDestroy();
     }
+
+//    private void showSoftInputPanel(View view) {
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        if (imm != null) {
+//            imm.showSoftInput(view, 0);
+//        }
+//    }
+
+    private void showToast(String message){
+        Toast toast=Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.show();
+
+    }
+
 }
+
+
+
