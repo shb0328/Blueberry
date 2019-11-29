@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -13,7 +14,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import ssu.cheesecake.blueberry.R;
 
-public class OptionFragment extends Fragment {
+public class OptionFragment extends Fragment implements View.OnClickListener{
+    Button backupBtn;
+    Button restoreBtn;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -24,7 +27,20 @@ public class OptionFragment extends Fragment {
         BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);
         Menu menu = navView.getMenu();
         menu.getItem(3).setChecked(true);
+
+        backupBtn = root.findViewById(R.id.button_backup);
+        restoreBtn = root.findViewById(R.id.button_restore);
+        backupBtn.setOnClickListener(this);
+        restoreBtn.setOnClickListener(this);
+
         return root;
     }
 
+    @Override
+    public void onClick(View button) {
+        if (backupBtn.equals(button)) {
+        }
+        else if (restoreBtn.equals(button)) {
+        }
+    }
 }

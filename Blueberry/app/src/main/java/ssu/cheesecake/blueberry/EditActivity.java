@@ -58,22 +58,22 @@ public class EditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-//        Intent intent = getIntent();
-//        imagePath = intent.getExtras().getString("imagePath");
-//        File imageFile = new File(imagePath);
-//
-//        BitmapFactory.Options options = new BitmapFactory.Options();
-//        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-//        imageView = findViewById(R.id.business_card);
-//        imageView.setImageBitmap(bitmap);
-//
-//        asyncTesseract = new AsyncTesseract();
-//        asyncTesseract.execute(bitmap);
-//
-//        //TODO: Parse result string - name,phone,email ...
-//        //TODO: Insert parsing results into each spinners
-//
-//        //TODO 이전까지 건들지 말기 !!!!!!!~~~~~------------------------------------
+        Intent intent = getIntent();
+        imagePath = intent.getExtras().getString("imagePath");
+        File imageFile = new File(imagePath);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+        imageView = findViewById(R.id.business_card);
+        imageView.setImageBitmap(bitmap);
+
+        asyncTesseract = new AsyncTesseract();
+        asyncTesseract.execute(bitmap);
+
+        //TODO: Parse result string - name,phone,email ...
+        //TODO: Insert parsing results into each spinners
+
+        //TODO 이전까지 건들지 말기 !!!!!!!~~~~~------------------------------------
 
 
         //앞으로 옮겨죠요 ...
@@ -161,41 +161,6 @@ public class EditActivity extends AppCompatActivity {
 
     }});}
 
-//    @Override
-//    public void onClick(View view) {
-//
-//
-//
-//        Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-//        insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-//        insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
-//        insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
-//
-//        ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
-//
-//        ContentValues rawContactRow = new ContentValues();
-//        contactData.add(rawContactRow);
-//
-//        ContentValues phoneRow = new ContentValues();
-//        phoneRow.put(
-//                ContactsContract.Data.MIMETYPE,
-//                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-//        );
-//        phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
-//        contactData.add(phoneRow);
-//
-//        ContentValues emailRow = new ContentValues();
-//        emailRow.put(
-//                ContactsContract.Data.MIMETYPE,
-//                ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-//        );
-//        emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, mail_finValue);
-//        contactData.add(emailRow);
-//
-//        insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-//        startActivity(insertIntent);
-//    }
-
 
     public class AsyncTesseract extends AsyncTask<Bitmap, Integer, String> {
 
@@ -247,13 +212,6 @@ public class EditActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
-
-//    private void showSoftInputPanel(View view) {
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//        if (imm != null) {
-//            imm.showSoftInput(view, 0);
-//        }
-//    }
 
     private void showToast(String message){
         Toast toast=Toast.makeText(this, message, Toast.LENGTH_LONG);
