@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
-import ssu.cheesecake.blueberry.EditActivity;
 import ssu.cheesecake.blueberry.R;
 
 public class SmartCropActivity extends AppCompatActivity {
@@ -82,7 +81,7 @@ public class SmartCropActivity extends AppCompatActivity {
                     Bitmap crop = cropImageView.crop();
                     if (crop != null) {
                         saveImage(crop, mFile);
-                        Intent intent = new Intent(SmartCropActivity.this, EditActivity.class);
+                        Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
                         intent.putExtra("imagePath",mFile.getPath());
                         startActivity(intent);
                         finish();

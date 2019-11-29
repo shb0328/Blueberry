@@ -1,42 +1,23 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.Spinner;
 import android.widget.Toast;
-
-import com.googlecode.tesseract.android.TessBaseAPI;
-
-import net.steamcrafted.loadtoast.LoadToast;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.ListAdapter;
-
-import ssu.cheesecake.blueberry.camera.OCRTask;
 
 public class EditActivity extends AppCompatActivity {
-
-    private EditActivity editActivity = this;
 
     private String imagePath;
     private ImageView imageView;
@@ -45,13 +26,13 @@ public class EditActivity extends AppCompatActivity {
     public String phone_finValue;
     public String mail_finValue;
     public String company_finValue;
+    private String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
 
-    /**
-     * OCR
-     */
-    private boolean isOCRFailed = false;
-    private AsyncTesseract asyncTesseract;
-    private LoadToast loadToast;
+    private EditSpinner editname;
+    private EditSpinner editphone;
+    private EditSpinner editcompany;
+    private EditSpinner editemail;
+    private EditSpinner editgroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,26 +47,6 @@ public class EditActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
         imageView = findViewById(R.id.business_card);
         imageView.setImageBitmap(bitmap);
-
-        asyncTesseract = new AsyncTesseract();
-        asyncTesseract.execute(bitmap);
-
-        //TODO: Parse result string - name,phone,email ...
-        //TODO: Insert parsing results into each spinners
-
-        //TODO 이전까지 건들지 말기 !!!!!!!~~~~~------------------------------------
-
-
-        //앞으로 옮겨죠요 ...
-        final EditSpinner editname;
-        final EditSpinner editphone;
-        final EditSpinner editcompany;
-        final  EditSpinner editemail;
-        final EditSpinner editgroup;
-
-
-        String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
-
 
         editname=findViewById(R.id.edit_name);
         editphone=findViewById(R.id.edit_phone);
@@ -108,12 +69,6 @@ public class EditActivity extends AppCompatActivity {
 
         ArrayAdapter group_adapter=new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, getResources().getStringArray(R.array.recheck_group));
         editemail.setAdapter(group_adapter);
-
-
-
-
-
-
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
@@ -156,67 +111,12 @@ public class EditActivity extends AppCompatActivity {
 
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
                 startActivity(insertIntent);
-
-
-
     }});}
-
-
-    public class AsyncTesseract extends AsyncTask<Bitmap, Integer, String> {
-
-        TessBaseAPI tessBaseAPI;
-
-        public AsyncTesseract() {
-            super();
-            OCRTask ocrTask = new OCRTask(editActivity);
-            tessBaseAPI = ocrTask.getTessBaseAPI();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            loadToast = new LoadToast(editActivity);
-            loadToast.setText("OCR Converting...");
-            //TODO: center,, not 1000
-            loadToast.setTranslationY(1000);
-            loadToast.show();
-        }
-
-        @Override
-        protected String doInBackground(Bitmap... bitmaps) {
-            tessBaseAPI.setImage(bitmaps[0]);
-            return tessBaseAPI.getUTF8Text();
-        }
-
-        @Override
-        protected void onCancelled() {
-            loadToast.error();
-            isOCRFailed = true;
-            onDestroy();
-            super.onCancelled();
-        }
-
-        @Override
-        protected void onPostExecute(String resultText) {
-            loadToast.success();
-//            tempTextView.setText(resultText);
-            Log.i("OCR result",resultText);
-            super.onPostExecute(resultText);
-        }
-    }
 
     @Override
     protected void onDestroy() {
-        if(isOCRFailed == true){
-            Toast.makeText(this,"Sorry, OCR Faild...",Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this,"cancel...",Toast.LENGTH_SHORT).show();
         super.onDestroy();
-    }
-
-    private void showToast(String message){
-        Toast toast=Toast.makeText(this, message, Toast.LENGTH_LONG);
-        toast.show();
-
     }
 
 }

@@ -2,7 +2,6 @@ package ssu.cheesecake.blueberry.camera;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
@@ -14,24 +13,31 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class NameCropImageView extends View implements View.OnTouchListener {
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+
+public class NameCropImageView extends AppCompatImageView implements View.OnTouchListener
+{
     private Paint paint;
+
+    private boolean flagPathDraw = true;
+    private boolean bFirstPoint = false;
+
+    private Point mFirstPoint = null;
+    private Point mLastPoint = null;
+
+    private Bitmap bitmap;
+
+    /**
+     *
+     */
     private List<Point> points;
     private Point leftTop;
     private Point rightBottom;
-
-    boolean flgPathDraw = true;
-    boolean bfirstpoint = false;
-
-    Point mfirstpoint = null;
-    Point mlastpoint = null;
-
-    Bitmap bitmap;
+    private boolean hasName = false;
 
     public NameCropImageView(Context context) {
         super(context);
@@ -39,7 +45,7 @@ public class NameCropImageView extends View implements View.OnTouchListener {
 
     public void init(Bitmap bitmap) {
         this.bitmap = bitmap;
-
+        super.setImageBitmap(bitmap);
         setFocusable(true);
         setFocusableInTouchMode(true);
 
@@ -54,7 +60,8 @@ public class NameCropImageView extends View implements View.OnTouchListener {
         this.setOnTouchListener(this);
         points = new ArrayList<Point>();
 
-        bfirstpoint = false;
+        bFirstPoint = false;
+        invalidate();
     }
 
     public NameCropImageView(Context context, @Nullable AttributeSet attrs) {
@@ -65,10 +72,25 @@ public class NameCropImageView extends View implements View.OnTouchListener {
         super(context, attrs, defStyleAttr);
     }
 
+    public Point getLeftTop(){
+        if(hasName){
+            return leftTop;
+        }else {
+            return new Point(0,0);
+        }
+    }
+
+    public Point getRightBottom(){
+        if(hasName){
+            return rightBottom;
+        }else {
+            return new Point(1,1);
+        }
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap, 0, 0, null);
 
         Path path = new Path();
         boolean first = true;
@@ -82,7 +104,7 @@ public class NameCropImageView extends View implements View.OnTouchListener {
                 Point next = points.get(i + 1);
                 path.quadTo(point.x, point.y, next.x, next.y);
             } else {
-                mlastpoint = points.get(i);
+                mLastPoint = points.get(i);
                 path.lineTo(point.x, point.y);
             }
         }
@@ -91,13 +113,14 @@ public class NameCropImageView extends View implements View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        Log.d("ocr", points.size() + "");
         Point point = new Point();
         point.x = (int) event.getX();
         point.y = (int) event.getY();
 
-        if (flgPathDraw) {
+        if (flagPathDraw) {
 
-            if (bfirstpoint) {
+            if (bFirstPoint) {
                 if (point.x < leftTop.x)
                     leftTop.x = point.x;
                 if (point.x > rightBottom.x)
@@ -106,10 +129,10 @@ public class NameCropImageView extends View implements View.OnTouchListener {
                     leftTop.y = point.y;
                 if (point.y > rightBottom.y)
                     rightBottom.y = point.y;
-                if (comparepoint(mfirstpoint, point)) {
+                if (comparepoint(mFirstPoint, point)) {
                     // points.add(point);
-                    points.add(mfirstpoint);
-                    flgPathDraw = false;
+                    points.add(mFirstPoint);
+                    flagPathDraw = false;
                 } else {
                     points.add(point);
                 }
@@ -117,10 +140,10 @@ public class NameCropImageView extends View implements View.OnTouchListener {
                 points.add(point);
             }
 
-            if (!(bfirstpoint)) {
+            if (!(bFirstPoint)) {
 
-                mfirstpoint = point;
-                bfirstpoint = true;
+                mFirstPoint = point;
+                bFirstPoint = true;
                 leftTop = new Point(point.x, point.y);
                 rightBottom = new Point(point.x, point.y);
             }
@@ -129,8 +152,8 @@ public class NameCropImageView extends View implements View.OnTouchListener {
         invalidate();
 
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            mlastpoint = point;
-            flgPathDraw = false;
+            mLastPoint = point;
+            flagPathDraw = false;
             leftTop.x = leftTop.x - 25;
             leftTop.y = leftTop.y - 25;
 
@@ -147,12 +170,17 @@ public class NameCropImageView extends View implements View.OnTouchListener {
                 rightBottom.x = (int) Math.floor(this.getX()) + this.getWidth();
             if (rightBottom.y > (int) Math.floor(this.getY()) + this.getHeight())
                 rightBottom.y = (int) Math.floor(this.getY()) + this.getHeight();
+
+            hasName = true;
         }
 
-        //TODO:좌표를 인텐트로 넘기기 누구한테? edit activity한테
         return false;
     }
 
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
 
     private boolean comparepoint(Point first, Point current) {
         int left_range_x = (int) (current.x - 3);

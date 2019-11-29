@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class OCRTask {
+public class OCRInitializer {
 
     private Context context;
     private TessBaseAPI tessBaseAPI;
@@ -22,19 +22,40 @@ public class OCRTask {
             "kor",
     };
 
-    public OCRTask(Context context)
+    public OCRInitializer(Context context)
     {
-        this.context = context;
-        init();
+        this(context,null);
     }
 
-    public TessBaseAPI getTessBaseAPI() { return tessBaseAPI; }
+    public OCRInitializer(Context context, Language language)
+    {
+        this.context = context;
+        if(language == Language.KR){
+            init("kor");
+        }else if(language == Language.EN){
+            init("eng");
+        }else {
+            init();
+        }
+    }
+
+    private void init(String languages)
+    {
+
+        String dir = context.getFilesDir() + "/tesseract";
+
+        checkLanguageFile(dir+"/tessdata/",languages);
+        tessBaseAPI = new TessBaseAPI();
+        tessBaseAPI.init(dir, languages);
+
+        Log.i("OCR init","languages : "+languages);
+    }
 
     private void init()
     {
 
         String dir = context.getFilesDir() + "/tesseract";
-        Log.d("OCR Task init",dir);
+
         String languages = "";
         for(String lang : languageList){
             if(checkLanguageFile(dir+"/tessdata/",lang)) {
@@ -42,10 +63,11 @@ public class OCRTask {
             }
         }
         languages = languages.substring(0,languages.length()-1);
-        Log.d("OCR Task init","languages : "+languages);
 
         tessBaseAPI = new TessBaseAPI();
         tessBaseAPI.init(dir, languages);
+
+        Log.i("OCR init","languages : "+languages);
     }
 
     private boolean checkLanguageFile(String dir,String language)
@@ -90,5 +112,6 @@ public class OCRTask {
         }
     }
 
+    public TessBaseAPI getTessBaseAPI() { return tessBaseAPI; }
 
 }
