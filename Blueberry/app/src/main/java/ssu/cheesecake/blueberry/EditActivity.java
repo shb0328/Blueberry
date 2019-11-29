@@ -19,6 +19,7 @@ import net.steamcrafted.loadtoast.LoadToast;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import androidx.appcompat.app.AppCompatActivity;
 import ssu.cheesecake.blueberry.camera.OCRTask;
@@ -41,6 +42,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isOCRFailed = false;
     private AsyncTesseract asyncTesseract;
     private LoadToast loadToast;
+    private OCRResult ocrResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +142,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             loadToast.success();
 //            tempTextView.setText(resultText);
             Log.i("OCR result",resultText);
+            ocrResult = new OCRResult(resultText);
+            HashMap<String,String> map = ocrResult.parsing();
+            Log.i("OCR result",
+                    "\nemail: "+map.get("email")
+                            +"\nphone: "+map.get("phone")
+                            +"\nname: "+map.get("name"));
             super.onPostExecute(resultText);
         }
     }
