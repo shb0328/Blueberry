@@ -188,6 +188,33 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="true"
+            android:orientation="vertical">
+
+            <ssu.cheesecake.blueberry.EditSpinner
+                android:id="@+id/edit_group"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="그룹을 지정하세요"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="@dimen/recheck1_question1"
+                android:fontFamily="@font/nanumsquare"
+                android:padding="8dp"
+                app:dropDownDrawable="@drawable/picker"
+                app:dropDownDrawableSpacing="15dp"
+                app:dropDownDrawableWidth="25dp"
+                app:dropDownDrawableHeight="25dp"
+                app:dropDownAnimStyle="@style/CustomPopupAnimation"
+                />
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
