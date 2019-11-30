@@ -65,6 +65,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.util.AutoFitTextureView;
 
 
 public class CameraFragment extends Fragment

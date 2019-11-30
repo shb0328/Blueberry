@@ -1,19 +1,16 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.util;
 
 import android.util.Log;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.gms.common.util.Strings;
 
 import java.util.Vector;
 
 import io.realm.Realm;
-import io.realm.RealmModel;
-import io.realm.RealmObject;
 import io.realm.RealmResults;
+import ssu.cheesecake.blueberry.custom.AutoSave;
+import ssu.cheesecake.blueberry.custom.BusinessCard;
+import ssu.cheesecake.blueberry.custom.CustomGroup;
 
-import static ssu.cheesecake.blueberry.RealmController.WhichResult.*;
+import static ssu.cheesecake.blueberry.util.RealmController.WhichResult.*;
 
 public class RealmController {
     public enum WhichResult {

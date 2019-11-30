@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry.camera;
+package ssu.cheesecake.blueberry.util;
 
 import android.content.Context;
 import android.util.AttributeSet;

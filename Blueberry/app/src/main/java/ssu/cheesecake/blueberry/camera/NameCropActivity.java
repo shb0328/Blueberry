@@ -36,7 +36,6 @@ import net.steamcrafted.loadtoast.LoadToast;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import ssu.cheesecake.blueberry.OCRResult;
 import ssu.cheesecake.blueberry.R;
 
 enum Language {

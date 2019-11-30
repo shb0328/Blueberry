@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.util;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -11,19 +11,19 @@ import android.text.Selection;
 import android.text.TextWatcher;
 import android.text.method.KeyListener;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListPopupWindow;
 import android.widget.PopupWindow;
 
 import androidx.appcompat.widget.AppCompatEditText;
+
+import ssu.cheesecake.blueberry.R;
 
 /**
  * EditSpinner

@@ -1,4 +1,4 @@
-package ssu.cheesecake.blueberry;
+package ssu.cheesecake.blueberry.custom;
 
 import io.realm.RealmObject;
 

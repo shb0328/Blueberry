@@ -3,7 +3,6 @@ package ssu.cheesecake.blueberry.menu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,27 +12,24 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import io.realm.Realm;
-import ssu.cheesecake.blueberry.BusinessCard;
+import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.RealmController;
+import ssu.cheesecake.blueberry.util.RealmController;
 import ssu.cheesecake.blueberry.camera.SmartCropActivity;
+import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
-
-import static android.app.Activity.RESULT_OK;
 
 public class ListFragment extends Fragment implements View.OnClickListener, RecyclerTouchListener.RecyclerTouchListenerHelper {
     public static Context context;

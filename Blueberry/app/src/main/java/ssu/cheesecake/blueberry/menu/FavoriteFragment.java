@@ -12,11 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.RealmController;
+import ssu.cheesecake.blueberry.util.RealmController;
+import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
 
 public class FavoriteFragment extends Fragment{
     private RealmController realmController;

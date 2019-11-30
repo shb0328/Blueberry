@@ -1,16 +1,13 @@
-package ssu.cheesecake.blueberry.menu;
+package ssu.cheesecake.blueberry;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -18,7 +15,7 @@ import androidx.navigation.Navigation;
 
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.RealmController;
+import ssu.cheesecake.blueberry.util.RealmController;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;

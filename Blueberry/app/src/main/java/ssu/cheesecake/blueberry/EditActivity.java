@@ -2,28 +2,26 @@ package ssu.cheesecake.blueberry;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import io.realm.Realm;
-import ssu.cheesecake.blueberry.menu.MainActivity;
+import ssu.cheesecake.blueberry.custom.BusinessCard;
+import ssu.cheesecake.blueberry.util.EditSpinner;
+import ssu.cheesecake.blueberry.util.RealmController;
 
 public class EditActivity extends AppCompatActivity {
 

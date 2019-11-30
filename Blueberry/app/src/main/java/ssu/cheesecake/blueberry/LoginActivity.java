@@ -2,7 +2,6 @@ package ssu.cheesecake.blueberry;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
-import ssu.cheesecake.blueberry.menu.MainActivity;
 
 import android.Manifest;
 import android.content.Intent;

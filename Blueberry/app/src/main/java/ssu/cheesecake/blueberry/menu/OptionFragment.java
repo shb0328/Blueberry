@@ -3,7 +3,6 @@ package ssu.cheesecake.blueberry.menu;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -12,21 +11,15 @@ import android.widget.Button;
 import android.widget.Switch;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiActivity;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.realm.Realm;
-import ssu.cheesecake.blueberry.FirebaseHelper;
+import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.RealmController;
+import ssu.cheesecake.blueberry.util.RealmController;
 
 public class OptionFragment extends Fragment implements View.OnClickListener {
     Button backupBtn;
