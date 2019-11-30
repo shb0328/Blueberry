@@ -16,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import io.realm.Realm;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.RealmController;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
@@ -53,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        //주소록 AutoSave Realm에서 읽어옴
+        Realm.init(this);
+        RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+        realmController.initializeAutoSave();
 
     }
 

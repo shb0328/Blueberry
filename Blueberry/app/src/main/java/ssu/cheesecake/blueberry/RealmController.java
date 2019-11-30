@@ -9,6 +9,8 @@ import com.google.android.gms.common.util.Strings;
 import java.util.Vector;
 
 import io.realm.Realm;
+import io.realm.RealmModel;
+import io.realm.RealmObject;
 import io.realm.RealmResults;
 
 import static ssu.cheesecake.blueberry.RealmController.WhichResult.*;
@@ -65,6 +67,42 @@ public class RealmController {
                 mRealm.deleteAll();
             }
         });
+    }
+
+    public void initializeAutoSave() {
+        RealmResults<AutoSave> result = mRealm.where(AutoSave.class).findAll();
+        if (result == null || result.isEmpty()){
+            Log.d("DEBUG!", "Empty!!");
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    AutoSave autoSave = realm.createObject(AutoSave.class);
+                    autoSave.setIsAutoSave(true);
+                }
+            });
+        }
+        return;
+    }
+
+    public AutoSave getIsAutoSave(){
+        return mRealm.where(AutoSave.class).findFirst();
+    }
+
+    public void changeAutoSave(){
+        final AutoSave autoSave = mRealm.where(AutoSave.class).findFirst();
+        final boolean isAuto = autoSave.getIsAutoSave();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                if(isAuto){
+                    autoSave.setIsAutoSave(false);
+                }
+                else {
+                    autoSave.setIsAutoSave(true);
+                }
+            }
+        });
+
     }
 
     //RealmController 생성 시 Realm에 등록되어 있는 BusinessCard를 Vector로 받아옴

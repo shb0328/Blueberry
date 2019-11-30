@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,6 +32,9 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
     Button backupBtn;
     Button restoreBtn;
     Button signOutBtn;
+    Switch autoSave;
+    RealmController realmController;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -45,23 +49,26 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
         backupBtn = root.findViewById(R.id.button_backup);
         restoreBtn = root.findViewById(R.id.button_restore);
         signOutBtn = root.findViewById(R.id.button_signOut);
+        autoSave = root.findViewById(R.id.auto_save);
         backupBtn.setOnClickListener(this);
         restoreBtn.setOnClickListener(this);
         signOutBtn.setOnClickListener(this);
-
+        Realm.init(this.getActivity());
+        realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+        if(realmController.getIsAutoSave().getIsAutoSave()){
+            autoSave.setChecked(true);
+        }
+        else autoSave.setChecked(false);
+        autoSave.setOnClickListener(this);
         return root;
     }
 
     @Override
     public void onClick(View button) {
         if (backupBtn.equals(button)) {
-            Realm.init(this.getActivity());
-            RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
             FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
             firebaseHelper.Backup(realmController);
         } else if (restoreBtn.equals(button)) {
-            Realm.init(this.getActivity());
-            RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
             FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
             firebaseHelper.Restore(realmController);
         } else if(signOutBtn.equals(button)){
@@ -82,6 +89,9 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
                 }
             });
             alert.show();
+        }
+        else if(autoSave.equals(button)){
+            realmController.changeAutoSave();
         }
     }
 }

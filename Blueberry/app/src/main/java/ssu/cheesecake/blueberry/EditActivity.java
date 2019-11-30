@@ -54,7 +54,6 @@ public class EditActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final BusinessCard card = intent.getParcelableExtra("card");
-        position = intent.getIntExtra("position", -1);
         //Image Loading
         imageView = findViewById(R.id.business_card);
         File imageFile = null;
@@ -166,26 +165,14 @@ public class EditActivity extends AppCompatActivity {
 
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
-                Intent resultIntent = new Intent(activity, MainActivity.class);
-                resultIntent.putExtra("position", position);
-                setResult(RESULT_OK, resultIntent);
+                if(realmController.getIsAutoSave().getIsAutoSave()) {
+                    startActivityForResult(insertIntent, RESULT_OK);
+                }
                 finish();
-
-                //startActivityForResult(insertIntent, RESULT_OK);
-                //finish();
             }
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        Log.d("DEBUG!", "onActivityResult: ");
-        super.onActivityResult(requestCode, resultCode, intent);
-        Log.d("DEBUG!", "onActivityResult: ");
-        intent.putExtra("position", position);
-        setResult(RESULT_OK, intent);
-        finish();
-    }
 }
 
 
