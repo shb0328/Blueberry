@@ -1,5 +1,9 @@
 package ssu.cheesecake.blueberry;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -18,8 +22,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 
-public class BusinessCard extends RealmObject {
-    @PrimaryKey
+public class BusinessCard extends RealmObject implements Parcelable {
     public int id;
 
     public String enName;
@@ -33,7 +36,7 @@ public class BusinessCard extends RealmObject {
     public String group;
     public boolean isFavorite;
 
-    public BusinessCard(){
+    public BusinessCard() {
     }
 
     public BusinessCard(String enName, String krName, String phoneNumber, String email, String company, String imageUrl) {
@@ -51,42 +54,122 @@ public class BusinessCard extends RealmObject {
         this.time = makeTImeString();
     }
 
-    public BusinessCard(Map<String, Object> map){
-        this.krName = (String)map.get("krName");
-        this.enName = (String)map.get("enName");
-        this.phoneNumber = (String)map.get("phoneNumber");
-        this.email = (String)map.get("email");
-        this.company = (String)map.get("company");
-        this.imageUrl = (String)map.get("imageUrl");
-        this.group = (String)map.get("group");
-        this.isFavorite = (boolean)map.get("isFavorite");
+    public BusinessCard(Map<String, Object> map) {
+        this.krName = (String) map.get("krName");
+        this.enName = (String) map.get("enName");
+        this.phoneNumber = (String) map.get("phoneNumber");
+        this.email = (String) map.get("email");
+        this.company = (String) map.get("company");
+        this.imageUrl = (String) map.get("imageUrl");
+        this.group = (String) map.get("group");
+        this.isFavorite = (boolean) map.get("isFavorite");
     }
 
-    public int getId() {return id;}
-    public String getEnName() {return enName;}
-    public String getKrName() { return krName;}
-    public String getPhoneNumber() { return phoneNumber;}
-    public String getEmail(){return email;}
-    public String getCompany(){return company;}
-    public String getTime(){return time;}
-    public String getImageUrl(){return imageUrl;}
-    public String getPath(){return path;}
-    public String getGroup(){return group;}
-    public boolean getIsFavorite(){return isFavorite;}
+    protected BusinessCard(Parcel in) {
+        id = in.readInt();
+        enName = in.readString();
+        krName = in.readString();
+        phoneNumber = in.readString();
+        email = in.readString();
+        company = in.readString();
+        time = in.readString();
+        imageUrl = in.readString();
+        path = in.readString();
+        group = in.readString();
+        int tmp = in.readInt();
+        if(tmp == 0) isFavorite = false;
+        else isFavorite = true;
+    }
 
-    public void setId(int id){this.id = id;}
-    public void setEnName(String str){this.enName = str;}
-    public void setKrName(String str){this.krName = str;}
-    public void setPhoneNumber(String str) {this.phoneNumber = str;}
-    public void setEmail(String str) {this.email = email;}
-    public void setCompany(String str){this.company = company;}
-    public void setTime(String time){this.time = time;}
-    public void setImageUrl(String imageUrl){this.imageUrl = imageUrl;}
-    public void setPath(String path){this.path = path;}
-    public void setGroup(String group){this.group = group;}
-    public void setIsFavorite(boolean isFavorite){this.isFavorite = isFavorite;}
+    public int getId() {
+        return id;
+    }
 
-    public static String makeTImeString(){
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEnName() {
+        return enName;
+    }
+
+    public void setEnName(String enName) {
+        this.enName = enName;
+    }
+
+    public String getKrName() {
+        return krName;
+    }
+
+    public void setKrName(String krName) {
+        this.krName = krName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public boolean getIsFavorite() {
+        return isFavorite;
+    }
+
+    public void setIsFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public static String makeTImeString() {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH) + 1;
@@ -95,34 +178,35 @@ public class BusinessCard extends RealmObject {
         int minute = c.get(Calendar.MINUTE);
         int second = c.get(Calendar.SECOND);
         String timeStr = String.valueOf(year);
-        if(month < 10)
+        if (month < 10)
             timeStr = timeStr + "-0" + month;
         else
             timeStr = timeStr + "-" + month;
 
-        if(day < 10)
+        if (day < 10)
             timeStr = timeStr + "-0" + day;
         else
             timeStr = timeStr + "-" + day;
 
-        if(hour < 10)
+        if (hour < 10)
             timeStr = timeStr + "-0" + hour;
         else
             timeStr = timeStr + "-" + hour;
 
-        if(minute < 10)
+        if (minute < 10)
             timeStr = timeStr + ":0" + minute;
         else
             timeStr = timeStr + ":" + minute;
 
-        if(second < 10)
+        if (second < 10)
             timeStr = timeStr + ":0" + second;
         else
             timeStr = timeStr + ":" + second;
         return timeStr;
     }
 
-    public void Copy(BusinessCard src){
+    public void Copy(BusinessCard src) {
+        id = src.getId();
         enName = src.getEnName();
         krName = src.getKrName();
         phoneNumber = src.getPhoneNumber();
@@ -137,8 +221,9 @@ public class BusinessCard extends RealmObject {
     }
 
     @Exclude
-    public Map<String, Object> toMap(){
+    public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("id", id);
         result.put("enName", enName);
         result.put("krName", krName);
         result.put("phoneNumber", phoneNumber);
@@ -152,8 +237,10 @@ public class BusinessCard extends RealmObject {
         return result;
     }
 
-    public String toString(){
+    public String toString() {
         String result = new String();
+        result += "id: ";
+        result += id;
         result += "enName: ";
         result += this.enName + ',';
         result += "krName: ";
@@ -176,5 +263,42 @@ public class BusinessCard extends RealmObject {
         result += this.isFavorite;
         return result;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(enName);
+        dest.writeString(krName);
+        dest.writeString(phoneNumber);
+        dest.writeString(email);
+        dest.writeString(company);
+        dest.writeString(time);
+        dest.writeString(imageUrl);
+        dest.writeString(path);
+        dest.writeString(group);
+        if (isFavorite)
+            dest.writeInt(1);
+        else if (isFavorite)
+            dest.writeInt(0);
+        return;
+    }
+
+    public static final Creator<BusinessCard> CREATOR = new Creator<BusinessCard>(){
+
+        @Override
+        public BusinessCard createFromParcel(Parcel source) {
+            return new BusinessCard(source);
+        }
+
+        @Override
+        public BusinessCard[] newArray(int size) {
+            return new BusinessCard[0];
+        }
+    };
 }
 

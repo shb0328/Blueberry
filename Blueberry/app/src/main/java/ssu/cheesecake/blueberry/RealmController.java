@@ -57,7 +57,7 @@ public class RealmController {
         }
     }
 
-    public void initializeCards(){
+    public void initializeCards() {
         cards = new Vector<BusinessCard>();
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
@@ -155,6 +155,10 @@ public class RealmController {
         });
     }
 
+    public Vector<BusinessCard> getCards() {
+        return cards;
+    }
+
     //Realm에 BusinessCard 추가하는 함수
     public void addBusinessCard(final BusinessCard card) {
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -162,20 +166,30 @@ public class RealmController {
             public void execute(Realm realm) {
                 Number currentIdNum = realm.where(BusinessCard.class).max("id");
                 int nextId;
-                if(currentIdNum == null) {
-                    nextId = 1;
+                if (currentIdNum == null) {
+                    nextId = 0;
                 } else {
                     nextId = currentIdNum.intValue() + 1;
                 }
-                BusinessCard addCard = realm.createObject(BusinessCard.class, nextId);
+                card.setId(nextId);
+                BusinessCard addCard = realm.createObject(BusinessCard.class);
                 addCard.Copy(card);
                 cards.add(addCard);
             }
         });
     }
 
-    public Vector<BusinessCard> getCards() {
-        return cards;
+    public void editBusinessCard(final BusinessCard card, final int position) {
+        final int id = card.getId();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
+                editCard.Copy(card);
+                cards.get(position).Copy(editCard);
+            }
+        });
+        return;
     }
 
     public void changeKrName(final BusinessCard card, final String krName) {

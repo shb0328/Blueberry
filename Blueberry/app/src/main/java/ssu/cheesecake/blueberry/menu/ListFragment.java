@@ -33,6 +33,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ListFragment extends Fragment implements View.OnClickListener, RecyclerTouchListener.RecyclerTouchListenerHelper {
     public static Context context;
     private static final int CAMREQUESTCODE = 1;
@@ -56,6 +58,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
     private View root;
 
     RealmController realmController;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = this.getContext();
@@ -87,7 +90,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
             }
         });
         searchStr = null;
-        buttonSearch.setOnClickListener(new View.OnClickListener(){
+        buttonSearch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

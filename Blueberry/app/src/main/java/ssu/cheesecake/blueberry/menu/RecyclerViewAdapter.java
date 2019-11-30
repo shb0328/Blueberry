@@ -2,6 +2,7 @@ package ssu.cheesecake.blueberry.menu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
@@ -22,6 +23,7 @@ import java.io.File;
 import java.util.Vector;
 
 import ssu.cheesecake.blueberry.BusinessCard;
+import ssu.cheesecake.blueberry.EditActivity;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.RealmController;
 
@@ -117,8 +119,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     //RecyclerView에 TouchListener 설정 함수
-     public static void setTouchListener(final Context context, Activity activity, final RecyclerView recyclerView) {
-        RecyclerTouchListener onTouchListener = new RecyclerTouchListener(activity, recyclerView);
+     public static void setTouchListener(final Context context, final Activity activity, final RecyclerView recyclerView) {
+        final RecyclerTouchListener onTouchListener = new RecyclerTouchListener(activity, recyclerView);
         onTouchListener
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
                     @Override
@@ -137,17 +139,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     @Override
                     public void onSwipeOptionClicked(int viewID, int position) {
+                        BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
                         if (viewID == R.id.item_button_favorite) {
-                            BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
                             if(realmController != null){
                                 realmController.changeIsFavorite(card);
+                                recyclerView.getAdapter().notifyItemChanged(position);
                             }
                         } else if (viewID == R.id.item_button_edit) {
-                            Toast toast = Toast.makeText(context, "Edit!", Toast.LENGTH_SHORT);
-                            toast.show();
-                            recyclerView.getAdapter().notifyItemChanged(position);
+                            Intent intent = new Intent(activity, EditActivity.class);
+                            intent.putExtra("card", card);
+                            intent.putExtra("position", position);
+                            activity.startActivityForResult(intent, Activity.RESULT_OK);
                         } else if (viewID == R.id.item_button_delete) {
-                            BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
                             if(realmController != null){
                                 realmController.deleteBusinessCard(card);
                                 recyclerView.getAdapter().notifyDataSetChanged();
