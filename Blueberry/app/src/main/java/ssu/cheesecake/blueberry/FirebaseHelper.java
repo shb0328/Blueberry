@@ -19,6 +19,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import net.steamcrafted.loadtoast.LoadToast;
+
 import java.util.HashMap;
 import java.util.Vector;
 
@@ -27,6 +29,7 @@ public class FirebaseHelper {
     private String userId;
     private FirebaseUser user;
     private DatabaseReference myRef;
+    LoadToast restoreLoadToast;
 
     public FirebaseHelper(){
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -72,6 +75,10 @@ public class FirebaseHelper {
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                restoreLoadToast = new LoadToast(context);
+                restoreLoadToast.setText("Restore...");
+                restoreLoadToast.setTranslationY(1000);
+                restoreLoadToast.show();
                 realm.initializeCards();
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -81,6 +88,7 @@ public class FirebaseHelper {
                             BusinessCard card = new BusinessCard(map);
                             realm.addBusinessCard(card);
                         }
+                        restoreLoadToast.success();
                     }
 
                     @Override

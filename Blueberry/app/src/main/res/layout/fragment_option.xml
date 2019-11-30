@@ -26,7 +26,7 @@
         android:id="@+id/layout_restore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/auto_save"
+        android:layout_above="@id/layout_signOut"
         android:orientation="horizontal">
 
         <TextView
@@ -39,6 +39,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_restore" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/layout_signOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/auto_save"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_signOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_signOut" />
     </LinearLayout>
 
     <Switch

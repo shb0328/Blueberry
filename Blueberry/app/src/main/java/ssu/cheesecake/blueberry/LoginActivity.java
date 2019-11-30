@@ -50,6 +50,12 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         // 파이어베이스 인증 객체 선언
         firebaseAuth = FirebaseAuth.getInstance();
 
+        if(firebaseAuth.getCurrentUser() != null){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+
         buttonGoogle = findViewById(R.id.btn_googleSignIn);
 
         // Google 로그인을 앱에 통합
