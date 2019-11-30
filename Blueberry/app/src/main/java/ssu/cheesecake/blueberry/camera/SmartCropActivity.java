@@ -42,6 +42,7 @@ import net.steamcrafted.loadtoast.LoadToast;
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.util.StringPharser;
 
 public class SmartCropActivity extends AppCompatActivity {
 
@@ -112,8 +113,9 @@ public class SmartCropActivity extends AppCompatActivity {
                                 new OnSuccessListener<FirebaseVisionText>() {
                                     @Override
                                     public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                        StringPharser stringPharser = new StringPharser(firebaseVisionText);
                                         String resultString = firebaseVisionText.getText();
-                                        Log.d("DEBUG!", resultString);
+//                                        Log.d("DEBUG!", resultString);
                                         loadToast.success();
                                     }
                                 })
