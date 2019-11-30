@@ -21,10 +21,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+
+import net.steamcrafted.loadtoast.LoadToast;
+
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
 import ssu.cheesecake.blueberry.R;
@@ -41,6 +55,7 @@ public class SmartCropActivity extends AppCompatActivity {
     private String path;
     private String fileName;
     private File mFile;
+    private LoadToast loadToast;
 
     CropImageView cropImageView;
     Button btnCancel;
@@ -51,10 +66,10 @@ public class SmartCropActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
 
-        if(intent.getIntExtra("key",0) == CAMREQUESTCODE){
+        if (intent.getIntExtra("key", 0) == CAMREQUESTCODE) {
             Intent cameraIntent = new Intent(this, CameraActivity.class);
-            startActivityForResult(cameraIntent,CAMREQUESTCODE);
-        }else if(intent.getIntExtra("key",0) == GALLERYREQUESTCODE){
+            startActivityForResult(cameraIntent, CAMREQUESTCODE);
+        } else if (intent.getIntExtra("key", 0) == GALLERYREQUESTCODE) {
             Intent galleryIntent = new Intent(Intent.ACTION_PICK);
             galleryIntent.setType(MediaStore.Images.Media.CONTENT_TYPE);
             startActivityForResult(galleryIntent, GALLERYREQUESTCODE);
@@ -81,14 +96,40 @@ public class SmartCropActivity extends AppCompatActivity {
                     Bitmap crop = cropImageView.crop();
                     if (crop != null) {
                         saveImage(crop, mFile);
-                        Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
-                        intent.putExtra("imagePath",mFile.getPath());
-                        startActivity(intent);
-                        finish();
+//                        Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
+//                        intent.putExtra("imagePath",mFile.getPath());
+//                        startActivity(intent);
+//                        finish();
+                        loadToast = new LoadToast(activity);
+                        loadToast.setText("Read Text From Image...");
+                        loadToast.setTranslationY(1000);
+                        loadToast.show();
+
+                        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(BitmapFactory.decodeFile(mFile.getPath()));
+                        FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getCloudTextRecognizer();
+                        new FirebaseVisionCloudTextRecognizerOptions.Builder().setLanguageHints(Arrays.asList("en", "kr")).build();
+                        Task<FirebaseVisionText> result = detector.processImage(image).addOnSuccessListener(
+                                new OnSuccessListener<FirebaseVisionText>() {
+                                    @Override
+                                    public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                        String resultString = firebaseVisionText.getText();
+                                        Log.d("DEBUG!", resultString);
+                                        loadToast.success();
+                                    }
+                                })
+                                .addOnFailureListener(
+                                        new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d("DEBUG!", "Failed!");
+
+                                            }
+                                        }
+                                );
                     } else {
-                        Log.d(TAG,"Bitmap crop is null...");
+                        Log.d(TAG, "Bitmap crop is null...");
                     }
-                    finish();
+//                    finish();
                 } else {
                     Toast.makeText(SmartCropActivity.this, "cannot crop correctly, please re crop", Toast.LENGTH_SHORT).show();
 
@@ -112,7 +153,7 @@ public class SmartCropActivity extends AppCompatActivity {
                 selectedBitmap = BitmapFactory.decodeFile(imagePath);
 
                 if (selectedBitmap != null) {
-                    selectedBitmap = rotateBitmap(selectedBitmap,imagePath);
+                    selectedBitmap = rotateBitmap(selectedBitmap, imagePath);
                     cropImageView.setImageToCrop(selectedBitmap);
                 } else {
                     Log.i(TAG, "SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
@@ -130,13 +171,13 @@ public class SmartCropActivity extends AppCompatActivity {
                     cursor.moveToFirst();
                     String imagePath = cursor.getString(column_index);
 
-                    path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/blueberry/";
+                    path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/blueberry/";
                     fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
                     File dir = new File(path);
-                    if(!dir.exists()&&dir.mkdir()){
+                    if (!dir.exists() && dir.mkdir()) {
                         dir.setWritable(true);
                     }
-                    mFile = new File(path,fileName);
+                    mFile = new File(path, fileName);
 
                     Bitmap originImage = BitmapFactory.decodeFile(imagePath);
                     saveImage(originImage, mFile);
@@ -145,7 +186,7 @@ public class SmartCropActivity extends AppCompatActivity {
                     selectedBitmap = BitmapFactory.decodeFile(mFile.getPath());
 
                     if (selectedBitmap != null) {
-                        selectedBitmap = rotateBitmap(selectedBitmap,mFile.getPath());
+                        selectedBitmap = rotateBitmap(selectedBitmap, mFile.getPath());
                         cropImageView.setImageToCrop(selectedBitmap);
                     } else {
                         Log.i(TAG, "SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
@@ -207,7 +248,7 @@ public class SmartCropActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            activity.sendBroadcast(new Intent( Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(saveFile)));
+            activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(saveFile)));
         }
     }
 

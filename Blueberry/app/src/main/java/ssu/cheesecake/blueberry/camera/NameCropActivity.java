@@ -5,36 +5,36 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.DashPathEffect;
-import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.ml.vision.FirebaseVision;
+import com.google.firebase.ml.vision.common.FirebaseVisionImage;
+import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions;
+import com.google.firebase.ml.vision.text.FirebaseVisionText;
+import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
 import com.googlecode.tesseract.android.TessBaseAPI;
 
 import net.steamcrafted.loadtoast.LoadToast;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import ssu.cheesecake.blueberry.OCRResult;
 import ssu.cheesecake.blueberry.R;
@@ -88,6 +88,33 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         map = new HashMap<>();
 
+        Log.d("DEBUG!", "Start!");
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(bitmap);
+        FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getCloudTextRecognizer();
+        FirebaseVisionCloudTextRecognizerOptions options = new FirebaseVisionCloudTextRecognizerOptions.Builder()
+                .setLanguageHints(Arrays.asList("en", "kr"))
+                .build();
+        Log.d("DEBUG!", "Start!");
+        Task<FirebaseVisionText> result =
+                detector.processImage(image)
+                        .addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
+                            @Override
+                            public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                                Log.d("DEBUG!", "Finish!");
+                                String resultString = firebaseVisionText.getText();
+                                Log.d("DEBUG!", resultString);
+                            }
+                        })
+                        .addOnFailureListener(
+                                new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.d("DEBUG!", "Failed!");
+
+                                    }
+                                }
+                        );
+
     }
 
     @Override
@@ -104,46 +131,46 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this, "언어를 선택해 주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-        //leftTop, rightBottom Point 얻어옴
-        leftTop = nameCropImageView.getLeftTop();
-        rightBottom = nameCropImageView.getRightBottom();
-        Log.d("DEBUG!", "onClick: " + nameCropImageView.getWidth() + "," + nameCropImageView.getHeight());
-        //image의 크기가 view보다 크다면
-        if(bitmap.getWidth() > nameCropImageView.getWidth()) {
-            //view에서의 좌표를 image에서의 좌표로 재설정
-            leftTop.x = (int) (leftTop.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            leftTop.y = (int) (leftTop.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            rightBottom.x = (int) (rightBottom.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            rightBottom.y = (int) (rightBottom.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-        }
-        //좌표값이 image의 범위를 벗어날 경우 image 내의 좌표로 재설정
-        if(leftTop.x < 0)
-            leftTop.x = 0;
-        if(leftTop.y < 0)
-            leftTop.y = 0;
-        if(rightBottom.x > bitmap.getWidth())
-            rightBottom.x = bitmap.getWidth();
-        if(rightBottom.y > bitmap.getHeight())
-            rightBottom.y = bitmap.getHeight();
-
-        Bitmap nameBitmap = cropNameImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
-        AsyncTesseract asyncTesseractForName;
-        if(languageRadioGroup.getCheckedRadioButtonId() == R.id.korRadioBtn){
-            asyncTesseractForName = new AsyncTesseract(Language.KR);
-            asyncTesseractForName.setOCRInitializer();
-            asyncTesseractForName.execute(nameBitmap);
-
-        }else if(languageRadioGroup.getCheckedRadioButtonId() == R.id.engRadioBtn){
-            asyncTesseractForName = new AsyncTesseract(Language.EN);
-            asyncTesseractForName.setOCRInitializer();
-            asyncTesseractForName.execute(nameBitmap);
-
-        }
-         Bitmap phoneAndEmailBitmap = cropPhoneAndEmailImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
-         AsyncTesseract asyncTesseractForPhoneAndEmail;
-         asyncTesseractForPhoneAndEmail = new AsyncTesseract();
-         asyncTesseractForPhoneAndEmail.setOCRInitializer();
-         asyncTesseractForPhoneAndEmail.execute(phoneAndEmailBitmap);
+//        //leftTop, rightBottom Point 얻어옴
+//        leftTop = nameCropImageView.getLeftTop();
+//        rightBottom = nameCropImageView.getRightBottom();
+//        Log.d("DEBUG!", "onClick: " + nameCropImageView.getWidth() + "," + nameCropImageView.getHeight());
+//        //image의 크기가 view보다 크다면
+//        if(bitmap.getWidth() > nameCropImageView.getWidth()) {
+//            //view에서의 좌표를 image에서의 좌표로 재설정
+//            leftTop.x = (int) (leftTop.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+//            leftTop.y = (int) (leftTop.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+//            rightBottom.x = (int) (rightBottom.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+//            rightBottom.y = (int) (rightBottom.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+//        }
+//        //좌표값이 image의 범위를 벗어날 경우 image 내의 좌표로 재설정
+//        if(leftTop.x < 0)
+//            leftTop.x = 0;
+//        if(leftTop.y < 0)
+//            leftTop.y = 0;
+//        if(rightBottom.x > bitmap.getWidth())
+//            rightBottom.x = bitmap.getWidth();
+//        if(rightBottom.y > bitmap.getHeight())
+//            rightBottom.y = bitmap.getHeight();
+//
+//        Bitmap nameBitmap = cropNameImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
+//        AsyncTesseract asyncTesseractForName;
+//        if(languageRadioGroup.getCheckedRadioButtonId() == R.id.korRadioBtn){
+//            asyncTesseractForName = new AsyncTesseract(Language.KR);
+//            asyncTesseractForName.setOCRInitializer();
+//            asyncTesseractForName.execute(nameBitmap);
+//
+//        }else if(languageRadioGroup.getCheckedRadioButtonId() == R.id.engRadioBtn){
+//            asyncTesseractForName = new AsyncTesseract(Language.EN);
+//            asyncTesseractForName.setOCRInitializer();
+//            asyncTesseractForName.execute(nameBitmap);
+//
+//        }
+//         Bitmap phoneAndEmailBitmap = cropPhoneAndEmailImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
+//         AsyncTesseract asyncTesseractForPhoneAndEmail;
+//         asyncTesseractForPhoneAndEmail = new AsyncTesseract();
+//         asyncTesseractForPhoneAndEmail.setOCRInitializer();
+//         asyncTesseractForPhoneAndEmail.execute(phoneAndEmailBitmap);
 
     }
 
