@@ -8,6 +8,7 @@ import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -19,15 +20,16 @@ import java.util.List;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
-public class NameCropImageView extends AppCompatImageView implements View.OnTouchListener
-{
+public class NameCropImageView extends AppCompatImageView implements View.OnTouchListener {
     private Paint paint;
 
-    private boolean flagPathDraw = true;
-    private boolean bFirstPoint = false;
+    private boolean isTouched = false;
 
-    private Point mFirstPoint = null;
-    private Point mLastPoint = null;
+    private boolean isFirstTouch = true;
+
+    private Rect bitmapRegion;
+    private int myWidth;
+    private int myHeight;
 
     private Bitmap bitmap;
 
@@ -37,6 +39,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     private List<Point> points;
     private Point leftTop;
     private Point rightBottom;
+
     private boolean hasName = false;
 
     public NameCropImageView(Context context) {
@@ -60,8 +63,28 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         this.setOnTouchListener(this);
         points = new ArrayList<Point>();
 
-        bFirstPoint = false;
         invalidate();
+    }
+
+    public void initBitmapRegion(int width, int height) {
+        myWidth = width;
+        myHeight = height;
+        if (bitmap.getWidth() > this.getWidth()) {
+            Log.d("DEBUG!", "this.width: " + this.getWidth());
+            Log.d("DEBUG!", "this.height: " + this.getHeight());
+            Log.d("DEBUG!", "bitmap.width: " + bitmap.getWidth());
+            Log.d("DEBUG!", "bitmap.height: " + bitmap.getHeight());
+            Log.d("DEBUG!", "myWidth: " + myWidth);
+            Log.d("DEBUG!", "myHeight: " + myHeight);
+            //view에서의 좌표를 image에서의 좌표로 재설정
+            width = (int) ((bitmap.getWidth() * ((float) myWidth / bitmap.getWidth())));
+            height = (int) ((bitmap.getHeight() * ((float) myHeight / bitmap.getWidth())));
+            Log.d("DEBUG!", "width: " + width);
+            Log.d("DEBUG!", "height: " + height);
+        }
+        bitmapRegion = new Rect(0, 0, width, height);
+        Log.d("DEBUG!", bitmapRegion.toString());
+        return;
     }
 
     public NameCropImageView(Context context, @Nullable AttributeSet attrs) {
@@ -72,20 +95,24 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         super(context, attrs, defStyleAttr);
     }
 
-    public Point getLeftTop(){
-        if(hasName){
+    public Point getLeftTop() {
+        if (hasName) {
             return leftTop;
-        }else {
-            return new Point(0,0);
+        } else {
+            return new Point(0, 0);
         }
     }
 
-    public Point getRightBottom(){
-        if(hasName){
+    public Point getRightBottom() {
+        if (hasName) {
             return rightBottom;
-        }else {
-            return new Point(1,1);
+        } else {
+            return new Point(1, 1);
         }
+    }
+
+    private boolean inBitmapRegion(Point point) {
+        return (point.x >= bitmapRegion.left) && (point.x <= bitmapRegion.right) && (point.y >= bitmapRegion.top) && (point.y <= bitmapRegion.bottom);
     }
 
     @Override
@@ -104,7 +131,6 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
                 Point next = points.get(i + 1);
                 path.quadTo(point.x, point.y, next.x, next.y);
             } else {
-                mLastPoint = points.get(i);
                 path.lineTo(point.x, point.y);
             }
         }
@@ -113,14 +139,18 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        Log.d("ocr", points.size() + "");
+        //첫 터치 이벤트 때에만 BitmapRegion 초기화
+        if (isFirstTouch) {
+            isFirstTouch = false;
+            initBitmapRegion(this.getWidth(), this.getHeight());
+        }
         Point point = new Point();
         point.x = (int) event.getX();
         point.y = (int) event.getY();
-
-        if (flagPathDraw) {
-
-            if (bFirstPoint) {
+        //BitmapRegion 안에서 TouchEvent가 발생했을 때에만
+        if (inBitmapRegion(point)) {
+            //Touch Move, Up Event
+            if (isTouched) {
                 if (point.x < leftTop.x)
                     leftTop.x = point.x;
                 if (point.x > rightBottom.x)
@@ -129,77 +159,51 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
                     leftTop.y = point.y;
                 if (point.y > rightBottom.y)
                     rightBottom.y = point.y;
-                if (comparepoint(mFirstPoint, point)) {
-                    // points.add(point);
-                    points.add(mFirstPoint);
-                    flagPathDraw = false;
-                } else {
-                    points.add(point);
-                }
-            } else {
                 points.add(point);
             }
-
-            if (!(bFirstPoint)) {
-
-                mFirstPoint = point;
-                bFirstPoint = true;
+            //Touch Down Event
+            else {
+                points = new ArrayList<Point>();
+                isTouched = true;
                 leftTop = new Point(point.x, point.y);
                 rightBottom = new Point(point.x, point.y);
+                points.add(point);
+            }
+            //Touch Up Event
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (isTouched) {
+                    isTouched = false;
+                    //margin 25
+                    leftTop.x = leftTop.x - 25;
+                    leftTop.y = leftTop.y - 25;
+                    rightBottom.x = rightBottom.x + 25;
+                    rightBottom.y = rightBottom.y + 25;
+
+                    hasName = true;
+                }
+            }
+        }
+        //BitmapRegion 밖으로 벗어났을 경우
+        else{
+            if(isTouched) {
+                isTouched = false;
+                //margin 25
+                leftTop.x = leftTop.x - 25;
+                leftTop.y = leftTop.y - 25;
+                rightBottom.x = rightBottom.x + 25;
+                rightBottom.y = rightBottom.y + 25;
+                hasName = true;
             }
         }
 
         invalidate();
 
-        if (event.getAction() == MotionEvent.ACTION_UP) {
-            mLastPoint = point;
-            flagPathDraw = false;
-            leftTop.x = leftTop.x - 25;
-            leftTop.y = leftTop.y - 25;
-
-            rightBottom.x = rightBottom.x + 25;
-            rightBottom.y = rightBottom.y + 25;
-
-            Log.d("DEBUG!", "onTouch: \nX: " + this.getX() + " ,Y: " + this.getY());
-
-            if (leftTop.x < (int) Math.ceil(this.getX()))
-                leftTop.x = (int) Math.ceil(this.getX());
-            if (leftTop.y < (int) Math.ceil(this.getY()))
-                leftTop.y = (int) Math.ceil(this.getY());
-            if (rightBottom.x > (int) Math.floor(this.getX()) + this.getWidth())
-                rightBottom.x = (int) Math.floor(this.getX()) + this.getWidth();
-            if (rightBottom.y > (int) Math.floor(this.getY()) + this.getHeight())
-                rightBottom.y = (int) Math.floor(this.getY()) + this.getHeight();
-
-            hasName = true;
-        }
-
-        return false;
+        return true;
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-    }
-
-    private boolean comparepoint(Point first, Point current) {
-        int left_range_x = (int) (current.x - 3);
-        int left_range_y = (int) (current.y - 3);
-
-        int right_range_x = (int) (current.x + 3);
-        int right_range_y = (int) (current.y + 3);
-
-        if ((left_range_x < first.x && first.x < right_range_x)
-                && (left_range_y < first.y && first.y < right_range_y)) {
-            if (points.size() < 10) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-
     }
 
 }

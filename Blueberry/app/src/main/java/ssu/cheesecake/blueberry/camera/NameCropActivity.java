@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -34,10 +35,11 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import ssu.cheesecake.blueberry.OCRResult;
 import ssu.cheesecake.blueberry.R;
 
-enum Language{
+enum Language {
     KR, EN
 }
 
@@ -52,13 +54,15 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
     private RadioGroup languageRadioGroup;
     private Button okButton, cancelButton;
 
+    private Point leftTop, rightBottom;
+
     /**
      * OCR
      */
     private boolean isOCRFailed = false;
     private LoadToast loadToast;
     private OCRResult ocrResult;
-    private HashMap<String,String> map;
+    private HashMap<String, String> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +77,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDestroy();
+                finish();
             }
         });
 
@@ -83,62 +87,75 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         nameCropImageView.init(bitmap);
 
         map = new HashMap<>();
+
     }
 
     @Override
-    protected void onDestroy()
-    {
-        if(isOCRFailed == true){
-            Toast.makeText(this,"cancel...",Toast.LENGTH_SHORT).show();
+    protected void onDestroy() {
+        if (isOCRFailed == true) {
+            Toast.makeText(this, "cancel...", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }
 
     @Override
     public void onClick(View view) {
-        if(languageRadioGroup.getCheckedRadioButtonId() == -1){
-            Toast.makeText(this,"언어를 선택해 주세요.",Toast.LENGTH_SHORT).show();
+        if (languageRadioGroup.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "언어를 선택해 주세요.", Toast.LENGTH_SHORT).show();
             return;
         }
-/**
-        Point leftTop = nameCropImageView.getLeftTop();
-        Point rightBottom = nameCropImageView.getRightBottom();
- **/
+        //leftTop, rightBottom Point 얻어옴
+        leftTop = nameCropImageView.getLeftTop();
+        rightBottom = nameCropImageView.getRightBottom();
+        Log.d("DEBUG!", "onClick: " + nameCropImageView.getWidth() + "," + nameCropImageView.getHeight());
+        //image의 크기가 view보다 크다면
+        if(bitmap.getWidth() > nameCropImageView.getWidth()) {
+            //view에서의 좌표를 image에서의 좌표로 재설정
+            leftTop.x = (int) (leftTop.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+            leftTop.y = (int) (leftTop.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+            rightBottom.x = (int) (rightBottom.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+            rightBottom.y = (int) (rightBottom.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+        }
+        //좌표값이 image의 범위를 벗어날 경우 image 내의 좌표로 재설정
+        if(leftTop.x < 0)
+            leftTop.x = 0;
+        if(leftTop.y < 0)
+            leftTop.y = 0;
+        if(rightBottom.x > bitmap.getWidth())
+            rightBottom.x = bitmap.getWidth();
+        if(rightBottom.y > bitmap.getHeight())
+            rightBottom.y = bitmap.getHeight();
 
-//        Bitmap nameBitmap = cropNameImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
-//        AsyncTesseract asyncTesseractForName;
-//        if(languageRadioGroup.getCheckedRadioButtonId() == R.id.korRadioBtn){
-//            asyncTesseractForName = new AsyncTesseract(Language.KR);
-//            asyncTesseractForName.setOCRInitializer();
-//            asyncTesseractForName.execute(nameBitmap);
-//
-//        }else if(languageRadioGroup.getCheckedRadioButtonId() == R.id.engRadioBtn){
-//            asyncTesseractForName = new AsyncTesseract(Language.EN);
-//            asyncTesseractForName.setOCRInitializer();
-//            asyncTesseractForName.execute(nameBitmap);
-//
-//        }
-/**
-        Bitmap phoneAndEmailBitmap = cropPhoneAndEmailImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
-        AsyncTesseract asyncTesseractForPhoneAndEmail;
-        asyncTesseractForPhoneAndEmail = new AsyncTesseract();
-        asyncTesseractForPhoneAndEmail.setOCRInitializer();
-        asyncTesseractForPhoneAndEmail.execute(phoneAndEmailBitmap);
- **/
+        Bitmap nameBitmap = cropNameImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
+        AsyncTesseract asyncTesseractForName;
+        if(languageRadioGroup.getCheckedRadioButtonId() == R.id.korRadioBtn){
+            asyncTesseractForName = new AsyncTesseract(Language.KR);
+            asyncTesseractForName.setOCRInitializer();
+            asyncTesseractForName.execute(nameBitmap);
+
+        }else if(languageRadioGroup.getCheckedRadioButtonId() == R.id.engRadioBtn){
+            asyncTesseractForName = new AsyncTesseract(Language.EN);
+            asyncTesseractForName.setOCRInitializer();
+            asyncTesseractForName.execute(nameBitmap);
+
+        }
+         Bitmap phoneAndEmailBitmap = cropPhoneAndEmailImage(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
+         AsyncTesseract asyncTesseractForPhoneAndEmail;
+         asyncTesseractForPhoneAndEmail = new AsyncTesseract();
+         asyncTesseractForPhoneAndEmail.setOCRInitializer();
+         asyncTesseractForPhoneAndEmail.execute(phoneAndEmailBitmap);
 
     }
 
 
-    private Bitmap cropNameImage(int left, int top, int right, int bottom)
-    {
-        Rect rect = new Rect(left,top,right,bottom);
+    private Bitmap cropNameImage(int left, int top, int right, int bottom) {
+        Rect rect = new Rect(left, top, right, bottom);
         return Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
     }
 
-    private Bitmap cropPhoneAndEmailImage(int left, int top, int right, int bottom)
-    {
+    private Bitmap cropPhoneAndEmailImage(int left, int top, int right, int bottom) {
         Bitmap restBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
-        Rect rect = new Rect(left,top,right,bottom);
+        Rect rect = new Rect(left, top, right, bottom);
         //Crop 영역 제외한 image 저장할 Canvas
         Canvas canvas = new Canvas(restBitmap);
         Paint paint = new Paint();
@@ -151,25 +168,23 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         return Bitmap.createBitmap(restBitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight());
     }
 
-
-
     class AsyncTesseract extends AsyncTask<Bitmap, Integer, String> {
 
         private TessBaseAPI tessBaseAPI;
         private Language nameLanguage;
 
-        public AsyncTesseract(){ this(null);}
+        public AsyncTesseract() {
+            this(null);
+        }
 
-        public AsyncTesseract(Language nameLanguage)
-        {
+        public AsyncTesseract(Language nameLanguage) {
             super();
             this.nameLanguage = nameLanguage;
         }
 
-        public void setOCRInitializer()
-        {
-            if(isName()){
-                OCRInitializer ocrInitializer = new OCRInitializer(app,nameLanguage);
+        public void setOCRInitializer() {
+            if (isName()) {
+                OCRInitializer ocrInitializer = new OCRInitializer(app, nameLanguage);
                 tessBaseAPI = ocrInitializer.getTessBaseAPI();
                 return;
             }
@@ -177,15 +192,14 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
             tessBaseAPI = ocrInitializer.getTessBaseAPI();
         }
 
-        private boolean isName(){
-            return nameLanguage!=null;
+        private boolean isName() {
+            return nameLanguage != null;
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             super.onPreExecute();
-            if(isName()){
+            if (isName()) {
                 loadToast = new LoadToast(app);
                 loadToast.setText("OCR Converting...");
                 //TODO: center,, not 1000
@@ -195,16 +209,14 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected String doInBackground(Bitmap... bitmaps)
-        {
+        protected String doInBackground(Bitmap... bitmaps) {
             tessBaseAPI.setImage(bitmaps[0]);
             return tessBaseAPI.getUTF8Text();
         }
 
         @Override
-        protected void onCancelled()
-        {
-            if(isName()){
+        protected void onCancelled() {
+            if (isName()) {
                 loadToast.error();
             }
             isOCRFailed = true;
@@ -213,22 +225,21 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected void onPostExecute(String resultText)
-        {
-            Log.i("OCR result",resultText);
+        protected void onPostExecute(String resultText) {
+            Log.i("OCR result", resultText);
 
-            if(isName()){
-                map.put("name",resultText);
+            if (isName()) {
+                map.put("name", resultText);
                 loadToast.success();
                 Log.i("OCR result",
-                        "\nname: "+map.get("name"));
-            }else {
+                        "\nname: " + map.get("name"));
+            } else {
                 ocrResult = new OCRResult(resultText);
-                map.put("email",ocrResult.parseEmail());
-                map.put("phone",ocrResult.parsePhone());
+                map.put("email", ocrResult.parseEmail());
+                map.put("phone", ocrResult.parsePhone());
                 Log.i("OCR result",
-                        "\nemail: "+map.get("email")
-                                +"\nphone: "+map.get("phone"));
+                        "\nemail: " + map.get("email")
+                                + "\nphone: " + map.get("phone"));
             }
 
             super.onPostExecute(resultText);

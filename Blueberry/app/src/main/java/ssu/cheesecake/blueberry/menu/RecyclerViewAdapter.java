@@ -82,7 +82,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bindData(BusinessCard object) {
-            Log.d("DEBUG!", getItemCount() + "");
             //image 출력
             String fileName = object.getImageUrl();
 
