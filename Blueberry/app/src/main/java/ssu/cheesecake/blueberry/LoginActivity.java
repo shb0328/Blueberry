@@ -79,7 +79,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         // 구글로그인 버튼 응답
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {   
+            try {
                 // 구글 로그인 성공
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);

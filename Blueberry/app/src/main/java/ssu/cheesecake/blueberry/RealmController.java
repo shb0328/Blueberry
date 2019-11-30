@@ -2,6 +2,8 @@ package ssu.cheesecake.blueberry;
 
 import android.util.Log;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.common.util.Strings;
 
 import java.util.Vector;
@@ -53,6 +55,16 @@ public class RealmController {
             this.searchWord = str;
             loadCard();
         }
+    }
+
+    public void initializeCards(){
+        cards = new Vector<BusinessCard>();
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                mRealm.deleteAll();
+            }
+        });
     }
 
     //RealmController 생성 시 Realm에 등록되어 있는 BusinessCard를 Vector로 받아옴
@@ -148,7 +160,14 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                BusinessCard addCard = realm.createObject(BusinessCard.class, card.getTime());
+                Number currentIdNum = realm.where(BusinessCard.class).max("id");
+                int nextId;
+                if(currentIdNum == null) {
+                    nextId = 1;
+                } else {
+                    nextId = currentIdNum.intValue() + 1;
+                }
+                BusinessCard addCard = realm.createObject(BusinessCard.class, nextId);
                 addCard.Copy(card);
                 cards.add(addCard);
             }
@@ -163,7 +182,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setKrName(krName);
             }
@@ -175,7 +194,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setPhoneNumber(phoneNumber);
             }
@@ -187,7 +206,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setEmail(email);
             }
@@ -199,7 +218,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setCompany(company);
             }
@@ -211,7 +230,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setGroup(group);
             }
@@ -223,7 +242,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.setIsFavorite(!editCard.getIsFavorite());
             }
@@ -234,7 +253,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                String id = card.getId();
+                int id = card.getId();
                 BusinessCard deleteCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 cards.remove(deleteCard);
                 deleteCard.deleteFromRealm();

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bindData(BusinessCard object) {
+            Log.d("DEBUG!", getItemCount() + "");
             //image 출력
             String fileName = object.getImageUrl();
 
@@ -144,13 +146,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         } else if (viewID == R.id.item_button_edit) {
                             Toast toast = Toast.makeText(context, "Edit!", Toast.LENGTH_SHORT);
                             toast.show();
+                            recyclerView.getAdapter().notifyItemChanged(position);
                         } else if (viewID == R.id.item_button_delete) {
                             BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
                             if(realmController != null){
                                 realmController.deleteBusinessCard(card);
+                                recyclerView.getAdapter().notifyDataSetChanged();
                             }
                         }
-                        recyclerView.getAdapter().notifyItemChanged(position);
                     }
                 });
         recyclerView.addOnItemTouchListener(onTouchListener);
