@@ -2,11 +2,9 @@ package ssu.cheesecake.blueberry.util;
 
 import android.util.Log;
 
-import com.google.android.gms.vision.L;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -58,7 +56,11 @@ public class StringPharser {
         //====================For HyeBin====================
         //원하는 words 예제 골라 넣기
         wordArray = words3;
+        //2차원 String Array를 2차원 String Vector로 변환
         ArrayToVector();
+        //WordType 결정
+        DetermineWordType();
+        //Log 출력
         Word.PrintWordVector(words, TAG);
     }
 
@@ -97,6 +99,9 @@ public class StringPharser {
         }
         //2차원 String Array를 2차원 String Vector로 변환
         ArrayToVector();
+        //WordType 결정
+        DetermineWordType();
+        //Log 출력
         Word.PrintWordVector(words, TAG);
     }
 
@@ -106,6 +111,17 @@ public class StringPharser {
         for(int i = 0; i < wordArray.length; i++) {
             words.add(Word.ConvertStringVectorToWordVector(new Vector(Arrays.asList(wordArray[i]))));
         }
+    }
+
+    public void DetermineWordType(){
+        FindEmail();
+        FindSite();
+        FindNumber();
+        FindKrName();
+        FindEnName();
+        FindCompany();
+        FindPosition();
+        FindAddress();
     }
 
     //Vector에서 from부터 to까지 from에 병합 후 나머지는 삭제하는 함수
@@ -123,11 +139,78 @@ public class StringPharser {
     //순서대로 구현하는 것이 가장 정확도 높을 듯!!!!!
     //words들을 탐색하면서 Email이라 생각되는 것들을 찾음
     public void FindEmail(){
+        //Line 탐색
+        for(int i = 0; i < words.size(); i++){
+            //Word 탐색
+            for(int j = 0; j < words.get(i).size(); j++){
+                //Word가 아직 판별되지 않은 것들일 때에만
+                if(words.get(i).get(j).getWordType() == WordType.empty) {
+                    //Language가 En일 때에만
+                    if (words.get(i).get(j).getLanguage() == Word.Language.en) {
+                        String str = words.get(i).get(j).getStr();
+                        boolean hasEmail = false;
+                        //Char 탐색
+                        for (int k = 0; k < str.length(); k++) {
+                            //@ 찾음
+                            if (str.charAt(k) == '@') {
+                                hasEmail = true;
+                                break;
+                            }
+                        }
+                        if (hasEmail) {
+                            words.get(i).get(j).setWordType(WordType.email);
+                        }
+                    }
+                }
+            }
+        }
         return;
     }
 
     //words들을 탐색하면서 웹사이트 주소라 생각되는 것들을 찾음
     public void FindSite(){
+        //Line 탐색
+        for(int i = 0; i < words.size(); i++){
+            //Word 탐색
+            for(int j = 0; j < words.get(i).size(); j++){
+                //Word가 아직 판별되지 않은 것들일 때에만
+                if(words.get(i).get(j).getWordType() == WordType.empty) {
+                    //Language가 En일 때에만
+                    if (words.get(i).get(j).getLanguage() == Word.Language.en) {
+                        String str = words.get(i).get(j).getStr();
+                        boolean hasSite = false;
+                        //"www", "http"로 Site 주소 판별
+                        if(str.contains("www.")){
+                            hasSite = true;
+                        }
+                        if(str.contains("http")){
+                            hasSite = true;
+                        }
+                        //Site 주소일 경우
+                        if (hasSite) {
+                            //같은 행에 단어가 뒤에 더 있을 경우
+                            if(j + 1 < words.get(i).size()) {
+                                String nextStr = words.get(i).get(j + 1).getStr();
+                                //다음 단어의 Type이 아직 판별되지 않았고, 언어가 en일 때
+                                if(words.get(i).get(j+1).getWordType() == WordType.empty || words.get(i).get(j+1).getLanguage() == Word.Language.en) {
+                                    //다음 단어가 .으로 시작할 경우
+                                    if (nextStr.startsWith(".")) {
+                                        //다음 단어와 병합
+                                        MergeVector(words.get(i), j, j + 1, WordType.email);
+                                    }
+                                    else {
+                                        words.get(i).get(j).setWordType(WordType.site);
+                                    }
+                                }
+                            }
+                            else{
+                                words.get(i).get(j).setWordType(WordType.site);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return;
     }
 
