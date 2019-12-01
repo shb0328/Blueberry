@@ -6,6 +6,7 @@ import com.google.firebase.database.core.operation.Merge;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -57,7 +58,7 @@ public class StringPharser {
 
         //====================For HyeBin====================
         //원하는 words 예제 골라 넣기
-        wordArray = words1;
+        wordArray = words3;
         //2차원 String Array를 2차원 String Vector로 변환
         ArrayToVector();
         //WordType 결정
@@ -261,6 +262,10 @@ public class StringPharser {
                                 else break;
                             }
                         }
+                        //길이가 짧은 경우 WordType empty로 설정
+                        if(words.get(i).get(j).getStr().length() < 10){
+                            words.get(i).get(j).setWordType(WordType.empty);
+                        }
                     }
                 }
             }
@@ -291,6 +296,58 @@ public class StringPharser {
     //words들을 탐색하면서 주소라 생각되는 것들을 찾음
     public void FindAddress(){
         return;
+    }
+
+    //words에서 name들을 찾아 Return하는 함수
+    public ArrayList<String> GetNameArray(){
+        ArrayList<String> result = new ArrayList<String>();
+        for(int i = 0; i < words.size(); i++){
+            for(int j = 0; j < words.get(i).size(); j++){
+                if(words.get(i).get(j).getWordType() == WordType.krName || words.get(i).get(j).getWordType() == WordType.enName){
+                    result.add(words.get(i).get(j).getStr());
+                }
+            }
+        }
+        return result;
+    }
+
+    //words에서 Number들을 찾아 Return하는 함수
+    public ArrayList<String> GetNumberArray(){
+        ArrayList<String> result = new ArrayList<String>();
+        for(int i = 0; i < words.size(); i++){
+            for(int j = 0; j < words.get(i).size(); j++){
+                if(words.get(i).get(j).getWordType() == WordType.number){
+                    result.add(words.get(i).get(j).getStr());
+                }
+            }
+        }
+        return result;
+    }
+
+    //words에서 email들을 찾아 Return하는 함수
+    public ArrayList<String> GetEmailArray(){
+        ArrayList<String> result = new ArrayList<String>();
+        for(int i = 0; i < words.size(); i++){
+            for(int j = 0; j < words.get(i).size(); j++){
+                if(words.get(i).get(j).getWordType() == WordType.email){
+                    result.add(words.get(i).get(j).getStr());
+                }
+            }
+        }
+        return result;
+    }
+
+    //words에서 company들을 찾아 Return하는 함수
+    public ArrayList<String> GetCompanyArray(){
+        ArrayList<String> result = new ArrayList<String>();
+        for(int i = 0; i < words.size(); i++){
+            for(int j = 0; j < words.get(i).size(); j++){
+                if(words.get(i).get(j).getWordType() == WordType.company){
+                    result.add(words.get(i).get(j).getStr());
+                }
+            }
+        }
+        return result;
     }
 
 }
