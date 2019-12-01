@@ -22,7 +22,6 @@ public class StringPharser {
     List<FirebaseVisionText.TextBlock> blocks;
     Vector<FirebaseVisionText.Line> lines;
     String[][] wordArray;
-    Vector<String> language;
     Vector<Vector<Word>> words;
 
     //Debug 위한 Default 생성자
@@ -34,8 +33,6 @@ public class StringPharser {
                 {"foodieboy@kakaopd.com"},
                 {"SAN","OX"},
                 {"sandboxnetwork.net"}};
-        String[] lang1 = {"en", "empty", "empty", "empty", "en", "empty"};
-        Vector<String> lang1vector = new Vector(Arrays.asList(lang1));
         String[][] words2 = {{"SAMSUNG"},
                 {"최지훈","Jihun","Choi"},
                 {"SAMSUNG"},
@@ -44,8 +41,6 @@ public class StringPharser {
                 {"정제","팀","/","정제","1","파트"},
                 {"삼성","바이오","로직스"},
                 {"Purification","Team","/","Purificatian","1","Part"}};
-        String[] lang2 = {"en", "ko", "en", "en", "en", "ko", "ko", "en"};
-        Vector<String> lang2vector = new Vector(Arrays.asList(lang2));
         String[][] words3 = {{"ictaulic"},
                 {"Metro","Team"},
                 {"명","섭"},
@@ -59,13 +54,10 @@ public class StringPharser {
                 {"mobile",":","010-2366-9887","e-mail",":","Myoung-Sup.Oh@victaulic.com"},
                 {"www.victaulic.com"},
                 {"어"}};
-        String[] lang3 = {"en", "en", "empty", "empty", "ko", "ko", "ko", "ko", "ko", "ko", "it", "it", "empty"};
-        Vector<String> lang3vector = new Vector(Arrays.asList(lang3));
 
         //====================For HyeBin====================
         //원하는 words 예제 골라 넣기
         wordArray = words3;
-        language = lang3vector;
         ArrayToVector();
         Word.PrintWordVector(words, TAG);
     }
@@ -75,7 +67,6 @@ public class StringPharser {
         this.srcText = srcText;
         blocks = srcText.getTextBlocks();
         lines = new Vector<FirebaseVisionText.Line>();
-        language = new Vector<String>();
         //Block 고려하지 않고 Line Vector 생성
         //block 탐색
         for (FirebaseVisionText.TextBlock block : blocks) {
@@ -84,9 +75,6 @@ public class StringPharser {
                 lines.add(block.getLines().get(0));
                 //languageList 받아옴, 그 중 최상위 값만 가져옴
                 List <RecognizedLanguage>languageList = block.getLines().get(0).getRecognizedLanguages();
-                if(languageList.size() != 0)
-                    language.add(languageList.get(0).getLanguageCode());
-                else language.add("empty");
             }
             //block에 line이 여러개이면
             else {
@@ -95,9 +83,6 @@ public class StringPharser {
                     lines.add(line);
                     //languageList 받아옴, 그 중 최상위 값만 가져옴
                     List <RecognizedLanguage>languageList = block.getLines().get(0).getRecognizedLanguages();
-                    if(languageList.size() != 0)
-                        language.add(languageList.get(0).getLanguageCode());
-                    else language.add("empty");
                 }
             }
         }
@@ -119,7 +104,7 @@ public class StringPharser {
     public void ArrayToVector(){
         words = new Vector<>();
         for(int i = 0; i < wordArray.length; i++) {
-            words.add(Word.ConvertStringVectorToWordVector(new Vector(Arrays.asList(wordArray[i])), language.get(i)));
+            words.add(Word.ConvertStringVectorToWordVector(new Vector(Arrays.asList(wordArray[i]))));
         }
     }
 

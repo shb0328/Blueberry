@@ -32,7 +32,13 @@ public class Word {
     public Word(String str){
         this.str = str;
         this.wordType = WordType.empty;
-        this.language = Language.empty;
+        this.DetermineLanguage();
+    }
+
+    public Word(String str, WordType wordType){
+        this.str = str;
+        this.wordType = wordType;
+        this.DetermineLanguage();
     }
 
     public Word(String str, Language language) {
@@ -82,20 +88,45 @@ public class Word {
         return str;
     }
 
+    //Language 결정
+    public void DetermineLanguage() {
+        boolean numeric = false;
+        boolean alpha = false;
+        boolean korean = false;
+        boolean sign = false;
+        for(int i = 0; i < this.str.length(); i++){
+            int index = this.str.charAt(i);
+            if(index >= '0' && index <= '9'){
+                numeric = true;
+            }
+            else if((index >= 'A' && index <= 'Z')|| (index>='a' && index <= 'z')){
+                alpha = true;
+            }
+            else if (index < 128) {
+                sign = true;
+            }
+            else {
+                korean = true;
+            }
+        }
+        if(korean)
+            this.language = Language.kr;
+        else if(alpha)
+            this.language = Language.en;
+        else if(numeric)
+            this.language = Language.number;
+        else this.language = Language.sign;
+        return;
+    }
+
+
     //String Vector를 Word Vector로 변환
-    public static Vector<Word> ConvertStringVectorToWordVector(Vector<String> strVector, String strLanguage) {
+    public static Vector<Word> ConvertStringVectorToWordVector(Vector<String> strVector) {
         Vector<Word> wordVector = new Vector<Word>();
         int len = strVector.size();
         Language language;
-        if(strLanguage.equals("empty"))
-            language = Language.empty;
-        else if(strLanguage.equals("ko"))
-            language = Language.kr;
-        else if(strLanguage.equals("en"))
-            language = Language.en;
-        else language = Language.empty;
         for (int i = 0; i < len; i++) {
-            wordVector.add(new Word(strVector.get(i), language));
+            wordVector.add(new Word(strVector.get(i)));
         }
         return wordVector;
     }
