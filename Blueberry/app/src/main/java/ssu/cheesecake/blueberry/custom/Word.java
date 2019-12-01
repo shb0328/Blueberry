@@ -18,6 +18,9 @@ public class Word {
         empty, krName, enName, email, number, site, company, address, position, none, trash
     }
 
+    //단어의 언어를 판별하는 열거형
+    //empty: 아직 판단 X
+    //sign: 특수 문자
     public enum Language {
         empty, sign, kr, en, number;
     }

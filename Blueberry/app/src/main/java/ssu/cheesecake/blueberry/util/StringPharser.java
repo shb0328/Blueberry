@@ -2,6 +2,7 @@ package ssu.cheesecake.blueberry.util;
 
 import android.util.Log;
 
+import com.google.firebase.database.core.operation.Merge;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.RecognizedLanguage;
 
@@ -11,6 +12,7 @@ import java.util.Vector;
 
 import ssu.cheesecake.blueberry.custom.Word;
 import ssu.cheesecake.blueberry.custom.Word.WordType;
+import ssu.cheesecake.blueberry.custom.Word.Language;
 
 
 public class StringPharser {
@@ -55,7 +57,7 @@ public class StringPharser {
 
         //====================For HyeBin====================
         //원하는 words 예제 골라 넣기
-        wordArray = words3;
+        wordArray = words1;
         //2차원 String Array를 2차원 String Vector로 변환
         ArrayToVector();
         //WordType 결정
@@ -123,6 +125,11 @@ public class StringPharser {
         FindPosition();
         FindAddress();
     }
+    
+    public void MergeVector(Vector<Word>vector, int from, int to, WordType wordType, Language language){
+        MergeVector(vector, from, to, wordType);
+        vector.get(from).setLanguage(language);
+    }
 
     //Vector에서 from부터 to까지 from에 병합 후 나머지는 삭제하는 함수
     public void MergeVector(Vector<Word>vector, int from, int to, WordType wordType){
@@ -134,7 +141,7 @@ public class StringPharser {
         }
         vector.get(from).setWordType(wordType);
     }
-
+    
     //====================For HyeBin====================
     //순서대로 구현하는 것이 가장 정확도 높을 듯!!!!!
     //words들을 탐색하면서 Email이라 생각되는 것들을 찾음
@@ -146,7 +153,7 @@ public class StringPharser {
                 //Word가 아직 판별되지 않은 것들일 때에만
                 if(words.get(i).get(j).getWordType() == WordType.empty) {
                     //Language가 En일 때에만
-                    if (words.get(i).get(j).getLanguage() == Word.Language.en) {
+                    if (words.get(i).get(j).getLanguage() == Language.en) {
                         String str = words.get(i).get(j).getStr();
                         boolean hasEmail = false;
                         //Char 탐색
@@ -176,7 +183,7 @@ public class StringPharser {
                 //Word가 아직 판별되지 않은 것들일 때에만
                 if(words.get(i).get(j).getWordType() == WordType.empty) {
                     //Language가 En일 때에만
-                    if (words.get(i).get(j).getLanguage() == Word.Language.en) {
+                    if (words.get(i).get(j).getLanguage() == Language.en) {
                         String str = words.get(i).get(j).getStr();
                         boolean hasSite = false;
                         //"www", "http"로 Site 주소 판별
@@ -192,7 +199,7 @@ public class StringPharser {
                             if(j + 1 < words.get(i).size()) {
                                 String nextStr = words.get(i).get(j + 1).getStr();
                                 //다음 단어의 Type이 아직 판별되지 않았고, 언어가 en일 때
-                                if(words.get(i).get(j+1).getWordType() == WordType.empty || words.get(i).get(j+1).getLanguage() == Word.Language.en) {
+                                if(words.get(i).get(j+1).getWordType() == WordType.empty || words.get(i).get(j+1).getLanguage() == Language.en) {
                                     //다음 단어가 .으로 시작할 경우
                                     if (nextStr.startsWith(".")) {
                                         //다음 단어와 병합
@@ -216,6 +223,48 @@ public class StringPharser {
 
     //words들을 탐색하면서 전화번호라 생각되는 것들을 찾음
     public void FindNumber(){
+        //Line 탐색
+        for(int i = 0; i < words.size(); i++){
+            //Word 탐색
+            for(int j = 0; j < words.get(i).size(); j++){
+                //Word가 아직 판별되지 않은 것들일 때에만
+                if(words.get(i).get(j).getWordType() == WordType.empty) {
+                    //Language가 number일 때에만
+                    if (words.get(i).get(j).getLanguage() == Language.number) {
+                        String str = words.get(i).get(j).getStr();
+                        boolean firstIsZero = false;
+                        //0으로 시작하는 Number일 경우
+                        if(str.startsWith("0")){
+                            firstIsZero = true;
+                        }
+                        //+82로 시작하는 Number일 경우
+                        else if(str.startsWith("+82")){
+                            firstIsZero = true;
+                        }
+                        if (firstIsZero) {
+                            //같은 행에 단어가 뒤에 더 없을 때까지 반복
+                            while(j + 1 < words.get(i).size()) {
+                                String nextStr = words.get(i).get(j + 1).getStr();
+                                //다음 단어의 Type이 아직 판별되지 않았고, 언어가 number일 때
+                                if(words.get(i).get(j+1).getWordType() == WordType.empty && words.get(i).get(j+1).getLanguage() == Language.number) {
+                                    //다음 단어가 0으로 시작하지 않는 number일 경우 경우
+                                    if (!nextStr.startsWith("0")) {
+                                        //다음 단어와 병합
+                                        MergeVector(words.get(i), j, j + 1, WordType.number);
+                                    }
+                                }
+                                //다음 단어가 특수문자일 경우
+                                else if(words.get(i).get(j+1).getWordType() == WordType.empty && words.get(i).get(j+1).getLanguage() == Language.sign){
+                                    //다음 단어와 병합
+                                    MergeVector(words.get(i), j, j + 1, WordType.number);
+                                }
+                                else break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return;
     }
 
