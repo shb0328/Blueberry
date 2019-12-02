@@ -34,6 +34,12 @@ public class Word {
 
     public Word(String str){
         this.str = str;
+        if(str == null){
+            this.str = "Word class construct ... str is null\n" +
+                    "010 1234 5678 \n" +
+                    "www.abc.com\n" +
+                    "shb0328@gmail.com\n";
+        }
         this.wordType = WordType.empty;
         this.DetermineLanguage();
     }

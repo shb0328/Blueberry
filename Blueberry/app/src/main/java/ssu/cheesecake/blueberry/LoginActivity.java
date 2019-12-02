@@ -27,8 +27,6 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 
-import ssu.cheesecake.blueberry.util.StringPharser;
-
 public class LoginActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     // 구글로그인 result 상수
@@ -47,8 +45,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        StringPharser stringPharser = new StringPharser();
 
         // 파이어베이스 인증 객체 선언
         firebaseAuth = FirebaseAuth.getInstance();
