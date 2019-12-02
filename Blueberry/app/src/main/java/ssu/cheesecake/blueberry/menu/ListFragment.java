@@ -108,17 +108,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         RecyclerViewAdapter.setTouchListener(context, this.getActivity(), recyclerView);
 
 
-        final Button addBtn = root.findViewById(R.id.add_button);
-        addBtn.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BusinessCard object = new BusinessCard("EnName", "안녕!", "010-1234-5678", "email@gmail.com", "Company", "sample1.jpg");
-                realmController.addBusinessCard(object);
-                recyclerView.getAdapter().notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
-            }
-        });
-
         //Floating Action Button
         fab_open = AnimationUtils.loadAnimation(this.getContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(this.getContext(), R.anim.fab_close);
@@ -151,12 +140,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
                 Intent intent = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent.putExtra("key", CAMREQUESTCODE);
                 startActivity(intent);
+                getActivity().finish();
                 break;
             case R.id.fab_gallery:
                 anim();
                 Intent intent2 = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent2.putExtra("key", GALLERYREQUESTCODE);
                 startActivity(intent2);
+                getActivity().finish();
                 break;
         }
     }

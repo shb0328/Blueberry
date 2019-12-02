@@ -3,9 +3,12 @@ package ssu.cheesecake.blueberry.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,39 +72,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public MainViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.item_image);
-            imageUrlTextView = itemView.findViewById(R.id.item_image_url);
             enNameTextView = itemView.findViewById(R.id.item_en_name);
             krNameTextView = itemView.findViewById(R.id.item_kr_name);
             phoneTextView = itemView.findViewById(R.id.item_phone_number);
             emailTextView = itemView.findViewById(R.id.item_email);
             companyTextView = itemView.findViewById(R.id.item_company);
             dateTextView = itemView.findViewById(R.id.item_date);
-            imageUrlTextView = itemView.findViewById(R.id.item_image_url);
             favoriteBtnImage = itemView.findViewById(R.id.item_button_favorite_imageview);
             context = itemView.getContext();
         }
 
         public void bindData(BusinessCard object) {
-            //image 출력
-            String fileName = object.getImageUrl();
-
             //Image Loading
-            File file = null;
+
+            File imageFile = null;
             try {
                 //Local에 Image 저장할 경로 지정
-                File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
-                file = new File(dir, fileName);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-
+                imageFile = new File(object.getImageUrl());
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
+            if (imageFile != null) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+                imageView.setImageBitmap(bitmap);
+            }
+
             //Local에 저장된 Image를 ImageView에 출력
-            imageUrlTextView.setText(file.getAbsolutePath());
-            imageView.setImageURI(Uri.parse(file.getAbsolutePath()));
+//            imageUrlTextView.setText(file.getAbsolutePath());
+//            imageView.setImageURI(Uri.parse(file.getAbsolutePath()));
 
             enNameTextView.setText(object.getEnName());
             krNameTextView.setText(object.getKrName());
@@ -123,8 +123,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
                     @Override
                     public void onRowClicked(int position) {
-                        Toast toast = Toast.makeText(context, "RowClick!", Toast.LENGTH_SHORT);
-                        toast.show();
                     }
 
                     @Override

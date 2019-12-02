@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,8 +29,11 @@ public class EditActivity extends AppCompatActivity {
 
     private String imagePath;
 
+    private Intent resultIntent;
     private BusinessCard card;
     private int position;
+
+    private boolean isAdded = false;
 
     //data
     private ArrayList<String> nameArray;
@@ -82,10 +86,13 @@ public class EditActivity extends AppCompatActivity {
         editAddress = findViewById(R.id.edit_address);
         editGroup = findViewById(R.id.edit_group);
 
+        resultIntent = new Intent(this, MainActivity.class);
+
         Intent intent = getIntent();
         String mode = intent.getStringExtra("mode");
 
         if (mode.equals("new")) {
+            isAdded = true;
             /**
              * new (from NameCropActivity)
              **/
@@ -96,6 +103,8 @@ public class EditActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
             imageView.setImageBitmap(bitmap);
 
+            card.setImageUrl(imagePath);
+
             nameArray = intent.getStringArrayListExtra("name");
             phoneArray = intent.getStringArrayListExtra("phone");
             emailArray = intent.getStringArrayListExtra("email");
@@ -105,6 +114,7 @@ public class EditActivity extends AppCompatActivity {
             groupArray = new ArrayList<>();
         }
         else if (mode.equals("edit")) {
+            isAdded = false;
             /**
              * edit (from MainActivity)
              **/
@@ -186,30 +196,31 @@ public class EditActivity extends AppCompatActivity {
         group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
         editGroup.setAdapter(group_adapter);
 
-
-        /**
-         *         Save
-         *         *****************************************************
-         *         TODO:받아라 김한수
-         *         *****************************************************
-         */
         Button ToFinValue = findViewById(R.id.finishButton1);
         ToFinValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BusinessCard editCard = new BusinessCard();
-                editCard.Copy(card);
-                editCard.setKrName(editName.getText().toString());
-                editCard.setPhoneNumber(editPhone.getText().toString());
-                editCard.setEmail(editEmail.getText().toString());
-                editCard.setWebSite(editWebSite.getText().toString());
-                editCard.setCompany(editCompany.getText().toString());
-                editCard.setAddress(editAddress.getText().toString());
-                editCard.setGroup(editGroup.getText().toString());
-
                 Realm.init(app);
                 RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
-                realmController.editBusinessCard(editCard, position);
+
+                if(!isAdded) {
+                    BusinessCard editCard = new BusinessCard();
+                    editCard.Copy(card);
+                    editCard.setKrName(editName.getText().toString());
+                    editCard.setPhoneNumber(editPhone.getText().toString());
+                    editCard.setEmail(editEmail.getText().toString());
+                    editCard.setWebSite(editWebSite.getText().toString());
+                    editCard.setCompany(editCompany.getText().toString());
+                    editCard.setAddress(editAddress.getText().toString());
+                    editCard.setGroup(editGroup.getText().toString());
+
+                    realmController.editBusinessCard(editCard, position);
+
+                    resultIntent.putExtra("activity", "Edit");
+                    resultIntent.putExtra("card", card);
+                    resultIntent.putExtra("position", position);
+                    setResult(RESULT_OK, resultIntent);
+                }
 
                 name_finValue = editName.getText().toString();
                 phone_finValue = editPhone.getText().toString();
@@ -255,6 +266,18 @@ public class EditActivity extends AppCompatActivity {
                 webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
                 contactData.add(webRow);
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+
+                if(isAdded){
+                    card.setKrName(name_finValue);
+                    card.setPhoneNumber(phone_finValue);
+                    card.setCompany(company_finValue);
+                    card.setAddress(address_finValue);
+                    card.setEmail(email_finValue);
+                    card.setGroup(group_finValue);
+                    realmController.addBusinessCard(card);
+                    Log.d("DEBUG!", card.getImageUrl());
+                    startActivity(resultIntent);
+                }
 
                 if (realmController.getIsAutoSave().getIsAutoSave()) {
                     startActivityForResult(insertIntent, RESULT_OK);
