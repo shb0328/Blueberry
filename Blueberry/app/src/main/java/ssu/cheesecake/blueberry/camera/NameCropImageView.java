@@ -142,7 +142,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         //첫 터치 이벤트 때에만 BitmapRegion 초기화
         if (isFirstTouch) {
             isFirstTouch = false;
-            initBitmapRegion(this.getWidth(), this.getHeight());
+            initBitmapRegion(v.getWidth(), v.getHeight());
         }
         Point point = new Point();
         point.x = (int) event.getX();

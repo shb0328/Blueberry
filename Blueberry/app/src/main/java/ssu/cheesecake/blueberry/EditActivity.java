@@ -54,63 +54,64 @@ public class EditActivity extends AppCompatActivity {
         final BusinessCard card = intent.getParcelableExtra("card");
         //Image Loading
         imageView = findViewById(R.id.business_card);
-        File imageFile = null;
-        try {
-            //Local에 Image 저장할 경로 지정
-            File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
-            imageFile = new File(dir, card.getImageUrl());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (imageFile != null) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-            imageView.setImageBitmap(bitmap);
-        }
-        editname = findViewById(R.id.edit_name);
-        editphone = findViewById(R.id.edit_phone);
-        editcompany = findViewById(R.id.edit_company);
-        editemail = findViewById(R.id.edit_address);
-        editgroup = findViewById(R.id.edit_group);
-
-        editname.setText(card.getKrName());
-        editphone.setText(card.getPhoneNumber());
-        editcompany.setText(card.getCompany());
-        editemail.setText(card.getEmail());
-        editgroup.setText(card.getGroup());
-
-        ArrayList<String> nameArray = new ArrayList<String>();
-        nameArray.add(card.getKrName());
-        nameArray.add("직접 입력");
-        ArrayList<String> phoneArray = new ArrayList<String>();
-        phoneArray.add(card.getPhoneNumber());
-        phoneArray.add("직접 입력");
-        ArrayList<String> companyArray = new ArrayList<String>();
-        companyArray.add(card.getCompany());
-        companyArray.add("직접 입력");
-        ArrayList<String> emailArray = new ArrayList<String>();
-        emailArray.add(card.getEmail());
-        emailArray.add("직접 입력");
-        ArrayList<String> groupArray = new ArrayList<String>();
-        groupArray.add(card.getGroup());
-        groupArray.add("직접 입력");
-
-
-        ArrayAdapter name_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, nameArray);
-        editname.setAdapter(name_adapter);
-
-        ArrayAdapter phone_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, phoneArray);
-        editphone.setAdapter(phone_adapter);
-
-        ArrayAdapter company_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, companyArray);
-        editcompany.setAdapter(company_adapter);
-
-        ArrayAdapter email_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, emailArray);
-        editemail.setAdapter(email_adapter);
-
-        ArrayAdapter group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
-        editemail.setAdapter(group_adapter);
+        //TODO:잠시주석
+//        File imageFile = null;
+//        try {
+//            //Local에 Image 저장할 경로 지정
+//            File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
+//            imageFile = new File(dir, card.getImageUrl());
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (imageFile != null) {
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+//            imageView.setImageBitmap(bitmap);
+//        }
+//        editname = findViewById(R.id.edit_name);
+//        editphone = findViewById(R.id.edit_phone);
+//        editcompany = findViewById(R.id.edit_company);
+//        editemail = findViewById(R.id.edit_address);
+//        editgroup = findViewById(R.id.edit_group);
+//
+//        editname.setText(card.getKrName());
+//        editphone.setText(card.getPhoneNumber());
+//        editcompany.setText(card.getCompany());
+//        editemail.setText(card.getEmail());
+//        editgroup.setText(card.getGroup());
+//
+//        ArrayList<String> nameArray = new ArrayList<String>();
+//        nameArray.add(card.getKrName());
+//        nameArray.add("직접 입력");
+//        ArrayList<String> phoneArray = new ArrayList<String>();
+//        phoneArray.add(card.getPhoneNumber());
+//        phoneArray.add("직접 입력");
+//        ArrayList<String> companyArray = new ArrayList<String>();
+//        companyArray.add(card.getCompany());
+//        companyArray.add("직접 입력");
+//        ArrayList<String> emailArray = new ArrayList<String>();
+//        emailArray.add(card.getEmail());
+//        emailArray.add("직접 입력");
+//        ArrayList<String> groupArray = new ArrayList<String>();
+//        groupArray.add(card.getGroup());
+//        groupArray.add("직접 입력");
+//
+//
+//        ArrayAdapter name_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, nameArray);
+//        editname.setAdapter(name_adapter);
+//
+//        ArrayAdapter phone_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, phoneArray);
+//        editphone.setAdapter(phone_adapter);
+//
+//        ArrayAdapter company_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, companyArray);
+//        editcompany.setAdapter(company_adapter);
+//
+//        ArrayAdapter email_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, emailArray);
+//        editemail.setAdapter(email_adapter);
+//
+//        ArrayAdapter group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
+//        editemail.setAdapter(group_adapter);
 
         //버튼으로 주소록에 데이터를 전달함
         Button ToFinValue = findViewById(R.id.finishButton1);
