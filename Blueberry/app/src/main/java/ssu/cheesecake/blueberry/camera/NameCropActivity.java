@@ -113,7 +113,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        setResionOfName();
+        setRegionOfName();
 
         Bitmap nameBitmap = cropNameImage(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y);
         AsyncTesseract asyncTesseract;
@@ -130,11 +130,10 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void setResionOfName() {
+    private void setRegionOfName() {
         //leftTop, rightBottom Point 얻어옴
         leftTop = nameCropImageView.getLeftTop();
         rightBottom = nameCropImageView.getRightBottom();
-        Log.d("DEBUG!", "onClick: " + nameCropImageView.getWidth() + "," + nameCropImageView.getHeight());
         //image의 크기가 view보다 크다면
         if (bitmap.getWidth() > nameCropImageView.getWidth()) {
             //view에서의 좌표를 image에서의 좌표로 재설정
@@ -224,7 +223,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
             super.onPostExecute(resultText);
 
-        }
+    }
 
         private void recogrizeFirebaseVisionText() {
             loadToast = new LoadToast(app);

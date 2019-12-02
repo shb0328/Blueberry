@@ -70,20 +70,11 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         myWidth = width;
         myHeight = height;
         if (bitmap.getWidth() > this.getWidth()) {
-            Log.d("DEBUG!", "this.width: " + this.getWidth());
-            Log.d("DEBUG!", "this.height: " + this.getHeight());
-            Log.d("DEBUG!", "bitmap.width: " + bitmap.getWidth());
-            Log.d("DEBUG!", "bitmap.height: " + bitmap.getHeight());
-            Log.d("DEBUG!", "myWidth: " + myWidth);
-            Log.d("DEBUG!", "myHeight: " + myHeight);
             //view에서의 좌표를 image에서의 좌표로 재설정
             width = (int) ((bitmap.getWidth() * ((float) myWidth / bitmap.getWidth())));
             height = (int) ((bitmap.getHeight() * ((float) myHeight / bitmap.getWidth())));
-            Log.d("DEBUG!", "width: " + width);
-            Log.d("DEBUG!", "height: " + height);
         }
         bitmapRegion = new Rect(0, 0, width, height);
-        Log.d("DEBUG!", bitmapRegion.toString());
         return;
     }
 
