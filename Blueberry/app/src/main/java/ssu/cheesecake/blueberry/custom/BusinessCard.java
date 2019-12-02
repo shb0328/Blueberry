@@ -17,16 +17,18 @@ import java.util.Calendar;
 public class BusinessCard extends RealmObject implements Parcelable {
     public int id;
 
-    public String enName;
-    public String krName;
-    public String phoneNumber;
-    public String email;
-    public String company;
-    public String time;
-    public String imageUrl;
-    public String path;
-    public String group;
-    public boolean isFavorite;
+    private String enName;
+    private String krName;
+    private String phoneNumber;
+    private String email;
+    private String webSite;
+    private String company;
+    private String address;
+    private String time;
+    private String imageUrl;
+    private String path;
+    private String group;
+    private boolean isFavorite;
 
     public BusinessCard() {
     }
@@ -63,7 +65,9 @@ public class BusinessCard extends RealmObject implements Parcelable {
         krName = in.readString();
         phoneNumber = in.readString();
         email = in.readString();
+        webSite = in.readString();
         company = in.readString();
+        address = in.readString();
         time = in.readString();
         imageUrl = in.readString();
         path = in.readString();
@@ -113,6 +117,14 @@ public class BusinessCard extends RealmObject implements Parcelable {
         this.email = email;
     }
 
+    public String getWebSite() {
+        return webSite;
+    }
+
+    public void setWebSite(String webSite) {
+        this.webSite = webSite;
+    }
+
     public String getCompany() {
         return company;
     }
@@ -120,6 +132,10 @@ public class BusinessCard extends RealmObject implements Parcelable {
     public void setCompany(String company) {
         this.company = company;
     }
+
+    public String getAddress() { return address; }
+
+    public void setAddress(String address) {this.address = address;}
 
     public String getTime() {
         return time;
@@ -203,7 +219,9 @@ public class BusinessCard extends RealmObject implements Parcelable {
         krName = src.getKrName();
         phoneNumber = src.getPhoneNumber();
         email = src.getEmail();
+        webSite = src.getWebSite();
         company = src.getCompany();
+        address = src.getAddress();
         time = src.getTime();
         imageUrl = src.getImageUrl();
         path = src.getPath();
@@ -220,7 +238,9 @@ public class BusinessCard extends RealmObject implements Parcelable {
         result.put("krName", krName);
         result.put("phoneNumber", phoneNumber);
         result.put("email", email);
+        result.put("webSite",webSite);
         result.put("company", company);
+        result.put("address",address);
         result.put("time", time);
         result.put("imageUrl", imageUrl);
         result.put("path", path);
@@ -241,8 +261,12 @@ public class BusinessCard extends RealmObject implements Parcelable {
         result += this.phoneNumber + ',';
         result += "email: ";
         result += this.email + ',';
+        result += "webSite: ";
+        result += this.webSite + ',';
         result += "company: ";
         result += this.company;
+        result += "address: ";
+        result += this.address;
         result += "time: ";
         result += this.time;
         result += "imageUrl: ";
@@ -268,7 +292,9 @@ public class BusinessCard extends RealmObject implements Parcelable {
         dest.writeString(krName);
         dest.writeString(phoneNumber);
         dest.writeString(email);
+        dest.writeString(webSite);
         dest.writeString(company);
+        dest.writeString(address);
         dest.writeString(time);
         dest.writeString(imageUrl);
         dest.writeString(path);

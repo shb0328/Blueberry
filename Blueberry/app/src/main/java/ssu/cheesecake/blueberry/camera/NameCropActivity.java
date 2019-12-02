@@ -68,6 +68,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> name;
     private ArrayList<String> phone;
     private ArrayList<String> email;
+    private ArrayList<String> webSite;
     private ArrayList<String> company;
     private ArrayList<String> address;
 
@@ -187,10 +188,8 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPreExecute() {
-
             loadToast = new LoadToast(app);
-            loadToast.setText("이름을 추출하고 있습니다...");
-            //TODO: center,, not 1000,, it's temp
+            loadToast.setText("명함에서 글자를 인식하고 있습니다...");
             loadToast.setTranslationY(1000);
             loadToast.show();
 
@@ -215,20 +214,12 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         protected void onPostExecute(String resultText) {
             name = new ArrayList<String>();
             name.add(resultText);
-            loadToast.success();
-            Log.i("OCR result", "\nname: " + resultText);
-
+            Log.i("OCR result", "\n******\nname: " + resultText + "\n******\n");
             recogrizeFirebaseVisionText();
-
             super.onPostExecute(resultText);
-
         }
 
         private void recogrizeFirebaseVisionText() {
-            loadToast = new LoadToast(app);
-            loadToast.setText("나머지 정보들을 추출하고 있습니다...");
-            loadToast.setTranslationY(1000);
-            loadToast.show();
 
             FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(cropTheOtherImage(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y));
             FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getCloudTextRecognizer();
@@ -237,28 +228,29 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                     new OnSuccessListener<FirebaseVisionText>() {
                         @Override
                         public void onSuccess(FirebaseVisionText firebaseVisionText) {
+                            loadToast.success();
+
                             stringParser = new StringParser(firebaseVisionText);
                             String resultString = firebaseVisionText.getText();
-                            Log.i("OCR result", "\n***나머지 정보들 : ***\n"+resultString);
+                            Log.i("OCR result", "\n******\n" + resultString + "\n******\n");
 
                             phone = stringParser.GetNumberArray();
                             email = stringParser.GetEmailArray();
                             company = stringParser.GetCompanyArray();
                             address = stringParser.GetAddressArray();
-                            Log.i("OCR result","\n**email : "+email.get(0)+"\n**phone : "+phone.get(0));
-
-                            loadToast.success();
+                            webSite = stringParser.GetWebSiteArray();
 
                             Intent intent = new Intent(app, EditActivity.class);
-                            intent.putExtra("path",imagePath);
+                            intent.putExtra("path", imagePath);
 
                             intent.putExtra("name", name);
                             intent.putExtra("phone", phone);
                             intent.putExtra("email", email);
-                            intent.putExtra("company",company);
-                            intent.putExtra("address",address);
+                            intent.putExtra("company", company);
+                            intent.putExtra("address", address);
+                            intent.putExtra("webSite",webSite);
 
-                            intent.putExtra("mode","new");
+                            intent.putExtra("mode", "new");
                             startActivity(intent);
                             finish();
                         }
@@ -269,6 +261,8 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                                 public void onFailure(@NonNull Exception e) {
                                     Log.d("DEBUG!", "Failed!");
                                     loadToast.error();
+                                    isOCRFailed = true;
+                                    onDestroy();
                                 }
                             }
                     );

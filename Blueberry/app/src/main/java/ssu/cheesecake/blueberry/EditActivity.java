@@ -29,11 +29,13 @@ public class EditActivity extends AppCompatActivity {
     private String imagePath;
 
     private BusinessCard card;
+    private int position;
 
     //data
     private ArrayList<String> nameArray;
-    private ArrayList<String> emailArray;
     private ArrayList<String> phoneArray;
+    private ArrayList<String> emailArray;
+    private ArrayList<String> webSiteArray;
     private ArrayList<String> companyArray;
     private ArrayList<String> addressArray;
     private ArrayList<String> groupArray;
@@ -43,6 +45,7 @@ public class EditActivity extends AppCompatActivity {
     private EditSpinner editName;
     private EditSpinner editPhone;
     private EditSpinner editEmail;
+    private EditSpinner editWebSite;
     private EditSpinner editCompany;
     private EditSpinner editAddress;
     private EditSpinner editGroup;
@@ -50,17 +53,16 @@ public class EditActivity extends AppCompatActivity {
     private ArrayAdapter name_adapter;
     private ArrayAdapter phone_adapter;
     private ArrayAdapter email_adapter;
+    private ArrayAdapter webSite_adapter;
     private ArrayAdapter company_adapter;
     private ArrayAdapter address_adapter;
     private ArrayAdapter group_adapter;
-
-    //?
-    private int position;
 
     //cheesed data
     private String name_finValue;
     private String phone_finValue;
     private String email_finValue;
+    private String webSite_finValue;
     private String company_finValue;
     private String address_finValue;
     private String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
@@ -75,6 +77,7 @@ public class EditActivity extends AppCompatActivity {
         editName = findViewById(R.id.edit_name);
         editPhone = findViewById(R.id.edit_phone);
         editEmail = findViewById(R.id.edit_email);
+        editWebSite = findViewById(R.id.edit_webSite);
         editCompany = findViewById(R.id.edit_company);
         editAddress = findViewById(R.id.edit_address);
         editGroup = findViewById(R.id.edit_group);
@@ -95,6 +98,7 @@ public class EditActivity extends AppCompatActivity {
             nameArray = intent.getStringArrayListExtra("name");
             phoneArray = intent.getStringArrayListExtra("phone");
             emailArray = intent.getStringArrayListExtra("email");
+            webSiteArray = intent.getStringArrayListExtra("webSite");
             companyArray = intent.getStringArrayListExtra("company");
             addressArray = intent.getStringArrayListExtra("address");
             groupArray = new ArrayList<>();
@@ -125,7 +129,9 @@ public class EditActivity extends AppCompatActivity {
             editName.setText(card.getKrName());
             editPhone.setText(card.getPhoneNumber());
             editEmail.setText(card.getEmail());
+            editWebSite.setText(card.getWebSite());
             editCompany.setText(card.getCompany());
+            editAddress.setText(card.getAddress());
             editGroup.setText(card.getGroup());
 
             nameArray = new ArrayList<String>();
@@ -140,12 +146,16 @@ public class EditActivity extends AppCompatActivity {
             emailArray.add(card.getEmail());
             emailArray.add("직접 입력");
 
+            webSiteArray = new ArrayList<String>();
+            webSiteArray.add(card.getWebSite());
+            webSiteArray.add("직접 입력");
+
             companyArray = new ArrayList<String>();
             companyArray.add(card.getCompany());
             companyArray.add("직접 입력");
 
             addressArray = new ArrayList<String>();
-//            addressArray.add(card.getAddress());
+            addressArray.add(card.getAddress());
             addressArray.add("직접 입력");
 
             groupArray = new ArrayList<String>();
@@ -163,6 +173,9 @@ public class EditActivity extends AppCompatActivity {
         email_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, emailArray);
         editEmail.setAdapter(email_adapter);
 
+        webSite_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, webSiteArray);
+        editWebSite.setAdapter(webSite_adapter);
+
         company_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, companyArray);
         editCompany.setAdapter(company_adapter);
 
@@ -170,11 +183,14 @@ public class EditActivity extends AppCompatActivity {
         editAddress.setAdapter(address_adapter);
 
         group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
-        editEmail.setAdapter(group_adapter);
+        editGroup.setAdapter(group_adapter);
 
 
         /**
-         *         주소록 연동
+         *         Save
+         *         *****************************************************
+         *         TODO:받아라 김한수
+         *         *****************************************************
          */
         Button ToFinValue = findViewById(R.id.finishButton1);
         ToFinValue.setOnClickListener(new View.OnClickListener() {
@@ -182,12 +198,12 @@ public class EditActivity extends AppCompatActivity {
             public void onClick(View view) {
                 BusinessCard editCard = new BusinessCard();
                 editCard.Copy(card);
-                //TODO:null처리?
                 editCard.setKrName(editName.getText().toString());
                 editCard.setPhoneNumber(editPhone.getText().toString());
                 editCard.setEmail(editEmail.getText().toString());
+                editCard.setWebSite(editWebSite.getText().toString());
                 editCard.setCompany(editCompany.getText().toString());
-//                editCard.setAddress(editAddress.getText().toString());
+                editCard.setAddress(editAddress.getText().toString());
                 editCard.setGroup(editGroup.getText().toString());
 
                 Realm.init(app);
@@ -197,15 +213,16 @@ public class EditActivity extends AppCompatActivity {
                 name_finValue = editName.getText().toString();
                 phone_finValue = editPhone.getText().toString();
                 email_finValue = editEmail.getText().toString();
+                webSite_finValue = editWebSite.getText().toString();
                 company_finValue = editCompany.getText().toString();
                 address_finValue = editAddress.getText().toString();
                 group_finValue = editGroup.getText().toString();
 
-                //TODO: address 관련 추가?
                 Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
                 insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
                 insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
+                insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, address_finValue);
 
                 ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
 
@@ -227,7 +244,15 @@ public class EditActivity extends AppCompatActivity {
                 );
                 emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
                 contactData.add(emailRow);
+                insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
+                ContentValues webRow = new ContentValues();
+                webRow.put(
+                        ContactsContract.Data.MIMETYPE,
+                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                );
+                webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
+                contactData.add(webRow);
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
                 if (realmController.getIsAutoSave().getIsAutoSave()) {
