@@ -54,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
         );
 
         //주소록 AutoSave Realm에서 읽어옴
-        Realm.init(this);
-        RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
-        realmController.initializeAutoSave();
+        //TODO:잠시주석
+//        Realm.init(this);
+//        RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+//        realmController.initializeAutoSave();
 
     }
 

@@ -12,10 +12,10 @@ public class Word {
 
     //단어의 종류를 판별하는 열거형
     //empty: 아직 판단 X
-    //none: 판단 불가
+    //others: 나머지 값 (Company, Address 등)
     //trash: 쓰레기값
     public enum WordType {
-        empty, krName, enName, email, number, site, company, address, position, none, trash
+        empty, krName, enName, email, number, site, company, address, position, others, trash
     }
 
     //단어의 언어를 판별하는 열거형
@@ -34,6 +34,9 @@ public class Word {
 
     public Word(String str){
         this.str = str;
+        if(str == null){
+            this.str = "";
+        }
         this.wordType = WordType.empty;
         this.DetermineLanguage();
     }
@@ -129,13 +132,15 @@ public class Word {
         int len = strVector.size();
         Language language;
         for (int i = 0; i < len; i++) {
-            wordVector.add(new Word(strVector.get(i)));
+            if(strVector.get(i) != null)
+                wordVector.add(new Word(strVector.get(i)));
         }
         return wordVector;
     }
 
     //Word Vector를 로그로 출력
     public static void PrintWordVector(Vector<Vector<Word>> vector, String TAG) {
+        Log.d(TAG, "CALL!!");
         for (int i = 0; i < vector.size(); i++)
             Log.d(TAG, vector.get(i).toString());
     }

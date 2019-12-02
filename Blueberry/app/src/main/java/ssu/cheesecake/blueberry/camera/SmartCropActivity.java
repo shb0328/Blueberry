@@ -17,32 +17,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import net.steamcrafted.loadtoast.LoadToast;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.ml.vision.FirebaseVision;
-import com.google.firebase.ml.vision.common.FirebaseVisionImage;
-import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions;
-import com.google.firebase.ml.vision.text.FirebaseVisionText;
-import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
-
-import net.steamcrafted.loadtoast.LoadToast;
-
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.util.StringPharser;
 
 public class SmartCropActivity extends AppCompatActivity {
 
@@ -97,37 +84,11 @@ public class SmartCropActivity extends AppCompatActivity {
                     Bitmap crop = cropImageView.crop();
                     if (crop != null) {
                         saveImage(crop, mFile);
-//                        Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
-//                        intent.putExtra("imagePath",mFile.getPath());
-//                        startActivity(intent);
-//                        finish();
-                        loadToast = new LoadToast(activity);
-                        loadToast.setText("Read Text From Image...");
-                        loadToast.setTranslationY(1000);
-                        loadToast.show();
+                        Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
+                        intent.putExtra("imagePath",mFile.getPath());
+                        startActivity(intent);
+                        finish();
 
-                        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(BitmapFactory.decodeFile(mFile.getPath()));
-                        FirebaseVisionTextRecognizer detector = FirebaseVision.getInstance().getCloudTextRecognizer();
-                        new FirebaseVisionCloudTextRecognizerOptions.Builder().setLanguageHints(Arrays.asList("en", "kr")).build();
-                        Task<FirebaseVisionText> result = detector.processImage(image).addOnSuccessListener(
-                                new OnSuccessListener<FirebaseVisionText>() {
-                                    @Override
-                                    public void onSuccess(FirebaseVisionText firebaseVisionText) {
-                                        StringPharser stringPharser = new StringPharser(firebaseVisionText);
-                                        String resultString = firebaseVisionText.getText();
-//                                        Log.d("DEBUG!", resultString);
-                                        loadToast.success();
-                                    }
-                                })
-                                .addOnFailureListener(
-                                        new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d("DEBUG!", "Failed!");
-
-                                            }
-                                        }
-                                );
                     } else {
                         Log.d(TAG, "Bitmap crop is null...");
                     }
