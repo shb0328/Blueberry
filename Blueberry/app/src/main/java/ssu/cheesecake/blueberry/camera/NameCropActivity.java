@@ -62,16 +62,15 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
      */
     private boolean isOCRFailed = false;
     private LoadToast loadToast;
-    //    private OCRResult ocrResult;
-//    private HashMap<String, String> map;
     private StringParser stringParser;
 
     //results
     private ArrayList<String> name;
-    private ArrayList<String> email;
     private ArrayList<String> phone;
+    private ArrayList<String> email;
     private ArrayList<String> company;
     private ArrayList<String> address;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +112,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        setResionOfName();
+        setRegionOfName();
 
         Bitmap nameBitmap = cropNameImage(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y);
         AsyncTesseract asyncTesseract;
@@ -130,7 +129,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void setResionOfName() {
+    private void setRegionOfName() {
         //leftTop, rightBottom Point 얻어옴
         leftTop = nameCropImageView.getLeftTop();
         rightBottom = nameCropImageView.getRightBottom();
@@ -188,7 +187,6 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPreExecute() {
-//            recogrizeFirebaseVisionText();
 
             loadToast = new LoadToast(app);
             loadToast.setText("이름을 추출하고 있습니다...");
@@ -243,17 +241,24 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                             String resultString = firebaseVisionText.getText();
                             Log.i("OCR result", "\n***나머지 정보들 : ***\n"+resultString);
 
-                            email = stringParser.GetEmailArray();
                             phone = stringParser.GetNumberArray();
-                            Log.i("OCR result","**email : "+email.get(0)+"\n**phone : "+phone.get(0));
-
+                            email = stringParser.GetEmailArray();
+                            company = stringParser.GetCompanyArray();
+                            address = stringParser.GetAddressArray();
+                            Log.i("OCR result","\n**email : "+email.get(0)+"\n**phone : "+phone.get(0));
 
                             loadToast.success();
 
                             Intent intent = new Intent(app, EditActivity.class);
+                            intent.putExtra("path",imagePath);
+
                             intent.putExtra("name", name);
-                            intent.putExtra("email", email);
                             intent.putExtra("phone", phone);
+                            intent.putExtra("email", email);
+                            intent.putExtra("company",company);
+                            intent.putExtra("address",address);
+
+                            intent.putExtra("mode","new");
                             startActivity(intent);
                             finish();
                         }
