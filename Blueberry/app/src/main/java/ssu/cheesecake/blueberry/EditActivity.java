@@ -89,6 +89,7 @@ public class EditActivity extends AppCompatActivity {
             /**
              * new (from NameCropActivity)
              **/
+            card = new BusinessCard();
 
             imagePath = intent.getStringExtra("path");
             BitmapFactory.Options options = new BitmapFactory.Options();
