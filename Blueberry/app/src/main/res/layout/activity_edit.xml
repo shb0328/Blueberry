@@ -125,7 +125,31 @@
                 app:dropDownAnimStyle="@style/CustomPopupAnimation"
                 />
 
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:baselineAligned="true"
+            android:orientation="vertical">
+
+            <ssu.cheesecake.blueberry.util.EditSpinner
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:hint="이메일을 입력하고 수정하세요"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="@dimen/recheck1_question1"
+                android:fontFamily="@font/nanumsquare"
+                android:padding="8dp"
+                app:dropDownDrawable="@drawable/picker"
+                app:dropDownDrawableSpacing="15dp"
+                app:dropDownDrawableWidth="25dp"
+                app:dropDownDrawableHeight="25dp"
+                app:dropDownAnimStyle="@style/CustomPopupAnimation"
+                />
 
         </LinearLayout>
 
@@ -155,12 +179,7 @@
                 app:dropDownAnimStyle="@style/CustomPopupAnimation"
                 />
 
-
-
-
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,7 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:hint="이메일 주소를 입력하고 수정하세요"
+                android:hint="주소를 입력하고 수정하세요"
                 android:textColorHint="@color/colorWhite"
                 android:textSize="@dimen/recheck1_question1"
                 android:fontFamily="@font/nanumsquare"
@@ -187,6 +206,7 @@
                 />
 
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

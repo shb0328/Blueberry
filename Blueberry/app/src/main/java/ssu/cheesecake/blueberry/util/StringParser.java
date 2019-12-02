@@ -317,4 +317,10 @@ public class StringParser {
         return result;
     }
 
+    public ArrayList<String> GetAddressArray(){
+        ArrayList<String> result = new ArrayList<String>();
+        result.add("address sample");
+        return result;
+    }
+
 }
