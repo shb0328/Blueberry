@@ -1,7 +1,7 @@
 package ssu.cheesecake.blueberry;
 
-import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,7 +17,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.util.EditSpinner;
@@ -25,117 +24,184 @@ import ssu.cheesecake.blueberry.util.RealmController;
 
 public class EditActivity extends AppCompatActivity {
 
-    private Activity activity;
+    private Context app;
 
     private String imagePath;
+
+    private BusinessCard card;
+
+    //data
+    private ArrayList<String> nameArray;
+    private ArrayList<String> emailArray;
+    private ArrayList<String> phoneArray;
+    private ArrayList<String> companyArray;
+    private ArrayList<String> addressArray;
+    private ArrayList<String> groupArray;
+
+    //spinners and adapters
     private ImageView imageView;
+    private EditSpinner editName;
+    private EditSpinner editPhone;
+    private EditSpinner editEmail;
+    private EditSpinner editCompany;
+    private EditSpinner editAddress;
+    private EditSpinner editGroup;
 
-    public String name_finValue;
-    public String phone_finValue;
-    public String mail_finValue;
-    public String company_finValue;
-    private String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
+    private ArrayAdapter name_adapter;
+    private ArrayAdapter phone_adapter;
+    private ArrayAdapter email_adapter;
+    private ArrayAdapter company_adapter;
+    private ArrayAdapter address_adapter;
+    private ArrayAdapter group_adapter;
 
-    private EditSpinner editname;
-    private EditSpinner editphone;
-    private EditSpinner editcompany;
-    private EditSpinner editemail;
-    private EditSpinner editgroup;
-
+    //?
     private int position;
+
+    //cheesed data
+    private String name_finValue;
+    private String phone_finValue;
+    private String email_finValue;
+    private String company_finValue;
+    private String address_finValue;
+    private String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
-        activity = this;
+        app = this;
+
+        imageView = findViewById(R.id.business_card);
+        editName = findViewById(R.id.edit_name);
+        editPhone = findViewById(R.id.edit_phone);
+        editEmail = findViewById(R.id.edit_email);
+        editCompany = findViewById(R.id.edit_company);
+        editAddress = findViewById(R.id.edit_address);
+        editGroup = findViewById(R.id.edit_group);
 
         Intent intent = getIntent();
-        final BusinessCard card = intent.getParcelableExtra("card");
-        //Image Loading
-        imageView = findViewById(R.id.business_card);
-        //TODO:잠시주석
-//        File imageFile = null;
-//        try {
-//            //Local에 Image 저장할 경로 지정
-//            File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
-//            imageFile = new File(dir, card.getImageUrl());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//        if (imageFile != null) {
-//            BitmapFactory.Options options = new BitmapFactory.Options();
-//            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-//            imageView.setImageBitmap(bitmap);
-//        }
-//        editname = findViewById(R.id.edit_name);
-//        editphone = findViewById(R.id.edit_phone);
-//        editcompany = findViewById(R.id.edit_company);
-//        editemail = findViewById(R.id.edit_address);
-//        editgroup = findViewById(R.id.edit_group);
-//
-//        editname.setText(card.getKrName());
-//        editphone.setText(card.getPhoneNumber());
-//        editcompany.setText(card.getCompany());
-//        editemail.setText(card.getEmail());
-//        editgroup.setText(card.getGroup());
-//
-//        ArrayList<String> nameArray = new ArrayList<String>();
-//        nameArray.add(card.getKrName());
-//        nameArray.add("직접 입력");
-//        ArrayList<String> phoneArray = new ArrayList<String>();
-//        phoneArray.add(card.getPhoneNumber());
-//        phoneArray.add("직접 입력");
-//        ArrayList<String> companyArray = new ArrayList<String>();
-//        companyArray.add(card.getCompany());
-//        companyArray.add("직접 입력");
-//        ArrayList<String> emailArray = new ArrayList<String>();
-//        emailArray.add(card.getEmail());
-//        emailArray.add("직접 입력");
-//        ArrayList<String> groupArray = new ArrayList<String>();
-//        groupArray.add(card.getGroup());
-//        groupArray.add("직접 입력");
-//
-//
-//        ArrayAdapter name_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, nameArray);
-//        editname.setAdapter(name_adapter);
-//
-//        ArrayAdapter phone_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, phoneArray);
-//        editphone.setAdapter(phone_adapter);
-//
-//        ArrayAdapter company_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, companyArray);
-//        editcompany.setAdapter(company_adapter);
-//
-//        ArrayAdapter email_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, emailArray);
-//        editemail.setAdapter(email_adapter);
-//
-//        ArrayAdapter group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
-//        editemail.setAdapter(group_adapter);
+        String mode = intent.getStringExtra("mode");
 
-        //버튼으로 주소록에 데이터를 전달함
+        if (mode.equals("new")) {
+            /**
+             * new (from NameCropActivity)
+             **/
+
+            imagePath = intent.getStringExtra("path");
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+            imageView.setImageBitmap(bitmap);
+
+            nameArray = intent.getStringArrayListExtra("name");
+            phoneArray = intent.getStringArrayListExtra("phone");
+            emailArray = intent.getStringArrayListExtra("email");
+            companyArray = intent.getStringArrayListExtra("company");
+            addressArray = intent.getStringArrayListExtra("address");
+            groupArray = new ArrayList<>();
+        }
+        else if (mode.equals("edit")) {
+            /**
+             * edit (from MainActivity)
+             **/
+
+            card = intent.getParcelableExtra("card");
+
+            //Image Loading
+            File imageFile = null;
+            try {
+                //Local에 Image 저장할 경로 지정
+                File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
+                imageFile = new File(dir, card.getImageUrl());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (imageFile != null) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
+                imageView.setImageBitmap(bitmap);
+            }
+
+            editName.setText(card.getKrName());
+            editPhone.setText(card.getPhoneNumber());
+            editEmail.setText(card.getEmail());
+            editCompany.setText(card.getCompany());
+            editGroup.setText(card.getGroup());
+
+            nameArray = new ArrayList<String>();
+            nameArray.add(card.getKrName());
+            nameArray.add("직접 입력");
+
+            phoneArray = new ArrayList<String>();
+            phoneArray.add(card.getPhoneNumber());
+            phoneArray.add("직접 입력");
+
+            emailArray = new ArrayList<String>();
+            emailArray.add(card.getEmail());
+            emailArray.add("직접 입력");
+
+            companyArray = new ArrayList<String>();
+            companyArray.add(card.getCompany());
+            companyArray.add("직접 입력");
+
+            addressArray = new ArrayList<String>();
+//            addressArray.add(card.getAddress());
+            addressArray.add("직접 입력");
+
+            groupArray = new ArrayList<String>();
+            groupArray.add(card.getGroup());
+            groupArray.add("직접 입력");
+
+        }//end of ArrayLists setting
+
+        name_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, nameArray);
+        editName.setAdapter(name_adapter);
+
+        phone_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, phoneArray);
+        editPhone.setAdapter(phone_adapter);
+
+        email_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, emailArray);
+        editEmail.setAdapter(email_adapter);
+
+        company_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, companyArray);
+        editCompany.setAdapter(company_adapter);
+
+        address_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, addressArray);
+        editAddress.setAdapter(address_adapter);
+
+        group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
+        editEmail.setAdapter(group_adapter);
+
+
+        /**
+         *         주소록 연동
+         */
         Button ToFinValue = findViewById(R.id.finishButton1);
         ToFinValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BusinessCard editCard = new BusinessCard();
                 editCard.Copy(card);
-                editCard.setKrName(editname.getText().toString());
-                editCard.setPhoneNumber(editphone.getText().toString());
-                editCard.setCompany(editcompany.getText().toString());
-                editCard.setEmail(editemail.getText().toString());
-                editCard.setGroup(editgroup.getText().toString());
+                //TODO:null처리?
+                editCard.setKrName(editName.getText().toString());
+                editCard.setPhoneNumber(editPhone.getText().toString());
+                editCard.setEmail(editEmail.getText().toString());
+                editCard.setCompany(editCompany.getText().toString());
+//                editCard.setAddress(editAddress.getText().toString());
+                editCard.setGroup(editGroup.getText().toString());
 
-                Realm.init(activity);
+                Realm.init(app);
                 RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
                 realmController.editBusinessCard(editCard, position);
 
-                name_finValue = editname.getText().toString();
-                phone_finValue = editphone.getText().toString();
-                company_finValue = editcompany.getText().toString();
-                mail_finValue = editemail.getText().toString();
-                group_finValue = editgroup.getText().toString();
+                name_finValue = editName.getText().toString();
+                phone_finValue = editPhone.getText().toString();
+                email_finValue = editEmail.getText().toString();
+                company_finValue = editCompany.getText().toString();
+                address_finValue = editAddress.getText().toString();
+                group_finValue = editGroup.getText().toString();
 
+                //TODO: address 관련 추가?
                 Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
                 insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
                 insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
@@ -159,12 +225,12 @@ public class EditActivity extends AppCompatActivity {
                         ContactsContract.Data.MIMETYPE,
                         ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
                 );
-                emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, mail_finValue);
+                emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
                 contactData.add(emailRow);
 
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
-                if(realmController.getIsAutoSave().getIsAutoSave()) {
+                if (realmController.getIsAutoSave().getIsAutoSave()) {
                     startActivityForResult(insertIntent, RESULT_OK);
                 }
                 finish();
