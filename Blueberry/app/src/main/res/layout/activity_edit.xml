@@ -6,6 +6,8 @@
     android:background="@color/colorBlueBerry1"
     android:orientation="vertical">
 
+    <!-- info -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -39,9 +41,9 @@
             android:layout_marginTop="10dp"
             android:background="@color/colorWhite" />
 
-
     </LinearLayout>
 
+    <!-- Image -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,6 +64,8 @@
 
     </LinearLayout>
 
+    <!-- Spinners -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -70,14 +74,12 @@
         android:background="@drawable/borderselection"
         android:orientation="vertical">
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:baselineAligned="true"
             android:orientation="vertical">
-
 
             <ssu.cheesecake.blueberry.util.EditSpinner
                 android:id="@+id/edit_name"
@@ -98,15 +100,12 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:baselineAligned="true"
             android:orientation="vertical">
-
-
 
             <ssu.cheesecake.blueberry.util.EditSpinner
                 android:id="@+id/edit_phone"
@@ -153,14 +152,12 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:baselineAligned="true"
             android:orientation="vertical">
-
 
             <ssu.cheesecake.blueberry.util.EditSpinner
                 android:id="@+id/edit_company"
@@ -207,7 +204,6 @@
 
         </LinearLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -234,9 +230,9 @@
 
         </LinearLayout>
 
-
-
     </LinearLayout>
+
+    <!-- Button -->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -251,7 +247,6 @@
             android:layout_height="wrap_content"
             android:text="@string/recheck_next"
             android:textSize="@dimen/recheck1_question1" />
-
 
     </LinearLayout>
 
