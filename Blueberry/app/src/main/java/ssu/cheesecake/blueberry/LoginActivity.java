@@ -27,8 +27,6 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 
-import ssu.cheesecake.blueberry.util.StringParser;
-
 public class LoginActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener{
 
     // 구글로그인 result 상수
@@ -75,8 +73,6 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
         });
-
-        StringParser stringParser = new StringParser();
 
         tedPermission();
     }
