@@ -47,6 +47,9 @@
         <meta-data
             android:name="firebase_analytics_collection_deactivated"
             android:value="false" />
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
     </application>
 
 </manifest>
