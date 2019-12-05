@@ -142,9 +142,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 recyclerView.getAdapter().notifyItemChanged(position);
                             }
                         } else if (viewID == R.id.item_button_edit) {
-                            Intent intent = new Intent(activity, EditActivity.class);
+                            Intent intent = new Intent(context, EditActivity.class);
+                            intent.putExtra("mode", "edit");
                             intent.putExtra("card", card);
-                            intent.putExtra("mode","edit");
                             activity.startActivity(intent);
                         } else if (viewID == R.id.item_button_delete) {
                             if(realmController != null){

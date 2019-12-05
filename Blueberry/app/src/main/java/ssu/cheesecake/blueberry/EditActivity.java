@@ -86,13 +86,19 @@ public class EditActivity extends AppCompatActivity {
         editAddress = findViewById(R.id.edit_address);
         editGroup = findViewById(R.id.edit_group);
 
-        resultIntent = new Intent(this, MainActivity.class);
 
         Intent intent = getIntent();
+        if(intent.hasExtra("mode")){
+            String mode = intent.getStringExtra("mode");
+        }
         String mode = intent.getStringExtra("mode");
-
         if (mode.equals("new")) {
             isAdded = true;
+        }
+        else if (mode.equals("edit")) {
+            isAdded = false;
+        }
+        if(isAdded){
             /**
              * new (from NameCropActivity)
              **/
@@ -113,8 +119,7 @@ public class EditActivity extends AppCompatActivity {
             addressArray = intent.getStringArrayListExtra("address");
             groupArray = new ArrayList<>();
         }
-        else if (mode.equals("edit")) {
-            isAdded = false;
+        else if(!isAdded){
             /**
              * edit (from MainActivity)
              **/
@@ -195,6 +200,8 @@ public class EditActivity extends AppCompatActivity {
 
         group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
         editGroup.setAdapter(group_adapter);
+
+        resultIntent = new Intent(this, MainActivity.class);
 
         Button ToFinValue = findViewById(R.id.finishButton1);
         ToFinValue.setOnClickListener(new View.OnClickListener() {

@@ -299,10 +299,12 @@ public class BusinessCard extends RealmObject implements Parcelable {
         dest.writeString(imageUrl);
         dest.writeString(path);
         dest.writeString(group);
+        int tmp = 0;
         if (isFavorite)
-            dest.writeInt(1);
-        else if (isFavorite)
-            dest.writeInt(0);
+            tmp = 1;
+        else if (!isFavorite)
+            tmp = 0;
+        dest.writeInt(tmp);
         return;
     }
 

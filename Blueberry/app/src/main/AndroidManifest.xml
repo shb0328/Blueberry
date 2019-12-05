@@ -21,7 +21,7 @@
         <activity android:name=".camera.NameCropActivity"></activity>
         <activity
             android:name=".LoginActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="unspecified">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

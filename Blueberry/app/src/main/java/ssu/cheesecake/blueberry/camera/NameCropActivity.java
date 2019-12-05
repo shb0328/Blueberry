@@ -242,15 +242,14 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
                             Intent intent = new Intent(app, EditActivity.class);
                             intent.putExtra("path", imagePath);
-
                             intent.putExtra("name", name);
                             intent.putExtra("phone", phone);
                             intent.putExtra("email", email);
                             intent.putExtra("company", company);
                             intent.putExtra("address", address);
                             intent.putExtra("webSite",webSite);
-
                             intent.putExtra("mode", "new");
+
                             startActivity(intent);
                             finish();
                         }
