@@ -1,7 +1,9 @@
 package ssu.cheesecake.blueberry.menu;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -17,11 +19,14 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import io.realm.Realm;
+import ssu.cheesecake.blueberry.LoginActivity;
 import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
 
 public class OptionFragment extends Fragment implements View.OnClickListener {
+    Context context;
+
     Button backupBtn;
     Button restoreBtn;
     Button signOutBtn;
@@ -32,6 +37,7 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_option, container, false);
+        context = this.getContext();
 
         //Navigation Menu bar Icon 변경
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
@@ -72,6 +78,7 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(context, LoginActivity.class));
                     getActivity().finish();
                 }
             });

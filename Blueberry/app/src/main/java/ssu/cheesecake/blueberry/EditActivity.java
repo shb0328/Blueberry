@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.util.EditSpinner;
@@ -89,17 +90,16 @@ public class EditActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        if(intent.hasExtra("mode")){
+        if (intent.hasExtra("mode")) {
             String mode = intent.getStringExtra("mode");
         }
         String mode = intent.getStringExtra("mode");
         if (mode.equals("new")) {
             isAdded = true;
-        }
-        else if (mode.equals("edit")) {
+        } else if (mode.equals("edit")) {
             isAdded = false;
         }
-        if(isAdded){
+        if (isAdded) {
             /**
              * new (from NameCropActivity)
              **/
@@ -120,8 +120,7 @@ public class EditActivity extends AppCompatActivity {
             companyArray = intent.getStringArrayListExtra("company");
             addressArray = intent.getStringArrayListExtra("address");
             groupArray = new ArrayList<>();
-        }
-        else if(!isAdded){
+        } else if (!isAdded) {
             /**
              * edit (from MainActivity)
              **/
@@ -129,20 +128,10 @@ public class EditActivity extends AppCompatActivity {
             card = intent.getParcelableExtra("card");
 
             //Image Loading
-            File imageFile = null;
-            try {
-                //Local에 Image 저장할 경로 지정
-                File dir = new File(Environment.getExternalStorageDirectory() + "/photos");
-                imageFile = new File(dir, card.getImageUrl());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (imageFile != null) {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath(), options);
-                imageView.setImageBitmap(bitmap);
-            }
+            //Local에 Image 저장할 경로 지정
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            Bitmap bitmap = BitmapFactory.decodeFile(card.getImageUrl(), options);
+            imageView.setImageBitmap(bitmap);
 
             editName.setText(card.getKrName());
             editPhone.setText(card.getPhoneNumber());
@@ -212,7 +201,7 @@ public class EditActivity extends AppCompatActivity {
                 Realm.init(app);
                 RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
 
-                if(!isAdded) {
+                if (!isAdded) {
                     BusinessCard editCard = new BusinessCard();
                     editCard.Copy(card);
                     editCard.setKrName(editName.getText().toString());
@@ -276,7 +265,7 @@ public class EditActivity extends AppCompatActivity {
                 contactData.add(webRow);
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
-                if(isAdded){
+                if (isAdded) {
                     card.setKrName(name_finValue);
                     card.setPhoneNumber(phone_finValue);
                     card.setCompany(company_finValue);
