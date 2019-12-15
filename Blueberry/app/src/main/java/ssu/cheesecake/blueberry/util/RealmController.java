@@ -36,9 +36,6 @@ public class RealmController {
         loadGroup();
     }
 
-    public RealmController() {
-    }
-
     //Search, Group의 결과 List 관리하는 RealmController의 생성자
     public RealmController(Realm mRealm, WhichResult whichResult, String str) {
         if (whichResult == Group) {
