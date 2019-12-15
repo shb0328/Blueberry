@@ -31,7 +31,6 @@ public class RealmController {
         this.whichResult = whichResult;
         this.group = null;
         this.searchWord = null;
-        this.groups = new Vector<CustomGroup>();
         loadCard();
         loadGroup();
     }
@@ -56,6 +55,14 @@ public class RealmController {
         }
     }
 
+    public Realm getmRealm() {
+        return mRealm;
+    }
+
+    public void setmRealm(Realm mRealm) {
+        this.mRealm = mRealm;
+    }
+
     public void initializeCards() {
         cards = new Vector<BusinessCard>();
         mRealm.executeTransaction(new Realm.Transaction() {
@@ -66,7 +73,7 @@ public class RealmController {
         });
     }
 
-    public void initializeAutoSave() {
+    public void initializeAutoSave(final boolean value) {
         RealmResults<AutoSave> result = mRealm.where(AutoSave.class).findAll();
         if (result == null || result.isEmpty()){
             Log.d("DEBUG!", "Empty!!");
@@ -74,7 +81,7 @@ public class RealmController {
                 @Override
                 public void execute(Realm realm) {
                     AutoSave autoSave = realm.createObject(AutoSave.class);
-                    autoSave.setIsAutoSave(true);
+                    autoSave.setIsAutoSave(value);
                 }
             });
         }
@@ -131,6 +138,7 @@ public class RealmController {
     //RealmController 생성 시 Realm에 등록되어 있는 GroupList를 Vector로 받아옴
     public void loadGroup() {
         RealmResults<CustomGroup> result = null;
+        this.groups = new Vector<CustomGroup>();
         result = mRealm.where(CustomGroup.class).findAll();
         if (result != null) {
             int len = result.size();

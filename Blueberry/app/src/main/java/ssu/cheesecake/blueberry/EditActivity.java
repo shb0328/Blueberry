@@ -28,6 +28,7 @@ public class EditActivity extends AppCompatActivity {
     private Context app;
 
     private String imagePath;
+    private String fileName;
 
     private Intent resultIntent;
     private BusinessCard card;
@@ -105,6 +106,7 @@ public class EditActivity extends AppCompatActivity {
             card = new BusinessCard();
 
             imagePath = intent.getStringExtra("path");
+            fileName = intent.getStringExtra("fileName");
             BitmapFactory.Options options = new BitmapFactory.Options();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
             imageView.setImageBitmap(bitmap);
@@ -281,6 +283,7 @@ public class EditActivity extends AppCompatActivity {
                     card.setAddress(address_finValue);
                     card.setEmail(email_finValue);
                     card.setGroup(group_finValue);
+                    card.setFileName(fileName);
                     realmController.addBusinessCard(card);
                     Log.d("DEBUG!", card.getImageUrl());
                     startActivity(resultIntent);

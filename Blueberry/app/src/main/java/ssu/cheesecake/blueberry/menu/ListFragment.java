@@ -85,6 +85,8 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
                 return false;
             }
         });
+        buttonSearch.setFocusableInTouchMode(true);
+        buttonSearch.requestFocus();
         searchStr = null;
         buttonSearch.setOnClickListener(new View.OnClickListener() {
 

@@ -85,6 +85,8 @@ public class SmartCropActivity extends AppCompatActivity {
                     if (crop != null) {
                         saveImage(crop, mFile);
                         Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
+                        Log.d("DEBUG!", "onClick: " + fileName);
+                        intent.putExtra("fileName", fileName);
                         intent.putExtra("imagePath",mFile.getPath());
                         startActivity(intent);
                         finish();
@@ -203,12 +205,12 @@ public class SmartCropActivity extends AppCompatActivity {
     }
 
     private void saveImage(Bitmap bitmap, File saveFile) {
-        try {
-            FileOutputStream fos = new FileOutputStream(saveFile);
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-            fos.flush();
-            fos.close();
-        } catch (IOException e) {
+            try {
+                FileOutputStream fos = new FileOutputStream(saveFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                fos.flush();
+                fos.close();
+            } catch (IOException e) {
             e.printStackTrace();
         } finally {
             activity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(saveFile)));

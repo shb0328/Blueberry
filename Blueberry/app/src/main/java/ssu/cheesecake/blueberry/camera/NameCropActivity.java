@@ -49,6 +49,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
     private Context app = this;
 
     private String imagePath = "";
+    private String fileName;
     private Bitmap bitmap;
 
     private NameCropImageView nameCropImageView;
@@ -92,6 +93,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         Intent intent = getIntent();
         imagePath = intent.getStringExtra("imagePath");
+        fileName = intent.getStringExtra("fileName");
         bitmap = BitmapFactory.decodeFile(imagePath);
         nameCropImageView.init(bitmap);
 
@@ -242,6 +244,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
                             Intent intent = new Intent(app, EditActivity.class);
                             intent.putExtra("path", imagePath);
+                            intent.putExtra("fileName", fileName);
                             intent.putExtra("name", name);
                             intent.putExtra("phone", phone);
                             intent.putExtra("email", email);

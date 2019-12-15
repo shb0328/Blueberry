@@ -26,7 +26,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
     private String address;
     private String time;
     private String imageUrl;
-    private String path;
+    private String fileName;
     private String group;
     private boolean isFavorite;
 
@@ -44,7 +44,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         this.isFavorite = false;
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        this.path = user.getDisplayName() + "_" + user.getUid();
+        this.fileName = user.getDisplayName() + "_" + user.getUid();
         this.time = makeTImeString();
     }
 
@@ -55,6 +55,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         this.email = (String) map.get("email");
         this.company = (String) map.get("company");
         this.imageUrl = (String) map.get("imageUrl");
+        this.fileName = (String)map.get("fileName");
         this.group = (String) map.get("group");
         this.isFavorite = (boolean) map.get("isFavorite");
     }
@@ -70,7 +71,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         address = in.readString();
         time = in.readString();
         imageUrl = in.readString();
-        path = in.readString();
+        fileName = in.readString();
         group = in.readString();
         int tmp = in.readInt();
         if(tmp == 0) isFavorite = false;
@@ -153,12 +154,12 @@ public class BusinessCard extends RealmObject implements Parcelable {
         this.imageUrl = imageUrl;
     }
 
-    public String getPath() {
-        return path;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getGroup() {
@@ -224,7 +225,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         address = src.getAddress();
         time = src.getTime();
         imageUrl = src.getImageUrl();
-        path = src.getPath();
+        fileName = src.getFileName();
         group = src.getGroup();
         isFavorite = src.getIsFavorite();
         return;
@@ -243,7 +244,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         result.put("address",address);
         result.put("time", time);
         result.put("imageUrl", imageUrl);
-        result.put("path", path);
+        result.put("fileName", fileName);
         result.put("group", group);
         result.put("isFavorite", isFavorite);
         return result;
@@ -271,8 +272,8 @@ public class BusinessCard extends RealmObject implements Parcelable {
         result += this.time;
         result += "imageUrl: ";
         result += this.imageUrl;
-        result += "path: ";
-        result += this.path;
+        result += "fileName: ";
+        result += this.fileName;
         result += "group: ";
         result += this.group;
         result += "isFavorite: ";
@@ -297,7 +298,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
         dest.writeString(address);
         dest.writeString(time);
         dest.writeString(imageUrl);
-        dest.writeString(path);
+        dest.writeString(fileName);
         dest.writeString(group);
         int tmp = 0;
         if (isFavorite)
