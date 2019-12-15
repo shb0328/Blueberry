@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +25,7 @@ import io.realm.RealmResults;
 import ssu.cheesecake.blueberry.GroupAdapter;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.custom.CustomGroup;
+import ssu.cheesecake.blueberry.util.RealmController;
 
 
 public class GroupFragment extends Fragment {
@@ -32,7 +35,8 @@ public class GroupFragment extends Fragment {
     private GridView groupView;
     private FloatingActionButton addGroupFab;
     private Realm realm;
-    private ArrayList<CustomGroup> groupArrayList;
+
+    private RealmController realmController;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,55 +46,43 @@ public class GroupFragment extends Fragment {
 
         context = getActivity();
 
-        if(groupArrayList == null){
-            groupArrayList = new ArrayList<>();
-            realm = Realm.getDefaultInstance();
-            realm.executeTransaction(new Realm.Transaction() {
-                @Override
-                public void execute(Realm realm) {
-                    RealmResults<CustomGroup> results = realm.where(CustomGroup.class).findAll();
-                    for(CustomGroup vo : results){
-                        groupArrayList.add(vo);
-                    }
-                }
-            });
-        }
+        realm = Realm.getDefaultInstance();
+        realmController = new RealmController(realm, RealmController.WhichResult.Group);
 
         //fab버튼 누르면 dialog 뜸
         addGroupFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                AlertDialog.Builder groupBuild = new AlertDialog.Builder(getActivity());
-                groupBuild.setTitle("그룹 추가");
-                groupBuild.setMessage("그룹 이름을 입력하시오");
+                AlertDialog.Builder groupAddBuilder = new AlertDialog.Builder(getActivity());
+                groupAddBuilder.setTitle("그룹 추가");
+                groupAddBuilder.setMessage("그룹 이름을 입력하시오");
 
                 final EditText editGroup = new EditText(getActivity());
-                groupBuild.setView(editGroup);
-                groupBuild.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                groupAddBuilder.setView(editGroup);
+                groupAddBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        realm = Realm.getDefaultInstance();
-                        realm.executeTransaction(new Realm.Transaction() {
-                            @Override
-                            public void execute(Realm realm) {
-                                CustomGroup vo = realm.createObject(CustomGroup.class);
-                                vo.setGroupName(editGroup.getText().toString());
-                                groupArrayList.add(vo);
-                            }
-                        });
-
-                        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,groupArrayList);
-                        groupView.setAdapter(groupAdapter);
+                        String groupName = editGroup.getText().toString();
+                        if(groupName.length() < 2){
+                            Toast.makeText(context,"그룹 이름은  2글자 이상만 가능합니다.",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        boolean isSuccess = realmController.addCustomGroup(groupName);
+                        if(isSuccess) {
+                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups());
+                            groupView.setAdapter(groupAdapter);
+                            return;
+                        }
+                        Toast.makeText(context,"이미 존재하는 그룹 이름 입니다.",Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                groupBuild.setNegativeButton("No", null);
-                groupBuild.show();
+                groupAddBuilder.setNegativeButton("No", null);
+                groupAddBuilder.show();
             }
         });
 
-        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,groupArrayList);
+        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups());
         groupView.setAdapter(groupAdapter);
 
         //Navigation Menu bar Icon 변경

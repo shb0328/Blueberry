@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Vector;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,9 +18,9 @@ public class GroupAdapter extends ArrayAdapter {
 
     Context context;
     int resID;
-    ArrayList<CustomGroup> data;
+    Vector<CustomGroup> data;
 
-    public GroupAdapter(@NonNull Context context, int resource, @NonNull ArrayList<CustomGroup> objects) {
+    public GroupAdapter(@NonNull Context context, int resource, @NonNull Vector<CustomGroup> objects) {
         super(context, resource, objects);
         this.context = context;
         this.resID = resource;
