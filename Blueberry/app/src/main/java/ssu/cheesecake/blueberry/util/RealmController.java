@@ -35,9 +35,6 @@ public class RealmController {
         loadGroup();
     }
 
-    public RealmController() {
-    }
-
     //Search, Group의 결과 List 관리하는 RealmController의 생성자
     public RealmController(Realm mRealm, WhichResult whichResult, String str) {
         if (whichResult == Group) {
@@ -190,16 +187,23 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                CustomGroup group = new CustomGroup(groupName);
                 CustomGroup deleteGroup = realm.where(CustomGroup.class).equalTo("groupName", groupName).findFirst();
                 groups.remove(deleteGroup);
                 deleteGroup.deleteFromRealm();
+
+                RealmResults<BusinessCard> resCards = realm.where(BusinessCard.class).equalTo("group",groupName).findAll();
+                for(BusinessCard card : resCards){
+                    card.setGroup(null);
+                }
             }
         });
     }
 
     public Vector<BusinessCard> getCards() {
         return cards;
+    }
+    public Vector<CustomGroup> getGroups() {
+        return groups;
     }
 
     //Realm에 BusinessCard 추가하는 함수
@@ -332,4 +336,5 @@ public class RealmController {
             }
         });
     }
+
 }

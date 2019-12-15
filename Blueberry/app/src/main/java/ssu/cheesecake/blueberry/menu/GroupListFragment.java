@@ -3,6 +3,7 @@ package ssu.cheesecake.blueberry.menu;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -63,7 +64,7 @@ public class GroupListFragment extends Fragment {
         whichResult = RealmController.WhichResult.Group;
         Realm.init(this.getActivity());
         mRealm = Realm.getDefaultInstance();
-        realmController = new RealmController(mRealm, whichResult);
+        realmController = new RealmController(mRealm, whichResult, groupName);
 
         //Recycler View
         recyclerView = root.findViewById(R.id.recyclerView_group_list);
