@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.GroupAdapter;
 import ssu.cheesecake.blueberry.R;
@@ -36,9 +37,12 @@ public class GroupFragment extends Fragment {
 
     private RealmController realmController;
 
+    private Fragment groupFragment;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_group, container, false);
+        groupFragment = this;
         groupView = root.findViewById(R.id.groupView);
         addGroupFab = root.findViewById(R.id.addGroupFab);
 
@@ -68,7 +72,7 @@ public class GroupFragment extends Fragment {
                         }
                         boolean isSuccess = realmController.addCustomGroup(groupName);
                         if(isSuccess) {
-                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupDeleteListener());
+                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
                             groupView.setAdapter(groupAdapter);
                             return;
                         }
@@ -80,7 +84,7 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupDeleteListener());
+        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
         groupView.setAdapter(groupAdapter);
 
         //Navigation Menu bar Icon 변경
@@ -93,11 +97,13 @@ public class GroupFragment extends Fragment {
     }
 
 
-    class OnGroupDeleteListener implements View.OnTouchListener{
+    class OnGroupTouchListener implements View.OnTouchListener{
         private long touchDownTime, touchUpTime;
+        private String groupName;
 
         @Override
         public boolean onTouch(final View view, MotionEvent motionEvent) {
+            groupName = ((TextView)view).getText().toString();
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                 touchDownTime = motionEvent.getDownTime();
                 view.getParent().requestDisallowInterceptTouchEvent(true);
@@ -107,6 +113,9 @@ public class GroupFragment extends Fragment {
                 touchUpTime = motionEvent.getEventTime();
                 Log.i("time", "up" + touchUpTime);
                 if (touchUpTime - touchDownTime > 1000) {
+                    /**
+                     * delete
+                     */
                     touchDownTime = 0;
                     touchUpTime = 0;
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
@@ -115,15 +124,20 @@ public class GroupFragment extends Fragment {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            realmController.deleteCustomGroup(((TextView)view).getText().toString());
-                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupDeleteListener());
+                            realmController.deleteCustomGroup((groupName);
+                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
                             groupView.setAdapter(groupAdapter);
                         }
                     });
                     builder.setNegativeButton("No", null);
                     builder.show();
                 }else{
-                    Toast.makeText(context,"onClicked!!!",Toast.LENGTH_SHORT).show();
+                    /**
+                     * select
+                     */
+                    GroupListFragment groupListFragment = new GroupListFragment(groupName);
+                    FragmentManager manager = groupFragment.getFragmentManager();
+                    manager.beginTransaction().replace(R.id.nav_host_fragment,groupListFragment).commit();
                 }
             }
             return true;
