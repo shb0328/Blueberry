@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Vector;
@@ -13,6 +14,7 @@ import java.util.Vector;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import ssu.cheesecake.blueberry.custom.CustomGroup;
+import ssu.cheesecake.blueberry.menu.GroupFragment;
 
 public class GroupAdapter extends ArrayAdapter {
 
@@ -20,11 +22,14 @@ public class GroupAdapter extends ArrayAdapter {
     int resID;
     Vector<CustomGroup> data;
 
-    public GroupAdapter(@NonNull Context context, int resource, @NonNull Vector<CustomGroup> objects) {
+    View.OnTouchListener groupDeleteListener;
+
+    public GroupAdapter(@NonNull Context context, int resource, @NonNull Vector<CustomGroup> objects,View.OnTouchListener groupDeleteListener) {
         super(context, resource, objects);
         this.context = context;
         this.resID = resource;
         this.data = objects;
+        this.groupDeleteListener = groupDeleteListener;
     }
 
     @NonNull
@@ -52,6 +57,8 @@ public class GroupAdapter extends ArrayAdapter {
         String groupname = customGroup.getGroupName();
         groupName.setText(groupname);
 
+        groupName.setOnTouchListener(groupDeleteListener);
         return convertView;
     }
+
 }
