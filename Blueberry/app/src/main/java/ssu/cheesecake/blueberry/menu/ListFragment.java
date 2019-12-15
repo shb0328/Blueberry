@@ -32,7 +32,7 @@ import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 public class ListFragment extends Fragment implements View.OnClickListener, RecyclerTouchListener.RecyclerTouchListenerHelper {
-    public static Context context;
+    private Context context;
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
 
