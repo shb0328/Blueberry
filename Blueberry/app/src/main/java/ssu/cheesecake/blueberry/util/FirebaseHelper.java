@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -85,18 +86,23 @@ public class FirebaseHelper {
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                backupLoadToast = new LoadToast(context);
-                backupLoadToast.setText("Backup...");
-                backupLoadToast.setTranslationY(1000);
-                backupLoadToast.show();
-                Vector<BusinessCard> cards = realm.getCards();
-                myRef.removeValue();
-                int len = cards.size();
-                for (int i = 0; i < len; i++) {
-                    myRef.child(i + "").setValue(cards.get(i).toMap());
-                    uploadFileList.add(cards.get(i).getFileName());
+                if (realm.getCards().size() > 0) {
+                    backupLoadToast = new LoadToast(context);
+                    backupLoadToast.setText("Backup...");
+                    backupLoadToast.setTranslationY(1000);
+                    backupLoadToast.show();
+                    Vector<BusinessCard> cards = realm.getCards();
+                    myRef.removeValue();
+                    int len = cards.size();
+                    for (int i = 0; i < len; i++) {
+                        myRef.child(i + "").setValue(cards.get(i).toMap());
+                        uploadFileList.add(cards.get(i).getFileName());
+                    }
+                    addToUploadFileList();
                 }
-                addToUploadFileList();
+                else{
+                    Toast.makeText(context, "백업할 내용이 없습니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -109,7 +115,7 @@ public class FirebaseHelper {
     }
 
     public void Restore(final RealmController realm) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle("복원");
         alert.setMessage("복원을 실행하시겠습니까? 현재 단말기에 저장된 정보는 모두 지워지고, 백업된 내용이 들어옵니다.");
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -125,16 +131,21 @@ public class FirebaseHelper {
                 myRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                            HashMap<String, Object> map = (HashMap<String, Object>) postSnapshot.getValue();
-                            BusinessCard card = new BusinessCard(map);
-                            realm.addBusinessCard(card);
-                            downloadFileList.add(card.getFileName());
-                            try {
-                                downloadImage(card.getFileName());
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
+                        if(dataSnapshot.hasChildren()) {
+                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                HashMap<String, Object> map = (HashMap<String, Object>) postSnapshot.getValue();
+                                BusinessCard card = new BusinessCard(map);
+                                realm.addBusinessCard(card);
+                                downloadFileList.add(card.getFileName());
+                                try {
+                                    downloadImage(card.getFileName());
+                                } catch (FileNotFoundException e) {
+                                    e.printStackTrace();
+                                }
                             }
+                        }
+                        else{
+                            restoreLoadToast.success();
                         }
                     }
 
