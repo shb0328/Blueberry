@@ -15,12 +15,11 @@ import androidx.navigation.Navigation;
 
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.custom.AutoSave;
 import ssu.cheesecake.blueberry.util.RealmController;
 
 public class MainActivity extends AppCompatActivity {
     NavController navController;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         //TODO:잠시주석
         Realm.init(this);
         RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
-        realmController.initializeAutoSave();
+        realmController.initializeAutoSave(true);
 
     }
 

@@ -32,7 +32,7 @@ import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 public class ListFragment extends Fragment implements View.OnClickListener, RecyclerTouchListener.RecyclerTouchListenerHelper {
-    public static Context context;
+    private Context context;
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
 
@@ -105,7 +105,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         //TouchEventListener 설정
-        RecyclerViewAdapter.setTouchListener(context, this.getActivity(), recyclerView);
+        adapter.setTouchListener(context, this.getActivity(), recyclerView, RealmController.WhichResult.List);
 
 
         //Floating Action Button
@@ -140,14 +140,14 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
                 Intent intent = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent.putExtra("key", CAMREQUESTCODE);
                 startActivity(intent);
-                getActivity().finish();
+//                getActivity().finish();
                 break;
             case R.id.fab_gallery:
                 anim();
                 Intent intent2 = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent2.putExtra("key", GALLERYREQUESTCODE);
                 startActivity(intent2);
-                getActivity().finish();
+//                getActivity().finish();
                 break;
         }
     }

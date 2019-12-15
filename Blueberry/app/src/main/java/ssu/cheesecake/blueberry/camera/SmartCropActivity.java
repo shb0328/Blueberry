@@ -27,6 +27,7 @@ import java.util.Date;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import me.pqpo.smartcropperlib.SmartCropper;
 import me.pqpo.smartcropperlib.view.CropImageView;
 import ssu.cheesecake.blueberry.R;
@@ -85,7 +86,9 @@ public class SmartCropActivity extends AppCompatActivity {
                     if (crop != null) {
                         saveImage(crop, mFile);
                         Intent intent = new Intent(SmartCropActivity.this, NameCropActivity.class);
-                        intent.putExtra("imagePath",mFile.getPath());
+                        Log.d("DEBUG!", "onClick: " + fileName);
+                        intent.putExtra("fileName", fileName);
+                        intent.putExtra("imagePath", mFile.getPath());
                         startActivity(intent);
                         finish();
 
@@ -104,67 +107,68 @@ public class SmartCropActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == CAMREQUESTCODE) {
+        if (resultCode == RESULT_CANCELED) {
+            finish();
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == RESULT_OK) {
+                if (requestCode == CAMREQUESTCODE) {
 
-                path = data.getExtras().getString("path");
-                fileName = data.getExtras().getString("fileName");
-                mFile = new File(path, fileName);
-                String imagePath = path + fileName;
-                Bitmap selectedBitmap = null;
-                selectedBitmap = BitmapFactory.decodeFile(imagePath);
-
-                if (selectedBitmap != null) {
-                    selectedBitmap = rotateBitmap(selectedBitmap, imagePath);
-                    cropImageView.setImageToCrop(selectedBitmap);
-                } else {
-                    Log.i(TAG, "SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
-                }
-
-            } else if (requestCode == GALLERYREQUESTCODE) {
-                Uri photoUri = data.getData();
-                Cursor cursor = null;
-                try {
-                    // Uri 스키마를 content:/// 에서 file:/// 로  변경한다.
-                    String[] proj = {MediaStore.Images.Media.DATA};
-                    cursor = this.getContentResolver().query(photoUri, proj, null, null, null);
-                    assert cursor != null;
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    cursor.moveToFirst();
-                    String imagePath = cursor.getString(column_index);
-
-                    path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/blueberry/";
-                    fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
-                    File dir = new File(path);
-                    if (!dir.exists() && dir.mkdir()) {
-                        dir.setWritable(true);
-                    }
+                    path = data.getExtras().getString("path");
+                    fileName = data.getExtras().getString("fileName");
                     mFile = new File(path, fileName);
-
-                    Bitmap originImage = BitmapFactory.decodeFile(imagePath);
-                    saveImage(originImage, mFile);
-
+                    String imagePath = path + fileName;
                     Bitmap selectedBitmap = null;
-                    selectedBitmap = BitmapFactory.decodeFile(mFile.getPath());
+                    selectedBitmap = BitmapFactory.decodeFile(imagePath);
 
                     if (selectedBitmap != null) {
-                        selectedBitmap = rotateBitmap(selectedBitmap, mFile.getPath());
+                        selectedBitmap = rotateBitmap(selectedBitmap, imagePath);
                         cropImageView.setImageToCrop(selectedBitmap);
                     } else {
-                        Log.i(TAG, "SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
+                        Log.i(TAG, "SmartCropActivity - onActivityResult - camera - selectedBitmap is null");
                     }
-                } finally {
-                    if (cursor != null) {
-                        cursor.close();
+
+                } else if (requestCode == GALLERYREQUESTCODE) {
+                    Uri photoUri = data.getData();
+                    Cursor cursor = null;
+                    try {
+                        // Uri 스키마를 content:/// 에서 file:/// 로  변경한다.
+                        String[] proj = {MediaStore.Images.Media.DATA};
+                        cursor = this.getContentResolver().query(photoUri, proj, null, null, null);
+                        assert cursor != null;
+                        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        cursor.moveToFirst();
+                        String imagePath = cursor.getString(column_index);
+
+                        path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/blueberry/";
+                        fileName = "blueberry_" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".jpg";
+                        File dir = new File(path);
+                        if (!dir.exists() && dir.mkdir()) {
+                            dir.setWritable(true);
+                        }
+                        mFile = new File(path, fileName);
+
+                        Bitmap originImage = BitmapFactory.decodeFile(imagePath);
+                        saveImage(originImage, mFile);
+
+                        Bitmap selectedBitmap = null;
+                        selectedBitmap = BitmapFactory.decodeFile(mFile.getPath());
+
+                        if (selectedBitmap != null) {
+                            selectedBitmap = rotateBitmap(selectedBitmap, mFile.getPath());
+                            cropImageView.setImageToCrop(selectedBitmap);
+                        } else {
+                            Log.i(TAG, "SmartCropActivity - onActivityResult - gallery - selectedBitmap is null");
+                        }
+                    } finally {
+                        if (cursor != null) {
+                            cursor.close();
+                        }
                     }
+                } else {
+                    Toast.makeText(this, "requestCode is null", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(this, "requestCode is null", Toast.LENGTH_SHORT).show();
             }
-        } else {//RESULT_CANCELED
-            Toast.makeText(this, "result cancel", Toast.LENGTH_SHORT).show();
-            onDestroy();
         }
     }
 

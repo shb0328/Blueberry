@@ -117,7 +117,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     //RecyclerView에 TouchListener 설정 함수
-     public static void setTouchListener(final Context context, final Activity activity, final RecyclerView recyclerView) {
+     public void setTouchListener(final Context context, final Activity activity, final RecyclerView recyclerView, final RealmController.WhichResult whichResult) {
         final RecyclerTouchListener onTouchListener = new RecyclerTouchListener(activity, recyclerView);
         onTouchListener
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
@@ -139,7 +139,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         if (viewID == R.id.item_button_favorite) {
                             if(realmController != null){
                                 realmController.changeIsFavorite(card);
-                                recyclerView.getAdapter().notifyItemChanged(position);
+                                if(whichResult == RealmController.WhichResult.Favorite) {
+                                    cards.remove(position);
+                                    recyclerView.getAdapter().notifyItemRemoved(position);
+                                }
+                                else if(whichResult == RealmController.WhichResult.List){
+                                    recyclerView.getAdapter().notifyItemChanged(position);
+                                }
                             }
                         } else if (viewID == R.id.item_button_edit) {
                             Intent intent = new Intent(context, EditActivity.class);

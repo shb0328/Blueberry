@@ -290,7 +290,7 @@ public class CameraFragment extends Fragment
             dir.setWritable(true);
         }
         Log.i(TAG,"dir.getAbsolutePath() : "+dir.getAbsolutePath());
-        Log.i(TAG,"dir.getPath() : "+dir.getPath());
+        Log.i(TAG,"dir.getFileName() : "+dir.getPath());
     }
 
     //thread to save image into gallery
