@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import io.realm.Realm;
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
@@ -57,6 +58,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.nowFragment = MainActivity.NowFragment.List;
         context = this.getContext();
         //Navigation Menu bar Icon 변경
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);

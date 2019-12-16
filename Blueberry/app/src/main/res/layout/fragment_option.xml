@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/layout_backup"
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/layout_restore"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_backup"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_backup" />
@@ -24,36 +28,43 @@
 
     <LinearLayout
         android:id="@+id/layout_restore"
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/layout_signOut"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_restore"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_restore" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/layout_signOut"
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/auto_save"
         android:orientation="horizontal">
 
         <TextView
+            style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
         <Button
             android:id="@+id/button_signOut"
+            style="@style/ButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/button_signOut" />
@@ -61,6 +72,7 @@
 
     <Switch
         android:id="@+id/auto_save"
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -69,6 +81,7 @@
 
     <TextView
         android:id="@+id/textView"
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

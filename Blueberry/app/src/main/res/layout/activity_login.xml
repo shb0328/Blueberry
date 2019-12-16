@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorBlueBerry1"
     android:layout_weight="100"
-    tools:context=".LoginActivity"
-    >
+    android:background="@color/colorBlueBerry"
+    android:orientation="vertical"
+    tools:context=".LoginActivity">
 
     <FrameLayout
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:layout_weight="60"
         android:orientation="horizontal">
-
 
 
         <TextView
@@ -31,9 +31,7 @@
             android:paddingBottom="@dimen/activity_login_box_vertical"
             android:text="@string/app_name"
             android:textColor="@color/colorWhite"
-            android:textSize="60sp"
-
-            />
+            android:textSize="60sp" />
 
         <ImageView
             android:id="@+id/BlueBerryLogo"
@@ -59,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
             android:layout_marginLeft="@dimen/activity_loginButtonSize"
-            android:layout_marginRight="@dimen/activity_loginButtonSize"/>
+            android:layout_marginRight="@dimen/activity_loginButtonSize" />
     </LinearLayout>
 
 </LinearLayout>

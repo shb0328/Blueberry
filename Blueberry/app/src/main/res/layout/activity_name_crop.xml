@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/nameCropActivityLinearLayout"
+    style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textStyle="bold"
+        android:gravity="center"
+        android:text="이름 영역을 손으로 색칠하고 언어를 선택해주세요."
         android:textColor="#000000"
         android:textSize="20dp"
-        android:gravity="center"
-        android:text="이름 영역을 손으로 색칠하고 언어를 선택해주세요."/>
+        android:textStyle="bold" />
 
     <ssu.cheesecake.blueberry.camera.NameCropImageView
         android:id="@+id/nameCropImageView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="5"
-        android:gravity="center"
         android:adjustViewBounds="true"
-        android:scaleType="fitStart"/>
+        android:gravity="center"
+        android:scaleType="fitStart" />
 
     <LinearLayout
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -36,39 +38,48 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
+
             <RadioButton
                 android:id="@+id/korRadioBtn"
+                style="@style/ButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="한글"/>
+                android:text="한글" />
+
             <RadioButton
                 android:id="@+id/engRadioBtn"
+                style="@style/ButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="영어"/>
+                android:text="영어" />
         </RadioGroup>
 
     </LinearLayout>
 
     <LinearLayout
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
+
         <Button
             android:id="@+id/btn_ok_name"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="ok"/>
+            android:text="ok" />
+
         <Button
             android:id="@+id/btn_cancel_name"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="cancel"/>
+            android:text="cancel" />
     </LinearLayout>
 
 </LinearLayout>

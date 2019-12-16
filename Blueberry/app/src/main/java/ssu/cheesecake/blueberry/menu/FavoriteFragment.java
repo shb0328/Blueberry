@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import io.realm.Realm;
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
 import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
@@ -25,6 +26,7 @@ public class FavoriteFragment extends Fragment{
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.nowFragment = MainActivity.NowFragment.Favorite;
         View root = inflater.inflate(R.layout.fragment_favorite, container, false);
 
         //Navigation Menu bar Icon 변경

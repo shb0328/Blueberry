@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <GridView
         android:id="@+id/groupView"
-        android:numColumns="3"
-        android:gravity="center"
+        style="@style/LayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:numColumns="3" />
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -23,6 +25,8 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:backgroundTint="#ffffff"
-        android:src="@drawable/icon_add_simple"/>
+        android:src="@drawable/icon_add_simple"
+        android:tint="#00FFFFFF"
+        app:backgroundTint="#ffffff" />
 
 </RelativeLayout>

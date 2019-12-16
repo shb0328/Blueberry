@@ -19,7 +19,9 @@ import ssu.cheesecake.blueberry.custom.AutoSave;
 import ssu.cheesecake.blueberry.util.RealmController;
 
 public class MainActivity extends AppCompatActivity {
+    public enum NowFragment{List, Group, Favorite, Option, GroupList}
     NavController navController;
+    public static NowFragment nowFragment = NowFragment.List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,19 +65,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final Activity root = this;
-        new AlertDialog.Builder(root)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.dialog_exit_title)
-                .setMessage(R.string.dialog_exit_question)
-                .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        root.finish();
-                    }
+        if(nowFragment != NowFragment.GroupList) {
+            new AlertDialog.Builder(root)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle(R.string.dialog_exit_title)
+                    .setMessage(R.string.dialog_exit_question)
+                    .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            root.finish();
+                        }
 
-                })
-                .setNegativeButton(R.string.dialog_exit_no, null)
-                .show();
+                    })
+                    .setNegativeButton(R.string.dialog_exit_no, null)
+                    .show();
+        }
+        else{
+            navController.navigate(R.id.fragment_group);
+        }
     }
 
 }

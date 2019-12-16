@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.GroupAdapter;
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
 
@@ -41,6 +42,7 @@ public class GroupFragment extends Fragment {
 
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.nowFragment = MainActivity.NowFragment.Group;
         View root = inflater.inflate(R.layout.fragment_group, container, false);
         groupFragment = this;
         groupView = root.findViewById(R.id.groupView);

@@ -13,6 +13,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -25,6 +26,7 @@ import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
 import io.realm.Realm;
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.camera.SmartCropActivity;
 import ssu.cheesecake.blueberry.util.RealmController;
@@ -33,6 +35,7 @@ import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
 public class GroupListFragment extends Fragment {
     private Context context;
 
+    private TextView groupNameTextView;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
@@ -50,6 +53,7 @@ public class GroupListFragment extends Fragment {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.nowFragment = MainActivity.NowFragment.GroupList;
         context = this.getContext();
         //Navigation Menu bar Icon 변경
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
@@ -59,6 +63,9 @@ public class GroupListFragment extends Fragment {
 
         //MainActivity
         root = inflater.inflate(R.layout.fragment_group_list, container, false);
+
+        groupNameTextView = root.findViewById(R.id.group_name_text);
+        groupNameTextView.setText(groupName);
 
         //Realm
         whichResult = RealmController.WhichResult.Group;
@@ -77,6 +84,8 @@ public class GroupListFragment extends Fragment {
 
         return root;
     }
+
+
 }
 
 

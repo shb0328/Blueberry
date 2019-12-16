@@ -11,6 +11,32 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="TextViewStyle" parent="AppTheme">
+        <item name="android:textSize">20dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="color">@color/colorBlueBerry</item>
+    </style>
+
+    <style name="TextViewSmallStyle" parent="AppTheme">
+        <item name="android:textSize">13dp</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="color">@color/colorBlueBerry</item>
+    </style>
+
+    <style name="ButtonStyle" parent="TextViewStyle">
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="LayoutStyle" parent="AppTheme"></style>
+
+    <style name="EditTextStyle" parent="TextViewStyle"></style>
+
+    <style name="SpinnerStyle" parent="TextViewStyle">
+        <item name="android:textSize">13dp</item>
+    </style>
+
+    <style name="ImageViewStyle" parent="TextViewStyle"></style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -29,7 +55,6 @@
         <item name="android:windowEnterAnimation">@anim/custom_anim_from_top</item>
         <item name="android:windowExitAnimation">@anim/custom_anim_to_top</item>
     </style>
-
 
 
 </resources>

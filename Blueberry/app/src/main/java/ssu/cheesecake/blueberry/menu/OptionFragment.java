@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.LoginActivity;
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
@@ -36,6 +37,7 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.nowFragment = MainActivity.NowFragment.Option;
         View root = inflater.inflate(R.layout.fragment_option, container, false);
         context = this.getContext();
 
