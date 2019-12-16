@@ -17,8 +17,7 @@ import java.util.Calendar;
 public class BusinessCard extends RealmObject implements Parcelable {
     public int id;
 
-    private String enName;
-    private String krName;
+    private String name;
     private String phoneNumber;
     private String email;
     private String webSite;
@@ -33,9 +32,8 @@ public class BusinessCard extends RealmObject implements Parcelable {
     public BusinessCard() {
     }
 
-    public BusinessCard(String enName, String krName, String phoneNumber, String email, String company, String imageUrl) {
-        this.enName = enName;
-        this.krName = krName;
+    public BusinessCard(String name, String phoneNumber, String email, String company, String imageUrl) {
+        this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.company = company;
@@ -49,8 +47,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
     }
 
     public BusinessCard(Map<String, Object> map) {
-        this.krName = (String) map.get("krName");
-        this.enName = (String) map.get("enName");
+        this.name = (String) map.get("name");
         this.phoneNumber = (String) map.get("phoneNumber");
         this.email = (String) map.get("email");
         this.company = (String) map.get("company");
@@ -62,8 +59,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
 
     protected BusinessCard(Parcel in) {
         id = in.readInt();
-        enName = in.readString();
-        krName = in.readString();
+        name = in.readString();
         phoneNumber = in.readString();
         email = in.readString();
         webSite = in.readString();
@@ -86,20 +82,12 @@ public class BusinessCard extends RealmObject implements Parcelable {
         this.id = id;
     }
 
-    public String getEnName() {
-        return enName;
+    public String getName() {
+        return name;
     }
 
-    public void setEnName(String enName) {
-        this.enName = enName;
-    }
-
-    public String getKrName() {
-        return krName;
-    }
-
-    public void setKrName(String krName) {
-        this.krName = krName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPhoneNumber() {
@@ -216,8 +204,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
 
     public void Copy(BusinessCard src) {
         id = src.getId();
-        enName = src.getEnName();
-        krName = src.getKrName();
+        name = src.getName();
         phoneNumber = src.getPhoneNumber();
         email = src.getEmail();
         webSite = src.getWebSite();
@@ -235,8 +222,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", id);
-        result.put("enName", enName);
-        result.put("krName", krName);
+        result.put("name", name);
         result.put("phoneNumber", phoneNumber);
         result.put("email", email);
         result.put("webSite",webSite);
@@ -254,10 +240,8 @@ public class BusinessCard extends RealmObject implements Parcelable {
         String result = new String();
         result += "id: ";
         result += id;
-        result += "enName: ";
-        result += this.enName + ',';
-        result += "krName: ";
-        result += this.krName + ',';
+        result += "name: ";
+        result += this.name + ',';
         result += "phoneNumber: ";
         result += this.phoneNumber + ',';
         result += "email: ";
@@ -289,8 +273,7 @@ public class BusinessCard extends RealmObject implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeString(enName);
-        dest.writeString(krName);
+        dest.writeString(name);
         dest.writeString(phoneNumber);
         dest.writeString(email);
         dest.writeString(webSite);

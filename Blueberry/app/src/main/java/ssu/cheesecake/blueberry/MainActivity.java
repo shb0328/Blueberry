@@ -20,7 +20,7 @@ import ssu.cheesecake.blueberry.util.RealmController;
 
 public class MainActivity extends AppCompatActivity {
     public enum NowFragment{List, Group, Favorite, Option, GroupList}
-    NavController navController;
+    public static NavController navController;
     public static NowFragment nowFragment = NowFragment.List;
 
     @Override
@@ -57,8 +57,14 @@ public class MainActivity extends AppCompatActivity {
         //주소록 AutoSave Realm에서 읽어옴
         //TODO:잠시주석
         Realm.init(this);
+        initRealm();
+    }
+
+    //앱 설치 후 첫 로그인 시 초기화 함수
+    public void initRealm(){
         RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
         realmController.initializeAutoSave(true);
+        realmController.initializeGroup();
 
     }
 

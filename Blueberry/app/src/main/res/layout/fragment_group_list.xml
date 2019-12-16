@@ -5,28 +5,35 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:gravity="top">
+    android:gravity="top"
+    android:orientation="vertical">
 
-    <LinearLayout
-        style="@style/LayoutStyle"
+    <TextView
+        android:id="@+id/group_name_text"
+        style="@style/TextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="30dp" />
 
-        <TextView
-            android:id="@+id/group_name_text"
-            style="@style/TextViewStyle"
-            android:layout_width="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_group_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/group_list_button_back"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="30dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_group_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </LinearLayout>
+            android:layout_centerInParent="true"
+            android:text="Back" />
+    </RelativeLayout>
 
 </LinearLayout>
 

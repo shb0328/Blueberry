@@ -6,15 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -61,23 +57,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     class MainViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView imageUrlTextView;
-        TextView enNameTextView;
-        TextView krNameTextView;
+        TextView nameTextView;
         TextView phoneTextView;
         TextView emailTextView;
         TextView companyTextView;
-        TextView dateTextView;
         ImageView favoriteBtnImage;
 
         public MainViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.item_image);
-            enNameTextView = itemView.findViewById(R.id.item_en_name);
-            krNameTextView = itemView.findViewById(R.id.item_kr_name);
+            nameTextView = itemView.findViewById(R.id.item_name);
             phoneTextView = itemView.findViewById(R.id.item_phone_number);
             emailTextView = itemView.findViewById(R.id.item_email);
             companyTextView = itemView.findViewById(R.id.item_company);
-            dateTextView = itemView.findViewById(R.id.item_date);
             favoriteBtnImage = itemView.findViewById(R.id.item_button_favorite_imageview);
             context = itemView.getContext();
         }
@@ -103,12 +95,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 //            imageUrlTextView.setText(file.getAbsolutePath());
 //            imageView.setImageURI(Uri.parse(file.getAbsolutePath()));
 
-            enNameTextView.setText(object.getEnName());
-            krNameTextView.setText(object.getKrName());
+            nameTextView.setText(object.getName());
             phoneTextView.setText(object.getPhoneNumber());
             emailTextView.setText(object.getEmail());
             companyTextView.setText(object.getCompany());
-            dateTextView.setText(object.getTime());
 
             if(object.getIsFavorite()){
                 favoriteBtnImage.setColorFilter(Color.argb(255, 255, 255, 0));

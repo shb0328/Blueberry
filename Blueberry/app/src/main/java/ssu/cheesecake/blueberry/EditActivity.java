@@ -138,7 +138,7 @@ public class EditActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeFile(card.getImageUrl(), options);
             imageView.setImageBitmap(bitmap);
 
-            editName.setText(card.getKrName());
+            editName.setText(card.getName());
             editPhone.setText(card.getPhoneNumber());
             editEmail.setText(card.getEmail());
             editWebSite.setText(card.getWebSite());
@@ -146,7 +146,7 @@ public class EditActivity extends AppCompatActivity {
             editAddress.setText(card.getAddress());
 
             nameArray = new ArrayList<String>();
-            nameArray.add(card.getKrName());
+            nameArray.add(card.getName());
             nameArray.add("직접 입력");
 
             phoneArray = new ArrayList<String>();
@@ -208,7 +208,7 @@ public class EditActivity extends AppCompatActivity {
                 if (!isAdded) {
                     BusinessCard editCard = new BusinessCard();
                     editCard.Copy(card);
-                    editCard.setKrName(editName.getText().toString());
+                    editCard.setName(editName.getText().toString());
                     editCard.setPhoneNumber(editPhone.getText().toString());
                     editCard.setEmail(editEmail.getText().toString());
                     editCard.setWebSite(editWebSite.getText().toString());
@@ -270,7 +270,7 @@ public class EditActivity extends AppCompatActivity {
                 insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
                 if (isAdded) {
-                    card.setKrName(name_finValue);
+                    card.setName(name_finValue);
                     card.setPhoneNumber(phone_finValue);
                     card.setCompany(company_finValue);
                     card.setAddress(address_finValue);
@@ -281,7 +281,7 @@ public class EditActivity extends AppCompatActivity {
                     startActivity(resultIntent);
                 }
 
-                if (realmController.getIsAutoSave().getIsAutoSave()) {
+                if (isAdded && realmController.getIsAutoSave().getIsAutoSave()) {
                     startActivityForResult(insertIntent, RESULT_OK);
                 }
                 finish();

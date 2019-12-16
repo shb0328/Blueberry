@@ -178,13 +178,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/item_en_name"
-                style="@style/TextViewSmallStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:id="@+id/item_kr_name"
+                android:id="@+id/item_name"
                 style="@style/TextViewSmallStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
@@ -207,11 +201,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/item_date"
-                style="@style/TextViewSmallStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

@@ -70,6 +70,24 @@ public class RealmController {
         });
     }
 
+    public void initializeGroup() {
+        RealmResults<CustomGroup> result = mRealm.where(CustomGroup.class).findAll();
+        if (result == null || result.isEmpty()){
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    CustomGroup workerGroup = realm.createObject(CustomGroup.class);
+                    workerGroup.setGroupName("직장");
+                    CustomGroup familyGroup = realm.createObject(CustomGroup.class);
+                    familyGroup.setGroupName("가족");
+                    CustomGroup friendGroup = realm.createObject(CustomGroup.class);
+                    friendGroup.setGroupName("친구");
+                }
+            });
+        }
+        return;
+    }
+
     public void initializeAutoSave(final boolean value) {
         RealmResults<AutoSave> result = mRealm.where(AutoSave.class).findAll();
         if (result == null || result.isEmpty()){
@@ -245,7 +263,7 @@ public class RealmController {
             public void execute(Realm realm) {
                 int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
-                editCard.setKrName(krName);
+                editCard.setName(krName);
             }
         });
         return;

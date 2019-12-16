@@ -32,12 +32,13 @@ import ssu.cheesecake.blueberry.camera.SmartCropActivity;
 import ssu.cheesecake.blueberry.util.RealmController;
 import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
 
-public class GroupListFragment extends Fragment {
+public class GroupListFragment extends Fragment implements View.OnClickListener {
     private Context context;
 
     private TextView groupNameTextView;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
+    private Button backButton;
 
     private RealmController.WhichResult whichResult;
 
@@ -81,11 +82,20 @@ public class GroupListFragment extends Fragment {
 
         //TouchEventListener 설정
         adapter.setTouchListener(context, this.getActivity(), recyclerView, whichResult);
+        backButton = root.findViewById(R.id.group_list_button_back);
+        backButton.setOnClickListener(this);
 
         return root;
     }
 
 
+    @Override
+    public void onClick(View v) {
+        if(v == backButton){
+            MainActivity.navController.navigate(R.id.fragment_group);
+            this.onDetach();
+        }
+    }
 }
 
 
