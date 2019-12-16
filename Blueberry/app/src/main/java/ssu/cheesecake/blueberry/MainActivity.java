@@ -4,22 +4,23 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import io.realm.Realm;
-import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.custom.AutoSave;
 import ssu.cheesecake.blueberry.util.RealmController;
 
 public class MainActivity extends AppCompatActivity {
-    public enum NowFragment{List, Group, Favorite, Option, GroupList}
+    public enum NowFragment{List, Group, Favorite, Option, DetailInfoFromList, DetailInfoFromFavorite, DetailInfoFromGroupList, GroupList}
+
     public static NavController navController;
     public static NowFragment nowFragment = NowFragment.List;
 
@@ -71,7 +72,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final Activity root = this;
-        if(nowFragment != NowFragment.GroupList) {
+        if(nowFragment == NowFragment.GroupList){
+            navController.navigate(R.id.fragment_group);
+        }
+        else if(nowFragment == NowFragment.DetailInfoFromList){
+            navController.navigate(R.id.fragment_list);
+        }
+        else if(nowFragment == NowFragment.DetailInfoFromFavorite){
+            navController.navigate(R.id.fragment_favorite);
+        }
+        else if(nowFragment == NowFragment.DetailInfoFromGroupList){
+            navController.navigate(R.id.fragment_group);
+        }
+        else{
             new AlertDialog.Builder(root)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle(R.string.dialog_exit_title)
@@ -85,9 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     })
                     .setNegativeButton(R.string.dialog_exit_no, null)
                     .show();
-        }
-        else{
-            navController.navigate(R.id.fragment_group);
         }
     }
 

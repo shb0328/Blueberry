@@ -107,7 +107,7 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         //TouchEventListener 설정
-        adapter.setTouchListener(context, this.getActivity(), recyclerView, RealmController.WhichResult.List);
+        adapter.setTouchListener(context, this.getActivity(), this, recyclerView, RealmController.WhichResult.List);
 
 
         //Floating Action Button

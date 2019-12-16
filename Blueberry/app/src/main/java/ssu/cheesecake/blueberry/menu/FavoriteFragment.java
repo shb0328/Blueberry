@@ -46,7 +46,7 @@ public class FavoriteFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
 
         //TouchEventListener 설정
-        adapter.setTouchListener(this.getContext(), this.getActivity(), recyclerView, RealmController.WhichResult.Favorite);
+        adapter.setTouchListener(this.getContext(), this.getActivity(), this, recyclerView, RealmController.WhichResult.Favorite);
 
 
         return root;

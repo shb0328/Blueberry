@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -20,9 +22,12 @@ import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 import java.io.File;
 import java.util.Vector;
 
+import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.EditActivity;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.menu.DetailInfoFragment;
+import ssu.cheesecake.blueberry.menu.GroupListFragment;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MainViewHolder> {
     LayoutInflater inflater;
@@ -30,7 +35,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     Context context;
     static RealmController realmController;
 
-    public Vector<BusinessCard> getCards(){ return cards;}
+    public Vector<BusinessCard> getCards() {
+        return cards;
+    }
 
     public RecyclerViewAdapter(Context context, Vector<BusinessCard> cards, RealmController realmController) {
         this.inflater = LayoutInflater.from(context);
@@ -100,19 +107,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             emailTextView.setText(object.getEmail());
             companyTextView.setText(object.getCompany());
 
-            if(object.getIsFavorite()){
+            if (object.getIsFavorite()) {
                 favoriteBtnImage.setColorFilter(Color.argb(255, 255, 255, 0));
             }
         }
     }
 
     //RecyclerView에 TouchListener 설정 함수
-     public void setTouchListener(final Context context, final Activity activity, final RecyclerView recyclerView, final RealmController.WhichResult whichResult) {
+    public void setTouchListener(final Context context, final Activity activity, final Fragment fragment, final RecyclerView recyclerView, final RealmController.WhichResult whichResult) {
         final RecyclerTouchListener onTouchListener = new RecyclerTouchListener(activity, recyclerView);
         onTouchListener
                 .setClickable(new RecyclerTouchListener.OnRowClickListener() {
                     @Override
                     public void onRowClicked(int position) {
+                        MainActivity.NowFragment nowFragment = null;
+                        if(whichResult == RealmController.WhichResult.Favorite)
+                            nowFragment = MainActivity.NowFragment.DetailInfoFromFavorite;
+                        else if(whichResult == RealmController.WhichResult.List)
+                            nowFragment = MainActivity.NowFragment.DetailInfoFromList;
+                        else if(whichResult == RealmController.WhichResult.Group)
+                            nowFragment = MainActivity.NowFragment.DetailInfoFromGroupList;
+                        DetailInfoFragment detailInfoFragment = new DetailInfoFragment(getCards().get(position), nowFragment);
+                        FragmentManager manager = fragment.getFragmentManager();
+                        manager.beginTransaction().replace(R.id.nav_host_fragment, detailInfoFragment).commit();
                     }
 
                     @Override
@@ -125,15 +142,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     @Override
                     public void onSwipeOptionClicked(int viewID, int position) {
-                        BusinessCard card = ((RecyclerViewAdapter)(recyclerView.getAdapter())).getCards().get(position);
+                        BusinessCard card = ((RecyclerViewAdapter) (recyclerView.getAdapter())).getCards().get(position);
                         if (viewID == R.id.item_button_favorite) {
-                            if(realmController != null){
+                            if (realmController != null) {
                                 realmController.changeIsFavorite(card);
-                                if(whichResult == RealmController.WhichResult.Favorite) {
+                                if (whichResult == RealmController.WhichResult.Favorite) {
                                     cards.remove(position);
                                     recyclerView.getAdapter().notifyItemRemoved(position);
-                                }
-                                else if(whichResult == RealmController.WhichResult.List){
+                                } else if (whichResult == RealmController.WhichResult.List) {
                                     recyclerView.getAdapter().notifyItemChanged(position);
                                 }
                             }
@@ -143,7 +159,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             intent.putExtra("card", card);
                             activity.startActivity(intent);
                         } else if (viewID == R.id.item_button_delete) {
-                            if(realmController != null){
+                            if (realmController != null) {
                                 realmController.deleteBusinessCard(card);
                                 recyclerView.getAdapter().notifyDataSetChanged();
                             }

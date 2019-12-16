@@ -239,6 +239,7 @@ public class RealmController {
                 card.setId(nextId);
                 BusinessCard addCard = realm.createObject(BusinessCard.class);
                 addCard.Copy(card);
+                addCard.setTime(BusinessCard.makeTImeString());
                 cards.add(addCard);
             }
         });

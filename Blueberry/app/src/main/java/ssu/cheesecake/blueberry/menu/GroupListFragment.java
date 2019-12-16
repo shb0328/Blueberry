@@ -74,14 +74,15 @@ public class GroupListFragment extends Fragment implements View.OnClickListener 
         mRealm = Realm.getDefaultInstance();
         realmController = new RealmController(mRealm, whichResult, groupName);
 
+
         //Recycler View
         recyclerView = root.findViewById(R.id.recyclerView_group_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
         adapter = new RecyclerViewAdapter(context, realmController.getCards(), realmController);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         //TouchEventListener 설정
-        adapter.setTouchListener(context, this.getActivity(), recyclerView, whichResult);
+        adapter.setTouchListener(context, this.getActivity(), this, recyclerView, whichResult);
         backButton = root.findViewById(R.id.group_list_button_back);
         backButton.setOnClickListener(this);
 
@@ -96,6 +97,7 @@ public class GroupListFragment extends Fragment implements View.OnClickListener 
             this.onDetach();
         }
     }
+
 }
 
 
