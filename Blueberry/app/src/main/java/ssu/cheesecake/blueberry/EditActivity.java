@@ -6,15 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +31,9 @@ public class EditActivity extends AppCompatActivity {
     private Intent resultIntent;
     private BusinessCard card;
     private int position;
+
+    private Realm mRealm;
+    private RealmController realmController;
 
     private boolean isAdded = false;
 
@@ -88,6 +88,12 @@ public class EditActivity extends AppCompatActivity {
         editAddress = findViewById(R.id.edit_address);
         editGroup = findViewById(R.id.edit_group);
 
+        groupArray = new ArrayList<>();
+        mRealm = Realm.getDefaultInstance();
+        realmController = new RealmController(mRealm, RealmController.WhichResult.Group);
+        for(int i = 0; i < realmController.getGroups().size(); i++){
+            groupArray.add(realmController.getGroups().get(i).getGroupName());
+        }
 
         Intent intent = getIntent();
         if (intent.hasExtra("mode")) {
@@ -119,7 +125,6 @@ public class EditActivity extends AppCompatActivity {
             webSiteArray = intent.getStringArrayListExtra("webSite");
             companyArray = intent.getStringArrayListExtra("company");
             addressArray = intent.getStringArrayListExtra("address");
-            groupArray = new ArrayList<>();
         } else if (!isAdded) {
             /**
              * edit (from MainActivity)
@@ -139,7 +144,6 @@ public class EditActivity extends AppCompatActivity {
             editWebSite.setText(card.getWebSite());
             editCompany.setText(card.getCompany());
             editAddress.setText(card.getAddress());
-            editGroup.setText(card.getGroup());
 
             nameArray = new ArrayList<String>();
             nameArray.add(card.getKrName());
@@ -165,9 +169,8 @@ public class EditActivity extends AppCompatActivity {
             addressArray.add(card.getAddress());
             addressArray.add("직접 입력");
 
-            groupArray = new ArrayList<String>();
             groupArray.add(card.getGroup());
-            groupArray.add("직접 입력");
+            groupArray.add("선택 안함");
 
         }//end of ArrayLists setting
 
@@ -191,6 +194,7 @@ public class EditActivity extends AppCompatActivity {
 
         group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
         editGroup.setAdapter(group_adapter);
+        editGroup.setEditable(false);
 
         resultIntent = new Intent(this, MainActivity.class);
 
@@ -274,7 +278,6 @@ public class EditActivity extends AppCompatActivity {
                     card.setGroup(group_finValue);
                     card.setFileName(fileName);
                     realmController.addBusinessCard(card);
-                    Log.d("DEBUG!", card.getImageUrl());
                     startActivity(resultIntent);
                 }
 
