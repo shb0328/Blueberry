@@ -12,8 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,11 +34,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
 import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ListFragment extends Fragment implements View.OnClickListener, RecyclerTouchListener.RecyclerTouchListenerHelper {
     private Context context;
     private static final int CAMREQUESTCODE = 1;
     private static final int GALLERYREQUESTCODE = 2;
 
+    private int position;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
     private OnActivityTouchListener touchListener;
@@ -57,9 +62,22 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
     RealmController realmController;
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1004){
+            if(resultCode == RESULT_OK){
+                Toast.makeText(context,"ok",Toast.LENGTH_SHORT).show();
+                position = data.getIntExtra("position",-1);
+                adapter.notifyItemChanged(position);
+            }
+        }
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         MainActivity.nowFragment = MainActivity.NowFragment.List;
         context = this.getContext();
+
         //Navigation Menu bar Icon 변경
         Fragment navHostFragment = this.getActivity().getSupportFragmentManager().getFragments().get(0);
         BottomNavigationView navView = navHostFragment.getActivity().findViewById(R.id.nav_view);

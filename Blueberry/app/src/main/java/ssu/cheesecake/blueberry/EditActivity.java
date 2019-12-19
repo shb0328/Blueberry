@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,7 +36,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private Realm mRealm;
     private RealmController realmController;
 
-    private boolean isAdded = false;
+    private boolean isNew = false;
 
     //data
     private ArrayList<String> nameArray;
@@ -104,11 +105,17 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         String mode = intent.getStringExtra("mode");
         if (mode.equals("new")) {
-            isAdded = true;
+            isNew = true;
         } else if (mode.equals("edit")) {
-            isAdded = false;
+            isNew = false;
+            position = intent.getIntExtra("position",-1);
+            if(position == -1){
+                Toast.makeText(this,"명함을 수정하는데 오류가 발생했습니다.",Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
         }
-        if (isAdded) {
+        if (isNew) {
             /**
              * new (from NameCropActivity)
              **/
@@ -128,7 +135,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             webSiteArray = intent.getStringArrayListExtra("webSite");
             companyArray = intent.getStringArrayListExtra("company");
             addressArray = intent.getStringArrayListExtra("address");
-        } else if (!isAdded) {
+        } else {
             /**
              * edit (from MainActivity)
              **/
@@ -210,19 +217,27 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view == saveBtn) {
+            name_finValue = editName.getText().toString();
+            phone_finValue = editPhone.getText().toString();
+            email_finValue = editEmail.getText().toString();
+            webSite_finValue = editWebSite.getText().toString();
+            company_finValue = editCompany.getText().toString();
+            address_finValue = editAddress.getText().toString();
+            group_finValue = editGroup.getText().toString();
+
             Realm.init(app);
             RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
 
-            if (!isAdded) {
+            if (!isNew) {
                 BusinessCard editCard = new BusinessCard();
                 editCard.Copy(card);
-                editCard.setName(editName.getText().toString());
-                editCard.setPhoneNumber(editPhone.getText().toString());
-                editCard.setEmail(editEmail.getText().toString());
-                editCard.setWebSite(editWebSite.getText().toString());
-                editCard.setCompany(editCompany.getText().toString());
-                editCard.setAddress(editAddress.getText().toString());
-                editCard.setGroup(editGroup.getText().toString());
+                editCard.setName(name_finValue);
+                editCard.setPhoneNumber(phone_finValue);
+                editCard.setEmail(email_finValue);
+                editCard.setWebSite(webSite_finValue);
+                editCard.setCompany(company_finValue);
+                editCard.setAddress(address_finValue);
+                editCard.setGroup(group_finValue);
 
                 realmController.editBusinessCard(editCard, position);
 
@@ -231,14 +246,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 resultIntent.putExtra("position", position);
                 setResult(RESULT_OK, resultIntent);
             }
-
-            name_finValue = editName.getText().toString();
-            phone_finValue = editPhone.getText().toString();
-            email_finValue = editEmail.getText().toString();
-            webSite_finValue = editWebSite.getText().toString();
-            company_finValue = editCompany.getText().toString();
-            address_finValue = editAddress.getText().toString();
-            group_finValue = editGroup.getText().toString();
 
             Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
             insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
@@ -277,7 +284,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             contactData.add(webRow);
             insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
 
-            if (isAdded) {
+            if (isNew) {
                 card.setName(name_finValue);
                 card.setPhoneNumber(phone_finValue);
                 card.setCompany(company_finValue);
@@ -290,7 +297,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(resultIntent);
             }
 
-            if (isAdded && realmController.getIsAutoSave().getIsAutoSave()) {
+            if (isNew && realmController.getIsAutoSave().getIsAutoSave()) {
                 startActivityForResult(insertIntent, RESULT_OK);
             }
             finish();

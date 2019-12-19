@@ -157,7 +157,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             Intent intent = new Intent(context, EditActivity.class);
                             intent.putExtra("mode", "edit");
                             intent.putExtra("card", card);
-                            activity.startActivity(intent);
+                            intent.putExtra("position",position);
+                            fragment.startActivityForResult(intent,1004);
                         } else if (viewID == R.id.item_button_delete) {
                             if (realmController != null) {
                                 realmController.deleteBusinessCard(card);
