@@ -267,13 +267,25 @@ public class RealmController {
         return;
     }
 
-    public void changeKrName(final BusinessCard card, final String krName) {
+    public void changeAllId(){
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(int i = 0; i < cards.size(); i++){
+                    cards.get(i).setId(i);
+                }
+            }
+        });
+        return;
+    }
+
+    public void changeName(final BusinessCard card, final String name) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 int id = card.getId();
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
-                editCard.setName(krName);
+                editCard.setName(name);
             }
         });
         return;

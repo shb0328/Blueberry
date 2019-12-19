@@ -88,6 +88,7 @@ public class FirebaseHelper {
             backupLoadToast.show();
             Vector<BusinessCard> cards = realm.getCards();
             myRef.removeValue();
+            realm.changeAllId();
             int len = cards.size();
             for (int i = 0; i < len; i++) {
                 myRef.child(i + "").setValue(cards.get(i).toMap());
