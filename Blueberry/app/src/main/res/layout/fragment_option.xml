@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/colorBlueBerry"
                 android:layoutDirection="rtl"
-                android:text="Auto Save to Contract"
+                android:text="Auto Save to Contact"
                 android:textSize="20dp" />
 
         </LinearLayout>
