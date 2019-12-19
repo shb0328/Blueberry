@@ -2,6 +2,8 @@ package ssu.cheesecake.blueberry.menu;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,17 +70,17 @@ public class GroupFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String groupName = editGroup.getText().toString();
-                        if(groupName.length() < 2){
-                            Toast.makeText(context,"그룹 이름은  2글자 이상만 가능합니다.",Toast.LENGTH_SHORT).show();
+                        if (groupName.length() < 2) {
+                            Toast.makeText(context, "그룹 이름은  2글자 이상만 가능합니다.", Toast.LENGTH_SHORT).show();
                             return;
                         }
                         boolean isSuccess = realmController.addCustomGroup(groupName);
-                        if(isSuccess) {
-                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
+                        if (isSuccess) {
+                            GroupAdapter groupAdapter = new GroupAdapter(context, R.layout.group_item, realmController.getGroups(), new OnGroupTouchListener());
                             groupView.setAdapter(groupAdapter);
                             return;
                         }
-                        Toast.makeText(context,"이미 존재하는 그룹 이름 입니다.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "이미 존재하는 그룹 이름 입니다.", Toast.LENGTH_SHORT).show();
                     }
                 });
                 groupAddBuilder.setNegativeButton("No", null);
@@ -86,7 +88,7 @@ public class GroupFragment extends Fragment {
             }
         });
 
-        GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
+        GroupAdapter groupAdapter = new GroupAdapter(context, R.layout.group_item, realmController.getGroups(), new OnGroupTouchListener());
         groupView.setAdapter(groupAdapter);
 
         //Navigation Menu bar Icon 변경
@@ -99,22 +101,39 @@ public class GroupFragment extends Fragment {
     }
 
 
-    class OnGroupTouchListener implements View.OnTouchListener{
+    class OnGroupTouchListener implements View.OnTouchListener {
         private long touchDownTime, touchUpTime;
+        private float touchDownX, touchDownY, touchUpX, touchUpY;
         private String groupName;
+        private View v;
 
         @Override
         public boolean onTouch(final View view, MotionEvent motionEvent) {
-            groupName = ((TextView)view).getText().toString();
+            groupName = ((TextView) view).getText().toString();
+
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                touchDownTime = motionEvent.getDownTime();
+                v=view;
+                view.setBackgroundColor(getResources().getColor(R.color.colorBlueBerry,getActivity().getTheme()));
                 view.getParent().requestDisallowInterceptTouchEvent(true);
-                Log.i("time", "down:" + touchDownTime);
+                ((TextView) view).setTextColor(getResources().getColor(R.color.colorWhite,getActivity().getTheme()));
+
+                touchDownTime = motionEvent.getDownTime();
+                touchDownX = motionEvent.getX();
+                touchDownY = motionEvent.getY();
             }
-            if(motionEvent.getAction() == MotionEvent.ACTION_UP){
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                v.setBackgroundColor(getResources().getColor(R.color.colorDefault,getActivity().getTheme()));
+                ((TextView) view).setTextColor(Color.GRAY);
+                touchUpX = motionEvent.getX();
+                touchUpY = motionEvent.getY();
+                if(isCanceledByTouchMovement()){
+                    view.setBackgroundColor(getResources().getColor(R.color.colorDefault,getActivity().getTheme()));
+
+                    return false;
+                }
+
                 touchUpTime = motionEvent.getEventTime();
-                Log.i("time", "up" + touchUpTime);
-                if (touchUpTime - touchDownTime > 1000) {
+                if (touchUpTime - touchDownTime > 500) {
                     /**
                      * delete
                      */
@@ -127,22 +146,28 @@ public class GroupFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             realmController.deleteCustomGroup(groupName);
-                            GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
+                            GroupAdapter groupAdapter = new GroupAdapter(context, R.layout.group_item, realmController.getGroups(), new OnGroupTouchListener());
                             groupView.setAdapter(groupAdapter);
                         }
                     });
                     builder.setNegativeButton("No", null);
                     builder.show();
-                }else{
+                } else {
                     /**
                      * select
                      */
                     GroupListFragment groupListFragment = new GroupListFragment(groupName);
                     FragmentManager manager = groupFragment.getFragmentManager();
-                    manager.beginTransaction().replace(R.id.nav_host_fragment,groupListFragment).commit();
+                    manager.beginTransaction().replace(R.id.nav_host_fragment, groupListFragment).commit();
                 }
+
             }
             return true;
+        }
+
+        private boolean isCanceledByTouchMovement()
+        {
+            return (touchUpX - touchDownX > 290) || (touchUpY - touchDownY > 290) ;
         }
 
     }

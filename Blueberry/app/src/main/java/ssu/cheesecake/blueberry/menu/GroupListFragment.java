@@ -1,34 +1,24 @@
 package ssu.cheesecake.blueberry.menu;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.nikhilpanju.recyclerviewenhanced.OnActivityTouchListener;
-import com.nikhilpanju.recyclerviewenhanced.RecyclerTouchListener;
-
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.MainActivity;
 import ssu.cheesecake.blueberry.R;
-import ssu.cheesecake.blueberry.camera.SmartCropActivity;
 import ssu.cheesecake.blueberry.util.RealmController;
 import ssu.cheesecake.blueberry.util.RecyclerViewAdapter;
 
@@ -38,7 +28,7 @@ public class GroupListFragment extends Fragment implements View.OnClickListener 
     private TextView groupNameTextView;
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
-    private Button backButton;
+    private ImageView backButton;
 
     private RealmController.WhichResult whichResult;
 
@@ -67,6 +57,8 @@ public class GroupListFragment extends Fragment implements View.OnClickListener 
 
         groupNameTextView = root.findViewById(R.id.group_name_text);
         groupNameTextView.setText(groupName);
+        groupNameTextView.setBackgroundColor(getResources().getColor(R.color.colorBlueBerry,getActivity().getTheme()));
+        groupNameTextView.setTextColor(getResources().getColor(R.color.colorWhite,getActivity().getTheme()));
 
         //Realm
         whichResult = RealmController.WhichResult.Group;
@@ -84,6 +76,9 @@ public class GroupListFragment extends Fragment implements View.OnClickListener 
         //TouchEventListener 설정
         adapter.setTouchListener(context, this.getActivity(), this, recyclerView, whichResult);
         backButton = root.findViewById(R.id.group_list_button_back);
+        backButton.setBackgroundColor(getResources().getColor(R.color.colorBlueBerry,getActivity().getTheme()));
+        backButton.setImageDrawable(getResources().getDrawable(R.drawable.back,getActivity().getTheme()));
+//        backButton.setTextColor(getResources().getColor(R.color.colorWhite,getActivity().getTheme()));
         backButton.setOnClickListener(this);
 
         return root;

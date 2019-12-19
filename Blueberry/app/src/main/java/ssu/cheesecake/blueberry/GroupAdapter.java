@@ -1,6 +1,7 @@
 package ssu.cheesecake.blueberry;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class GroupAdapter extends ArrayAdapter {
 
         GroupHolder holder = (GroupHolder)convertView.getTag();
         TextView groupName = holder.groupName;
+        groupName.setTextColor(Color.GRAY);
 
         CustomGroup customGroup = data.get(position);
 
