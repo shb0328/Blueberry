@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#9377BB</color>
     <color name="colorAccent">#9377BB</color>
     <color name="colorBlueBerry">#9377BB</color>
+    <color name="colorBlueBerry_Alpha">#AA9377BB</color>
     <color name="colorDefault">#00FFFFFF</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorYellow">#FFFF00</color>

@@ -26,7 +26,7 @@
             android:fontFamily="@font/nanumsquare"
             android:text="@string/recheck2_title"
             android:textStyle="bold"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorBlueBerry" />
 
         <!--        <TextView-->
         <!--            style="@style/TextViewStyle"-->
@@ -95,7 +95,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="이름을 선택 한 후 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
@@ -121,7 +121,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="휴대전화 번호를 선택하고 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
@@ -147,7 +147,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="이메일을 선택하고 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
@@ -173,7 +173,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="홈페이지 주소를 선택하고 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
@@ -199,7 +199,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="회사 이름을 선택하고 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
@@ -225,7 +225,7 @@
             android:fontFamily="@font/nanumsquare"
             android:hint="주소를 선택하고 수정하세요"
             android:textSize="@dimen/recheck1_question1"
-            android:textCursorDrawable="@color/colorWhite"
+            android:textCursorDrawable="@color/colorBlueBerry"
             app:dropDownAnimStyle="@style/CustomPopupAnimation"
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
