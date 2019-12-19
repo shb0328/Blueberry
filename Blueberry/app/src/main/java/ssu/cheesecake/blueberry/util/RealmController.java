@@ -74,7 +74,7 @@ public class RealmController {
 
     public void initializeGroup() {
         RealmResults<CustomGroup> result = mRealm.where(CustomGroup.class).findAll();
-        if (result == null || result.isEmpty()){
+        if (result.size() < 3){
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
