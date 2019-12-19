@@ -201,7 +201,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         editGroup.setAdapter(group_adapter);
         editGroup.setEditable(false);
 
-        resultIntent = new Intent();
+        resultIntent = new Intent(this, MainActivity.class);
 
         saveBtn = findViewById(R.id.finishButton1);
         backBtn = findViewById(R.id.edit_back_button);

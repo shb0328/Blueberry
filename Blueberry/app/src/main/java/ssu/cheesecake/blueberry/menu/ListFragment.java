@@ -157,7 +157,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        Log.d("DEBUG!", "onActivityResult: CALL");
         super.onActivityResult(requestCode, resultCode, intent);
         Log.d("DEBUG!", "onActivityResult: CALL");
         if (resultCode == Activity.RESULT_OK) {
