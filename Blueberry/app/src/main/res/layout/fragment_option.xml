@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,14 +17,17 @@
             style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button_backup"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+            style="@style/IconButtonStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_backup" />
+            android:layout_weight="1.5"
+            android:text="@string/button_backup"
+            app:icon="@drawable/button_icon_backup"
+            app:iconSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -38,14 +42,17 @@
             style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button_restore"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+            style="@style/IconButtonStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_restore" />
+            android:layout_weight="1.5"
+            android:text="@string/button_restore"
+            app:icon="@drawable/button_icon_restore"
+            app:iconSize="20dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -60,14 +67,17 @@
             style="@style/TextViewStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/button_signOut"
-            style="@style/ButtonStyle"
-            android:layout_width="wrap_content"
+            style="@style/IconButtonStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@string/button_signOut" />
+            android:layout_weight="1.5"
+            android:text="@string/button_signOut"
+            app:icon="@drawable/button_icon_signout"
+            app:iconSize="20dp" />
     </LinearLayout>
 
     <Switch

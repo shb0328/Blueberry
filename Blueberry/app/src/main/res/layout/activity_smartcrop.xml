@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,19 +29,23 @@
 
         <Button
             android:id="@+id/btn_ok"
-            style="@style/ButtonStyle"
+            style="@style/IconButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="OK" />
+            android:text="OK"
+            app:icon="@drawable/button_icon_ok"
+            app:iconSize="20dp" />
 
         <Button
             android:id="@+id/btn_cancel"
-            style="@style/ButtonStyle"
+            style="@style/IconButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="CANCEL" />
+            android:text="CANCEL"
+            app:icon="@drawable/button_icon_cancel"
+            app:iconSize="20dp" />
 
     </LinearLayout>
 

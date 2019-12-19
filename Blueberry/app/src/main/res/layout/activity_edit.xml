@@ -4,18 +4,17 @@
     style="@style/LayoutStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBlueBerry"
     android:orientation="vertical">
 
     <!-- info -->
 
     <LinearLayout
         style="@style/LayoutStyle"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="@dimen/activity_recheck_title_horizontal"
-        android:layout_marginRight="@dimen/activity_recheck_title_horizontal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/activity_recheck_title_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="@dimen/activity_recheck_title_horizontal"
         android:layout_weight="0.7"
         android:orientation="vertical">
 
@@ -28,19 +27,19 @@
             android:text="@string/recheck2_title"
             android:textColor="@color/colorWhite" />
 
-<!--        <TextView-->
-<!--            style="@style/TextViewStyle"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="5dp"-->
-<!--            android:layout_marginTop="5dp"-->
-<!--            android:text="@string/recheck2_guiding" />-->
+        <!--        <TextView-->
+        <!--            style="@style/TextViewStyle"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginStart="5dp"-->
+        <!--            android:layout_marginTop="5dp"-->
+        <!--            android:text="@string/recheck2_guiding" />-->
 
-<!--        <View-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="2dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:background="@color/colorWhite" />-->
+        <!--        <View-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="2dp"-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:background="@color/colorWhite" />-->
 
     </LinearLayout>
 
@@ -50,11 +49,11 @@
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:layout_weight="0.9"
         android:layout_gravity="center"
-        android:baselineAligned="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:layout_weight="0.9"
+        android:baselineAligned="true"
         android:gravity="top|center_horizontal"
         android:orientation="horizontal">
 
@@ -63,8 +62,7 @@
             style="@style/ImageViewStyle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:background="@drawable/borderimage" />
+            android:adjustViewBounds="true"/>
 
     </LinearLayout>
 
@@ -265,18 +263,33 @@
 
     <LinearLayout
         style="@style/LayoutStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/finishButton1"
-            style="@style/TextViewStyle"
-            android:layout_width="wrap_content"
+            style="@style/IconButtonStyle"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="@string/recheck_next"
-            android:textSize="@dimen/recheck1_question1" />
+            android:textSize="@dimen/recheck1_question1"
+            app:icon="@drawable/button_icon_save"
+            app:iconSize="20dp" />
+
+        <Button
+            android:id="@+id/edit_back_button"
+            style="@style/IconButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="back"
+            android:textSize="@dimen/recheck1_question1"
+            app:icon="@drawable/button_icon_back"
+            app:iconSize="20dp" />
 
     </LinearLayout>
 

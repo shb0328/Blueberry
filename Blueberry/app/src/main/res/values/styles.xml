@@ -25,6 +25,15 @@
 
     <style name="ButtonStyle" parent="TextViewStyle">
         <item name="android:textAlignment">center</item>
+        <item name="color">@color/colorBlueBerry</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="IconButtonStyle" parent="@style/Widget.MaterialComponents.Button.Icon">
+        <item name="android:padding">5dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="color">@color/colorBlueBerry</item>
+        <item name="android:layout_margin">5dp</item>
     </style>
 
     <style name="LayoutStyle" parent="AppTheme"></style>

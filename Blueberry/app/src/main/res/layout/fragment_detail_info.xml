@@ -259,9 +259,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
-                    android:textSize="10dp"
                     android:singleLine="true"
-                    android:text="sdcard/DCIM/blueberry" />
+                    android:text="sdcard/DCIM/blueberry"
+                    android:textSize="10dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -274,11 +274,13 @@
 
         <Button
             android:id="@+id/detail_info_button_back"
-            style="@style/ButtonStyle"
+            style="@style/IconButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Back" />
+            android:text="Back"
+            app:icon="@drawable/button_icon_back"
+            app:iconSize="20dp" />
     </RelativeLayout>
 
 </LinearLayout>

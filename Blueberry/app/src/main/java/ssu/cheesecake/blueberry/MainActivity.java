@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else{
             new AlertDialog.Builder(root)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setIcon(getResources().getDrawable(R.drawable.icon_warning, null))
                     .setTitle(R.string.dialog_exit_title)
                     .setMessage(R.string.dialog_exit_question)
                     .setPositiveButton(R.string.dialog_exit_yes, new DialogInterface.OnClickListener() {

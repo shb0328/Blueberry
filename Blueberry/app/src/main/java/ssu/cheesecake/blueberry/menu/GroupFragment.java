@@ -126,7 +126,7 @@ public class GroupFragment extends Fragment {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            realmController.deleteCustomGroup(groupName);
+                            realmController.deleteCustomGroup(groupName, context);
                             GroupAdapter groupAdapter = new GroupAdapter(context,R.layout.group_item,realmController.getGroups(),new OnGroupTouchListener());
                             groupView.setAdapter(groupAdapter);
                         }

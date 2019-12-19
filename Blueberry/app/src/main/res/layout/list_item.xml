@@ -23,7 +23,7 @@
             android:id="@+id/item_button_favorite"
             android:layout_width="@dimen/swipeWidth"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorBlueBerry"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
@@ -38,8 +38,8 @@
 
                 <ImageView
                     android:id="@+id/item_button_favorite_imageview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_favorite"
                     android:tint="@android:color/white" />
@@ -64,7 +64,7 @@
             android:id="@+id/item_button_edit"
             android:layout_width="@dimen/swipeWidth"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorBlueBerry"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
@@ -78,10 +78,10 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
-                    android:src="@drawable/ic_mode_edit_black_24dp"
+                    android:src="@drawable/icon_edit"
                     android:tint="@android:color/white" />
 
                 <TextView
@@ -104,7 +104,7 @@
             android:id="@+id/item_button_delete"
             android:layout_width="@dimen/swipeWidth"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimaryDark"
+            android:background="@color/colorBlueBerry"
             android:clickable="true"
             android:focusable="true"
             android:orientation="vertical">
@@ -118,8 +118,8 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/icon_delete"
                     android:tint="@android:color/white" />

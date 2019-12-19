@@ -31,10 +31,12 @@
 
             <Button
                 android:id="@+id/button_search"
-                style="@style/ButtonStyle"
+                style="@style/IconButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/button_search" />
+                android:text="@string/button_search"
+                app:icon="@drawable/button_icon_search"
+                app:iconSize="20dp"/>
 
         </LinearLayout>
 

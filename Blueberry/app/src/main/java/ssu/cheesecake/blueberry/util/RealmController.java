@@ -1,6 +1,8 @@
 package ssu.cheesecake.blueberry.util;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Vector;
 
@@ -201,17 +203,23 @@ public class RealmController {
     }
 
     //Realm에 CustomGroup 삭제하는 함수
-    public void deleteCustomGroup(final String groupName) {
+    public void deleteCustomGroup(final String groupName, final Context context) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 CustomGroup deleteGroup = realm.where(CustomGroup.class).equalTo("groupName", groupName).findFirst();
-                groups.remove(deleteGroup);
-                deleteGroup.deleteFromRealm();
+                if(deleteGroup.getGroupName().equals("직장") || deleteGroup.getGroupName().equals("가족") || deleteGroup.getGroupName().equals("친구")) {
+                    Toast.makeText(context, "기본 그룹은 삭제할 수 없습니다!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    groups.remove(deleteGroup);
+                    deleteGroup.deleteFromRealm();
 
-                RealmResults<BusinessCard> resCards = realm.where(BusinessCard.class).equalTo("group",groupName).findAll();
-                for(BusinessCard card : resCards){
-                    card.setGroup(null);
+                    RealmResults<BusinessCard> resCards = realm.where(BusinessCard.class).equalTo("group", groupName).findAll();
+                    for (BusinessCard card : resCards) {
+                        card.setGroup(null);
+                    }
                 }
             }
         });
