@@ -31,7 +31,8 @@
             android:fontFamily="@font/polyregular"
             android:text="@string/app_name"
             android:textColor="@color/colorBlueBerry"
-            android:textSize="60sp" />
+            android:textSize="60sp"
+            android:layout_marginRight="10dp"/>
 
     </LinearLayout>
 

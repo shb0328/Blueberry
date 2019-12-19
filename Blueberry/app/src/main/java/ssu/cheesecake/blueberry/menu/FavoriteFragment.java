@@ -59,12 +59,9 @@ public class FavoriteFragment extends Fragment{
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        Log.d("DEBUG!", "onActivityResult: CALL");
         if (resultCode == Activity.RESULT_OK) {
             //EditActivity
-            Log.d("DEBUG!", "onActivityResult: CALL");
-            if (requestCode == 1) {
-                Log.d("DEBUG!", "onActivityResult: CALL");
+            if (requestCode == 1004) {
                 int position = intent.getIntExtra("position", -1);
                 if (position != -1)
                     recyclerView.getAdapter().notifyItemChanged(position);

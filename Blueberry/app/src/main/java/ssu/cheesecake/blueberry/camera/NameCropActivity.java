@@ -140,10 +140,11 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         //image의 크기가 view보다 크다면
         if (bitmap.getWidth() > nameCropImageView.getWidth()) {
             //view에서의 좌표를 image에서의 좌표로 재설정
-            leftTop.x = (int) (leftTop.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            leftTop.y = (int) (leftTop.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            rightBottom.x = (int) (rightBottom.x * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
-            rightBottom.y = (int) (rightBottom.y * ((float) bitmap.getWidth() / nameCropImageView.getWidth()));
+            float ratio = ((float) bitmap.getWidth() / nameCropImageView.getWidth());
+            leftTop.x = (int) (leftTop.x * ratio);
+            leftTop.y = (int) (leftTop.y * ratio);
+            rightBottom.x = (int) (rightBottom.x * ratio);
+            rightBottom.y = (int) (rightBottom.y * ratio);
         }
         //좌표값이 image의 범위를 벗어날 경우 image 내의 좌표로 재설정
         if (leftTop.x < 0)
@@ -159,6 +160,9 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
     private Bitmap cropNameImage(int left, int top, int right, int bottom) {
         Rect rect = new Rect(left, top, right, bottom);
+        if(rect.height() <= 0)
+            return null;
+
         return Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
     }
 
@@ -200,6 +204,9 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected String doInBackground(Bitmap... bitmaps) {
+            if(bitmaps[0] == null)
+                return "";
+
             tessBaseAPI.setImage(bitmaps[0]);
             return tessBaseAPI.getUTF8Text();
         }
