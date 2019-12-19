@@ -6,88 +6,113 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/layout_backup"
-        style="@style/LayoutStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/layout_restore"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
-
-        <Button
-            android:id="@+id/button_backup"
-            style="@style/IconButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="@string/button_backup"
-            app:icon="@drawable/button_icon_backup"
-            app:iconSize="20dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_restore"
-        style="@style/LayoutStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/layout_signOut"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
-
-        <Button
-            android:id="@+id/button_restore"
-            style="@style/IconButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="@string/button_restore"
-            app:icon="@drawable/button_icon_restore"
-            app:iconSize="20dp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/layout_signOut"
-        style="@style/LayoutStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/auto_save"
-        android:orientation="horizontal">
-
-        <TextView
-            style="@style/TextViewStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3" />
-
-        <Button
-            android:id="@+id/button_signOut"
-            style="@style/IconButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:text="@string/button_signOut"
-            app:icon="@drawable/button_icon_signout"
-            app:iconSize="20dp" />
-    </LinearLayout>
-
-    <Switch
-        android:id="@+id/auto_save"
-        style="@style/TextViewStyle"
+        android:id="@+id/button_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_marginTop="0dp"
-        android:text="@string/switch1" />
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/layout_backup"
+            style="@style/LayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_backup"
+                style="@style/IconButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="@string/button_backup"
+                app:icon="@drawable/button_icon_backup"
+                app:iconSize="20dp" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_restore"
+            style="@style/LayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_restore"
+                style="@style/IconButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="@string/button_restore"
+                app:icon="@drawable/button_icon_restore"
+                app:iconSize="20dp" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_signOut"
+            style="@style/LayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_signOut"
+                style="@style/IconButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="@string/button_signOut"
+                app:icon="@drawable/button_icon_signout"
+                app:iconSize="20dp" />
+
+            <TextView
+                style="@style/TextViewStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layout_autoSave"
+            style="@style/LayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/auto_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layoutDirection="rtl"
+                android:textSize="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="3"
+                android:text="@string/switch1" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView"

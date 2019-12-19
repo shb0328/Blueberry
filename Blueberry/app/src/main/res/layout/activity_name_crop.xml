@@ -10,27 +10,35 @@
     <TextView
         style="@style/TextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="이름 영역을 손으로 색칠하고 언어를 선택해주세요."
+        android:text="@string/name_crop"
         android:textColor="#000000"
-        android:textSize="20dp"
-        android:textStyle="bold" />
+        android:textSize="20dp"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
 
     <ssu.cheesecake.blueberry.camera.NameCropImageView
         android:id="@+id/nameCropImageView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:gravity="center"
         android:scaleType="fitStart" />
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"/>
+
     <LinearLayout
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -62,8 +70,9 @@
     <LinearLayout
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <Button

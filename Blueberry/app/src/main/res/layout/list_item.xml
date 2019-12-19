@@ -42,7 +42,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_favorite"
-                    android:tint="@android:color/white" />
+                    android:tint="@color/colorWhite"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="Favorite"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -82,7 +82,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/icon_edit"
-                    android:tint="@android:color/white" />
+                    android:tint="@color/colorWhite"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="Edit"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -122,7 +122,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/icon_delete"
-                    android:tint="@android:color/white" />
+                    android:tint="@color/colorWhite" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -135,7 +135,7 @@
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="Delete"
-                    android:textColor="@android:color/white"
+                    android:textColor="@color/colorWhite"
                     android:textSize="12sp" />
             </LinearLayout>
         </RelativeLayout>
@@ -146,7 +146,7 @@
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@color/colorWhite"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
