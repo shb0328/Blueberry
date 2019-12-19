@@ -24,11 +24,12 @@ public class DetailInfoFragment extends Fragment implements View.OnClickListener
 
     private MainActivity.NowFragment nowFragment;
 
-    private Button backButton;
+    private ImageView backButton;
     private ImageView imageView;
     private TextView nameView;
     private TextView numberView;
     private TextView emailView;
+    private TextView webView;
     private TextView companyView;
     private TextView addressView;
     private TextView groupView;
@@ -51,12 +52,14 @@ public class DetailInfoFragment extends Fragment implements View.OnClickListener
 
         //TouchEventListener 설정
         backButton = root.findViewById(R.id.detail_info_button_back);
+        backButton.setImageDrawable(getResources().getDrawable(R.drawable.back,getActivity().getTheme()));
         backButton.setOnClickListener(this);
 
         imageView = root.findViewById(R.id.detail_info_image);
         nameView = root.findViewById(R.id.detail_info_name);
         numberView = root.findViewById(R.id.detail_info_phone_number);
         emailView = root.findViewById(R.id.detail_info_email);
+        webView = root.findViewById(R.id.detail_info_site);
         companyView = root.findViewById(R.id.detail_info_company);
         addressView = root.findViewById(R.id.detail_info_address);
         groupView = root.findViewById(R.id.detail_info_group);
@@ -69,6 +72,7 @@ public class DetailInfoFragment extends Fragment implements View.OnClickListener
         nameView.setText(card.getName());
         numberView.setText(card.getPhoneNumber());
         emailView.setText(card.getEmail());
+        webView.setText(card.getWebSite());
         companyView.setText(card.getCompany());
         addressView.setText(card.getAddress());
         groupView.setText(card.getGroup());

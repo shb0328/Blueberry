@@ -275,6 +275,7 @@ public class EditActivity extends AppCompatActivity {
                     card.setCompany(company_finValue);
                     card.setAddress(address_finValue);
                     card.setEmail(email_finValue);
+                    card.setWebSite(webSite_finValue);
                     card.setGroup(group_finValue);
                     card.setFileName(fileName);
                     realmController.addBusinessCard(card);
