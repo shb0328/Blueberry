@@ -27,7 +27,7 @@ import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 import java.util.ArrayList;
 
-public class LoginActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener{
+public class LoginActivity extends FragmentActivity {
 
     // 구글로그인 result 상수
     private static final int RC_SIGN_IN = 900;
@@ -137,9 +137,5 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 .check();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(LoginActivity.this, "Connection Failed", Toast.LENGTH_LONG).show();
-    }
 }
 
