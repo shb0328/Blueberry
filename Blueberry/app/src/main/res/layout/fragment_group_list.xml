@@ -12,7 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlueBerry"
+        android:background="@color/colorBlueBerry_Alpha"
         android:orientation="horizontal">
 
         <ImageView
@@ -21,7 +21,6 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:background="@color/colorBlueBerry"
             android:tint="@color/colorWhite"
             android:gravity="center" />
 

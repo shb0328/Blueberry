@@ -42,7 +42,7 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
     Button backupBtn;
     Button restoreBtn;
     Button signOutBtn;
-    Switch autoSave;
+    com.google.android.material.switchmaterial.SwitchMaterial autoSave;
     RealmController realmController;
 
 
