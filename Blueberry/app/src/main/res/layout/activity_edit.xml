@@ -28,20 +28,6 @@
             android:textStyle="bold"
             android:textColor="@color/colorBlueBerry" />
 
-        <!--        <TextView-->
-        <!--            style="@style/TextViewStyle"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginStart="5dp"-->
-        <!--            android:layout_marginTop="5dp"-->
-        <!--            android:text="@string/recheck2_guiding" />-->
-
-        <!--        <View-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="2dp"-->
-        <!--            android:layout_marginTop="10dp"-->
-        <!--            android:background="@color/colorWhite" />-->
-
     </LinearLayout>
 
     <!-- Image -->
@@ -69,15 +55,6 @@
 
     <!-- Spinners -->
 
-    <!--    <LinearLayout-->
-    <!--        style="@style/LayoutStyle"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        android:layout_weight="2.2"-->
-    <!--        android:background="@drawable/borderselection"-->
-    <!--        android:orientation="vertical" />-->
-
     <LinearLayout
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
@@ -100,7 +77,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -126,7 +104,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="phone"/>
 
     </LinearLayout>
 
@@ -152,7 +131,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="textEmailAddress"/>
 
     </LinearLayout>
 
@@ -178,7 +158,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="textUri"/>
 
     </LinearLayout>
 
@@ -204,7 +185,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -230,7 +212,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -256,7 +239,8 @@
             app:dropDownDrawable="@drawable/picker"
             app:dropDownDrawableHeight="25dp"
             app:dropDownDrawableSpacing="15dp"
-            app:dropDownDrawableWidth="25dp" />
+            app:dropDownDrawableWidth="25dp"
+            android:inputType="text"/>
 
     </LinearLayout>
 
