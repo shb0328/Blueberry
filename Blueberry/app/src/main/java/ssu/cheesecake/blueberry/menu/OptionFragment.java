@@ -113,7 +113,6 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
             });
             alert.setIcon(getResources().getDrawable(R.drawable.button_icon_restore_black, null));
             alert.show();
-            firebaseHelper.Restore(realmController);
         } else if(signOutBtn.equals(button)){
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("로그아웃");

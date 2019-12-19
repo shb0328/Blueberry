@@ -67,7 +67,7 @@ public class RealmController {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                mRealm.deleteAll();
+                mRealm.delete(BusinessCard.class);
             }
         });
     }
@@ -78,6 +78,7 @@ public class RealmController {
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    mRealm.delete(CustomGroup.class);
                     CustomGroup workerGroup = realm.createObject(CustomGroup.class);
                     workerGroup.setGroupName("직장");
                     CustomGroup familyGroup = realm.createObject(CustomGroup.class);
@@ -97,6 +98,7 @@ public class RealmController {
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
+                    mRealm.delete(AutoSave.class);
                     AutoSave autoSave = realm.createObject(AutoSave.class);
                     autoSave.setIsAutoSave(value);
                 }
