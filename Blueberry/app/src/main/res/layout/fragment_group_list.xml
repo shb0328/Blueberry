@@ -18,19 +18,19 @@
         <ImageView
             android:id="@+id/group_list_button_back"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:tint="@color/colorWhite"
-            android:gravity="center" />
+            android:gravity="center"
+            android:tint="@color/colorWhite" />
 
         <TextView
             android:id="@+id/group_name_text"
             android:layout_width="0dp"
-            android:layout_weight="8"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
             android:gravity="center"
-            android:textSize="40dp" />
+            android:textSize="40dp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

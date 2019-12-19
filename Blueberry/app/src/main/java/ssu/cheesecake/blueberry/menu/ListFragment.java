@@ -1,8 +1,10 @@
 package ssu.cheesecake.blueberry.menu;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -142,16 +145,30 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
                 Intent intent = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent.putExtra("key", CAMREQUESTCODE);
                 startActivity(intent);
-//                getActivity().finish();
                 break;
             case R.id.fab_gallery:
                 anim();
                 Intent intent2 = new Intent(this.getActivity(), SmartCropActivity.class);
                 intent2.putExtra("key", GALLERYREQUESTCODE);
                 startActivity(intent2);
-//                getActivity().finish();
                 break;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
+        Log.d("DEBUG!", "onActivityResult: CALL");
+        if (resultCode == Activity.RESULT_OK) {
+            //EditActivity
+            Log.d("DEBUG!", "onActivityResult: CALL");
+            if (requestCode == 1) {
+                Log.d("DEBUG!", "onActivityResult: CALL");
+                int position = intent.getIntExtra("position", -1);
+                if (position != -1)
+                    recyclerView.getAdapter().notifyItemChanged(position);
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 
     //Fab Button Animation

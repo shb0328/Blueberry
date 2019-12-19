@@ -42,7 +42,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_favorite"
-                    android:tint="@color/colorWhite"/>
+                    android:tint="@color/colorWhite" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                     android:layout_height="30dp"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/icon_edit"
-                    android:tint="@color/colorWhite"/>
+                    android:tint="@color/colorWhite" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitXY"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -181,25 +181,50 @@
                 android:id="@+id/item_name"
                 style="@style/TextViewSmallStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:singleLine="true"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
 
             <TextView
                 android:id="@+id/item_phone_number"
                 style="@style/TextViewSmallStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
 
             <TextView
                 android:id="@+id/item_email"
                 style="@style/TextViewSmallStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
 
             <TextView
                 android:id="@+id/item_company"
                 style="@style/TextViewSmallStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:singleLine="true" />
 
 
         </LinearLayout>

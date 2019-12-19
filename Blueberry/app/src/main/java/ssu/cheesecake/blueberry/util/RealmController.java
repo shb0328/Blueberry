@@ -255,6 +255,7 @@ public class RealmController {
 
     public void editBusinessCard(final BusinessCard card, final int position) {
         final int id = card.getId();
+        Log.d("DEBUG!", "editBusinessCardk: id" + id);
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {

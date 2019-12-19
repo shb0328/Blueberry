@@ -18,16 +18,17 @@
         <ImageView
             android:id="@+id/detail_info_button_back"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:adjustViewBounds="true"
-            android:tint="@color/colorWhite"
-            android:gravity="center" />
+            android:gravity="center"
+            android:tint="@color/colorWhite" />
 
         <TextView
+            style="@style/TextViewStyle"
             android:layout_width="0dp"
-            android:layout_weight="8"
             android:layout_height="wrap_content"
+            android:layout_weight="8"
             android:gravity="center"
             android:text="세부사항"
             android:textColor="@color/colorWhite"
@@ -110,9 +111,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
+                    android:autoLink="phone"
                     android:singleLine="true"
-                    android:text="없음"
-                    android:autoLink="phone"/>
+                    android:text="없음" />
             </LinearLayout>
 
             <LinearLayout
@@ -136,9 +137,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
+                    android:autoLink="email"
                     android:singleLine="true"
-                    android:text="없음"
-                    android:autoLink="email"/>
+                    android:text="없음" />
             </LinearLayout>
 
             <LinearLayout
@@ -187,9 +188,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
+                    android:autoLink="web"
                     android:singleLine="true"
-                    android:text="없음"
-                    android:autoLink="web"/>
+                    android:text="없음" />
             </LinearLayout>
 
             <LinearLayout
@@ -287,9 +288,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="3.5"
-                    android:textSize="10dp"
                     android:singleLine="true"
-                    android:text="불러오는데 오류가 발생했습니다."/>
+                    android:text="불러오는데 오류가 발생했습니다."
+                    android:textSize="10dp" />
             </LinearLayout>
         </LinearLayout>
 

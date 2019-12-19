@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -134,6 +135,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
              **/
 
             card = intent.getParcelableExtra("card");
+            position = intent.getIntExtra("position", -1);
 
             //Image Loading
             //Local에 Image 저장할 경로 지정
@@ -199,7 +201,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         editGroup.setAdapter(group_adapter);
         editGroup.setEditable(false);
 
-        resultIntent = new Intent(this, MainActivity.class);
+        resultIntent = new Intent();
 
         saveBtn = findViewById(R.id.finishButton1);
         backBtn = findViewById(R.id.edit_back_button);
@@ -213,25 +215,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             Realm.init(app);
             RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
 
-            if (!isAdded) {
-                BusinessCard editCard = new BusinessCard();
-                editCard.Copy(card);
-                editCard.setName(editName.getText().toString());
-                editCard.setPhoneNumber(editPhone.getText().toString());
-                editCard.setEmail(editEmail.getText().toString());
-                editCard.setWebSite(editWebSite.getText().toString());
-                editCard.setCompany(editCompany.getText().toString());
-                editCard.setAddress(editAddress.getText().toString());
-                editCard.setGroup(editGroup.getText().toString());
-
-                realmController.editBusinessCard(editCard, position);
-
-                resultIntent.putExtra("activity", "Edit");
-                resultIntent.putExtra("card", card);
-                resultIntent.putExtra("position", position);
-                setResult(RESULT_OK, resultIntent);
-            }
-
             name_finValue = editName.getText().toString();
             phone_finValue = editPhone.getText().toString();
             email_finValue = editEmail.getText().toString();
@@ -240,43 +223,25 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             address_finValue = editAddress.getText().toString();
             group_finValue = editGroup.getText().toString();
 
-            Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-            insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-            insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
-            insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
-            insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, address_finValue);
+            if (!isAdded) {
+                BusinessCard editCard = new BusinessCard();
+                editCard.Copy(card);
+                editCard.setName(name_finValue);
+                editCard.setPhoneNumber(phone_finValue);
+                editCard.setEmail(email_finValue);
+                editCard.setWebSite(webSite_finValue);
+                editCard.setCompany(company_finValue);
+                editCard.setAddress(address_finValue);
+                editCard.setGroup(group_finValue);
+                Log.d("DEBUG!", "onClick: position" + position);
 
-            ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
+                realmController.editBusinessCard(editCard, position);
 
-            ContentValues rawContactRow = new ContentValues();
-            contactData.add(rawContactRow);
-
-            ContentValues phoneRow = new ContentValues();
-            phoneRow.put(
-                    ContactsContract.Data.MIMETYPE,
-                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-            );
-            phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
-            contactData.add(phoneRow);
-
-            ContentValues emailRow = new ContentValues();
-            emailRow.put(
-                    ContactsContract.Data.MIMETYPE,
-                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-            );
-            emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
-            contactData.add(emailRow);
-            insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-
-            ContentValues webRow = new ContentValues();
-            webRow.put(
-                    ContactsContract.Data.MIMETYPE,
-                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-            );
-            webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
-            contactData.add(webRow);
-            insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-
+                resultIntent.putExtra("activity", "Edit");
+                resultIntent.putExtra("card", card);
+                resultIntent.putExtra("position", position);
+                setResult(RESULT_OK, resultIntent);
+            }
             if (isAdded) {
                 card.setName(name_finValue);
                 card.setPhoneNumber(phone_finValue);
@@ -287,11 +252,47 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 card.setGroup(group_finValue);
                 card.setFileName(fileName);
                 realmController.addBusinessCard(card);
-                startActivity(resultIntent);
-            }
 
-            if (isAdded && realmController.getIsAutoSave().getIsAutoSave()) {
-                startActivityForResult(insertIntent, RESULT_OK);
+                if (realmController.getIsAutoSave().getIsAutoSave()) {
+                    Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+                    insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+                    insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
+                    insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
+                    insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, address_finValue);
+
+                    ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
+
+                    ContentValues rawContactRow = new ContentValues();
+                    contactData.add(rawContactRow);
+
+                    ContentValues phoneRow = new ContentValues();
+                    phoneRow.put(
+                            ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+                    );
+                    phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
+                    contactData.add(phoneRow);
+
+                    ContentValues emailRow = new ContentValues();
+                    emailRow.put(
+                            ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                    );
+                    emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
+                    contactData.add(emailRow);
+                    insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+
+                    ContentValues webRow = new ContentValues();
+                    webRow.put(
+                            ContactsContract.Data.MIMETYPE,
+                            ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                    );
+                    webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
+                    contactData.add(webRow);
+                    insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+
+                    startActivityForResult(insertIntent, RESULT_OK);
+                }
             }
             finish();
         }
