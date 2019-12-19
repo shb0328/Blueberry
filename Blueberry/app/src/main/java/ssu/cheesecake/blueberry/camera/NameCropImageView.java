@@ -13,9 +13,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
@@ -29,9 +26,9 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     private int myWidth;
     private int myHeight;
 
-    private List<Point> points;
     private Point leftTop;
     private Point rightBottom;
+    private Point startPoint;
 
     private boolean isFirstTouch = true;
     private boolean isTouched = false;
@@ -42,15 +39,18 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         super(context);
     }
 
-    public NameCropImageView(Context context, @Nullable AttributeSet attrs) {
+    public NameCropImageView(Context context, @Nullable AttributeSet attrs)
+    {
         super(context, attrs);
     }
 
-    public NameCropImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public NameCropImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
+    {
         super(context, attrs, defStyleAttr);
     }
 
-    public void init(Bitmap bitmap) {
+    public void init(Bitmap bitmap)
+    {
         this.bitmap = bitmap;
         super.setImageBitmap(bitmap);
         initBitmapRegion(getWidth(), getHeight());
@@ -70,7 +70,9 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
 
         invalidate();
     }
-    public Point getLeftTop() {
+
+    public Point getLeftTop()
+    {
         if (hasName) {
             return leftTop;
         } else {
@@ -78,7 +80,8 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         }
     }
 
-    public Point getRightBottom() {
+    public Point getRightBottom()
+    {
         if (hasName) {
             return rightBottom;
         } else {
@@ -87,21 +90,23 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(Canvas canvas)
+    {
         super.onDraw(canvas);
-        if(points == null){
+        if (!isTouched) {
             return;
         }
 
-        Rect rect = new Rect(leftTop.x,leftTop.y,rightBottom.x,rightBottom.y);
-        canvas.drawRect(rect,paint);
+        Rect rect = new Rect(leftTop.x, leftTop.y, rightBottom.x, rightBottom.y);
+        canvas.drawRect(rect, paint);
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        if(isFirstTouch){
+    public boolean onTouch(View v, MotionEvent event)
+    {
+        if (isFirstTouch) {
             isFirstTouch = false;
-            initBitmapRegion(v.getWidth(),v.getHeight());
+            initBitmapRegion(v.getWidth(), v.getHeight());
         }
 
         Point point = new Point();
@@ -110,46 +115,49 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
 
         //BitmapRegion 안에서 TouchEvent가 발생했을 때에만
         if (inBitmapRegion(point)) {
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
 
                 v.getParent().requestDisallowInterceptTouchEvent(true);
-
-                points = new ArrayList<Point>();
                 leftTop = new Point(point.x, point.y);
                 rightBottom = new Point(point.x, point.y);
-                points.add(point);
+                startPoint = new Point(point.x, point.y);
                 isTouched = true;
 
-            }else if(isTouched && event.getAction() == MotionEvent.ACTION_MOVE){
+            } else if (isTouched && event.getAction() == MotionEvent.ACTION_MOVE) {
 
-                if (point.x < leftTop.x)
+                if(isLeftUp(point)){
                     leftTop.x = point.x;
-                if (point.x > rightBottom.x)
-                    rightBottom.x = point.x;
-                if (point.y < leftTop.y)
                     leftTop.y = point.y;
-                if (point.y > rightBottom.y)
+                }else if(isLeftDown(point)){
+                    leftTop.x = point.x;
                     rightBottom.y = point.y;
+                }else if(isRightUp(point)){
+                    rightBottom.x = point.x;
+                    leftTop.y = point.y;
+                }else if(isRightDown(point)){
+                    rightBottom.x = point.x;
+                    rightBottom.y = point.y;
+                }
 
-                points.add(point);
-
-            }else if(isTouched && event.getAction() == MotionEvent.ACTION_UP){
+            } else if (isTouched && event.getAction() == MotionEvent.ACTION_UP) {
                 hasName = true;
                 isTouched = false;
             }
         }
         //BitmapRegion 밖으로 벗어났을 경우
-        else{
-            if(event.getAction() == MotionEvent.ACTION_DOWN){
+        else {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 isTouched = false;
-            }else if(isTouched && event.getAction() == MotionEvent.ACTION_MOVE){
+            } else if (isTouched && event.getAction() == MotionEvent.ACTION_MOVE) {
                 isTouched = false;
-                points.removeAll(points);
-                Toast.makeText(getContext(),"영역을 벗어났습니다. 다시 시도해주세요.",Toast.LENGTH_SHORT).show();
-            }else if(isTouched && event.getAction() == MotionEvent.ACTION_UP) {
+                leftTop = null;
+                rightBottom = null;
+                Toast.makeText(getContext(), "영역을 벗어났습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            } else if (isTouched && event.getAction() == MotionEvent.ACTION_UP) {
                 isTouched = false;
-                points.removeAll(points);
-                Toast.makeText(getContext(),"영역을 벗어났습니다. 다시 시도해주세요.",Toast.LENGTH_SHORT).show();
+                leftTop = null;
+                rightBottom = null;
+                Toast.makeText(getContext(), "영역을 벗어났습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -158,18 +166,18 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void initBitmapRegion(int width, int height) {
+    public void initBitmapRegion(int width, int height)
+    {
         myWidth = width;
         myHeight = height;
         if (bitmap.getWidth() > this.getWidth()) {
-            //view에서의 좌표를 image에서의 좌표로 재설정
-            float ratio = ((float) myWidth / bitmap.getWidth());
-            width = (int) (bitmap.getWidth() * ratio);
-            height = (int) (bitmap.getHeight() * ratio);
+            width = (int) (bitmap.getWidth() * ((float) myWidth / bitmap.getWidth()));
+            height = (int) (bitmap.getHeight() * ((float) myHeight / bitmap.getHeight()));
         }
         bitmapRegion = new Rect(0, 0, width, height);
         return;
@@ -177,5 +185,21 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
 
     private boolean inBitmapRegion(Point point) {
         return (point.x >= bitmapRegion.left) && (point.x <= bitmapRegion.right) && (point.y >= bitmapRegion.top) && (point.y <= bitmapRegion.bottom);
+    }
+
+    private boolean isLeftUp(Point point) {
+        return (startPoint.x > point.x) && (startPoint.y > point.y);
+    }
+
+    private boolean isRightUp(Point point) {
+        return (startPoint.x < point.x) && (startPoint.y > point.y);
+    }
+
+    private boolean isLeftDown(Point point) {
+        return (startPoint.x > point.x) && (startPoint.y < point.y);
+    }
+
+    private boolean isRightDown(Point point) {
+        return (startPoint.x < point.x) && (startPoint.y < point.y);
     }
 }
