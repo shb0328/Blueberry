@@ -57,6 +57,10 @@
                 android:adjustViewBounds="true"
                 android:background="@drawable/borderimage" />
         </RelativeLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D3D3D3"></TextView>
 
         <LinearLayout
             style="@style/LayoutStyle"
@@ -89,7 +93,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -115,7 +122,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -141,7 +151,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -166,7 +179,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -192,7 +208,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -216,7 +235,10 @@
                     android:layout_weight="3.5"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -241,7 +263,10 @@
                     android:singleLine="true"
                     android:text="없음" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
@@ -266,7 +291,10 @@
                     android:singleLine="true"
                     android:text="불러오는데 오류가 발생했습니다." />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#D3D3D3"></TextView>
             <LinearLayout
                 style="@style/LayoutStyle"
                 android:layout_width="match_parent"
