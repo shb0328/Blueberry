@@ -22,13 +22,13 @@
     <string name="title_favorite">Favorite</string>
     <string name="title_option">Option</string>
 
-    <string name="hint_search">검색어를 입력하세요</string>
+    <string name="hint_search">검색</string>
     <string name="button_search">Search</string>
     <string name="button_backup">Backup</string>
     <string name="button_restore">Restore</string>
     <string name="button_signOut">SignOut</string>
     <string name="switch1">주소록 자동 저장</string>
-    <string name="information">BlueBerry ver0.1\n\nMade by CheeseCake\nshb0328\t소혜빈\nzzarbttoo\t배유진\ncpuman7\t김한수\n"</string>
+    <string name="information"><b>BlueBerry</b> ver1.0\n\nMade by <b>CheeseCake</b>\n<b>소혜빈</b>\tshb0328\n<b>배유진</b>\tzzarbttoo\n<b>김한수</b>\tcpuman7\n"</string>
 
     <!-- TODO: Remove or change this placeholder text : for U_JIN -->
     <string name="title_activity_re_check">reCheck</string>
@@ -85,5 +85,6 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="name_crop"><b>이름</b> 영역을 <b>색칠</b>한 후 <b>언어</b>를 <b>선택</b>해주세요.</string>
 
 </resources>

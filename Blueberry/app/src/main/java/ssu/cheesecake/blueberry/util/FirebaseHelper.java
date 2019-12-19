@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Vector;
 
+import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.custom.BusinessCard;
 
 public class FirebaseHelper {
@@ -80,89 +81,57 @@ public class FirebaseHelper {
     }
 
     public void Backup(final RealmController realm) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle("백업");
-        alert.setMessage("백업을 실행하시겠습니까?");
-        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (realm.getCards().size() > 0) {
-                    backupLoadToast = new LoadToast(context);
-                    backupLoadToast.setText("Backup...");
-                    backupLoadToast.setTranslationY(1000);
-                    backupLoadToast.show();
-                    Vector<BusinessCard> cards = realm.getCards();
-                    myRef.removeValue();
-                    int len = cards.size();
-                    for (int i = 0; i < len; i++) {
-                        myRef.child(i + "").setValue(cards.get(i).toMap());
-                        uploadFileList.add(cards.get(i).getFileName());
-                    }
-                    addToUploadFileList();
-                }
-                else{
-                    Toast.makeText(context, "백업할 내용이 없습니다.", Toast.LENGTH_SHORT).show();
-                }
+        if (realm.getCards().size() > 0) {
+            backupLoadToast = new LoadToast(context);
+            backupLoadToast.setText("Backup...");
+            backupLoadToast.setTranslationY(1000);
+            backupLoadToast.show();
+            Vector<BusinessCard> cards = realm.getCards();
+            myRef.removeValue();
+            int len = cards.size();
+            for (int i = 0; i < len; i++) {
+                myRef.child(i + "").setValue(cards.get(i).toMap());
+                uploadFileList.add(cards.get(i).getFileName());
             }
-        });
-        alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface arg0, int arg1) {
-            }
-        });
-        alert.show();
+            addToUploadFileList();
+        } else {
+            Toast.makeText(context, "백업할 내용이 없습니다.", Toast.LENGTH_SHORT).show();
+        }
         return;
     }
 
     public void Restore(final RealmController realm) {
-        final AlertDialog.Builder alert = new AlertDialog.Builder(context);
-        alert.setTitle("복원");
-        alert.setMessage("복원을 실행하시겠습니까? 현재 단말기에 저장된 정보는 모두 지워지고, 백업된 내용이 들어옵니다.");
-        alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+        restoreLoadToast = new LoadToast(context);
+        restoreLoadToast.setText("Restore...");
+        restoreLoadToast.setTranslationY(1000);
+        restoreLoadToast.show();
+        boolean isAutoSave = realm.getIsAutoSave().getIsAutoSave();
+        realm.initializeCards();
+        realm.initializeAutoSave(isAutoSave);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                restoreLoadToast = new LoadToast(context);
-                restoreLoadToast.setText("Restore...");
-                restoreLoadToast.setTranslationY(1000);
-                restoreLoadToast.show();
-                boolean isAutoSave = realm.getIsAutoSave().getIsAutoSave();
-                realm.initializeCards();
-                realm.initializeAutoSave(isAutoSave);
-                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.hasChildren()) {
-                            for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                HashMap<String, Object> map = (HashMap<String, Object>) postSnapshot.getValue();
-                                BusinessCard card = new BusinessCard(map);
-                                realm.addBusinessCard(card);
-                                downloadFileList.add(card.getFileName());
-                                try {
-                                    downloadImage(card.getFileName());
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                        else{
-                            restoreLoadToast.success();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                        HashMap<String, Object> map = (HashMap<String, Object>) postSnapshot.getValue();
+                        BusinessCard card = new BusinessCard(map);
+                        realm.addBusinessCard(card);
+                        downloadFileList.add(card.getFileName());
+                        try {
+                            downloadImage(card.getFileName());
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
                         }
                     }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                } else {
+                    restoreLoadToast.success();
+                }
             }
-        });
-        alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface arg0, int arg1) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-        alert.show();
-
         return;
     }
 
@@ -191,42 +160,42 @@ public class FirebaseHelper {
     }
 
     public void downloadImage(String fileName) throws FileNotFoundException {
-            StorageReference pathReference = storageMyRef.child(fileName);
+        StorageReference pathReference = storageMyRef.child(fileName);
 
-            //Local Directory 없을 경우 생성
-            File dir = new File(path);
-            if (!dir.exists() && dir.mkdir()) {
-                dir.setWritable(true);
-            }
+        //Local Directory 없을 경우 생성
+        File dir = new File(path);
+        if (!dir.exists() && dir.mkdir()) {
+            dir.setWritable(true);
+        }
 
-            //Local File 생성
-            final File file = new File(path, fileName);
-            if (!file.exists()) {
-                pathReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-                        downloadCount++;
-                        if (downloadCount == downloadFileList.size()) {
-                            restoreLoadToast.success();
-                        }
+        //Local File 생성
+        final File file = new File(path, fileName);
+        if (!file.exists()) {
+            pathReference.getFile(file).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                    downloadCount++;
+                    if (downloadCount == downloadFileList.size()) {
+                        restoreLoadToast.success();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        downloadCount++;
-                        if (downloadCount == downloadFileList.size()) {
-                            restoreLoadToast.success();
-                        }
-                    }
-                });
-                return;
-            } else {
-                downloadCount++;
-                if (downloadCount == downloadFileList.size()) {
-                    restoreLoadToast.success();
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    downloadCount++;
+                    if (downloadCount == downloadFileList.size()) {
+                        restoreLoadToast.success();
+                    }
+                }
+            });
+            return;
+        } else {
+            downloadCount++;
+            if (downloadCount == downloadFileList.size()) {
+                restoreLoadToast.success();
             }
+        }
     }
 
 }

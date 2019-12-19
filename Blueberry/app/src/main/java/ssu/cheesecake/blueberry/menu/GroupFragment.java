@@ -2,10 +2,8 @@ package ssu.cheesecake.blueberry.menu;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -112,22 +110,22 @@ public class GroupFragment extends Fragment {
             groupName = ((TextView) view).getText().toString();
 
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                v=view;
-                view.setBackgroundColor(getResources().getColor(R.color.colorBlueBerry,getActivity().getTheme()));
+                v = view;
+                view.setBackgroundColor(getResources().getColor(R.color.colorBlueBerry, getActivity().getTheme()));
                 view.getParent().requestDisallowInterceptTouchEvent(true);
-                ((TextView) view).setTextColor(getResources().getColor(R.color.colorWhite,getActivity().getTheme()));
+                ((TextView) view).setTextColor(getResources().getColor(R.color.colorWhite, getActivity().getTheme()));
 
                 touchDownTime = motionEvent.getDownTime();
                 touchDownX = motionEvent.getX();
                 touchDownY = motionEvent.getY();
             }
             if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                v.setBackgroundColor(getResources().getColor(R.color.colorDefault,getActivity().getTheme()));
+                v.setBackgroundColor(getResources().getColor(R.color.colorDefault, getActivity().getTheme()));
                 ((TextView) view).setTextColor(Color.GRAY);
                 touchUpX = motionEvent.getX();
                 touchUpY = motionEvent.getY();
-                if(isCanceledByTouchMovement()){
-                    view.setBackgroundColor(getResources().getColor(R.color.colorDefault,getActivity().getTheme()));
+                if (isCanceledByTouchMovement()) {
+                    view.setBackgroundColor(getResources().getColor(R.color.colorDefault, getActivity().getTheme()));
 
                     return false;
                 }
@@ -145,8 +143,10 @@ public class GroupFragment extends Fragment {
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            realmController.deleteCustomGroup(groupName);
+
+                            realmController.deleteCustomGroup(groupName, context);
                             GroupAdapter groupAdapter = new GroupAdapter(context, R.layout.group_item, realmController.getGroups(), new OnGroupTouchListener());
+
                             groupView.setAdapter(groupAdapter);
                         }
                     });
@@ -165,9 +165,8 @@ public class GroupFragment extends Fragment {
             return true;
         }
 
-        private boolean isCanceledByTouchMovement()
-        {
-            return (touchUpX - touchDownX > 290) || (touchUpY - touchDownY > 290) ;
+        private boolean isCanceledByTouchMovement() {
+            return (touchUpX - touchDownX > 290) || (touchUpY - touchDownY > 290);
         }
 
     }

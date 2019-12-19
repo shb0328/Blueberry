@@ -21,7 +21,7 @@ import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.util.EditSpinner;
 import ssu.cheesecake.blueberry.util.RealmController;
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context app;
 
@@ -73,6 +73,9 @@ public class EditActivity extends AppCompatActivity {
     private String address_finValue;
     private String group_finValue;//일단 충돌 오류때문에 여기다가 해놓음하하
 
+    private Button saveBtn;
+    private Button backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +94,7 @@ public class EditActivity extends AppCompatActivity {
         groupArray = new ArrayList<>();
         mRealm = Realm.getDefaultInstance();
         realmController = new RealmController(mRealm, RealmController.WhichResult.Group);
-        for(int i = 0; i < realmController.getGroups().size(); i++){
+        for (int i = 0; i < realmController.getGroups().size(); i++) {
             groupArray.add(realmController.getGroups().get(i).getGroupName());
         }
 
@@ -198,98 +201,103 @@ public class EditActivity extends AppCompatActivity {
 
         resultIntent = new Intent(this, MainActivity.class);
 
-        Button ToFinValue = findViewById(R.id.finishButton1);
-        ToFinValue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Realm.init(app);
-                RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
-
-                if (!isAdded) {
-                    BusinessCard editCard = new BusinessCard();
-                    editCard.Copy(card);
-                    editCard.setName(editName.getText().toString());
-                    editCard.setPhoneNumber(editPhone.getText().toString());
-                    editCard.setEmail(editEmail.getText().toString());
-                    editCard.setWebSite(editWebSite.getText().toString());
-                    editCard.setCompany(editCompany.getText().toString());
-                    editCard.setAddress(editAddress.getText().toString());
-                    editCard.setGroup(editGroup.getText().toString());
-
-                    realmController.editBusinessCard(editCard, position);
-
-                    resultIntent.putExtra("activity", "Edit");
-                    resultIntent.putExtra("card", card);
-                    resultIntent.putExtra("position", position);
-                    setResult(RESULT_OK, resultIntent);
-                }
-
-                name_finValue = editName.getText().toString();
-                phone_finValue = editPhone.getText().toString();
-                email_finValue = editEmail.getText().toString();
-                webSite_finValue = editWebSite.getText().toString();
-                company_finValue = editCompany.getText().toString();
-                address_finValue = editAddress.getText().toString();
-                group_finValue = editGroup.getText().toString();
-
-                Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
-                insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
-                insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
-                insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
-                insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, address_finValue);
-
-                ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
-
-                ContentValues rawContactRow = new ContentValues();
-                contactData.add(rawContactRow);
-
-                ContentValues phoneRow = new ContentValues();
-                phoneRow.put(
-                        ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-                );
-                phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
-                contactData.add(phoneRow);
-
-                ContentValues emailRow = new ContentValues();
-                emailRow.put(
-                        ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-                );
-                emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
-                contactData.add(emailRow);
-                insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-
-                ContentValues webRow = new ContentValues();
-                webRow.put(
-                        ContactsContract.Data.MIMETYPE,
-                        ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
-                );
-                webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
-                contactData.add(webRow);
-                insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
-
-                if (isAdded) {
-                    card.setName(name_finValue);
-                    card.setPhoneNumber(phone_finValue);
-                    card.setCompany(company_finValue);
-                    card.setAddress(address_finValue);
-                    card.setEmail(email_finValue);
-                    card.setWebSite(webSite_finValue);
-                    card.setGroup(group_finValue);
-                    card.setFileName(fileName);
-                    realmController.addBusinessCard(card);
-                    startActivity(resultIntent);
-                }
-
-                if (isAdded && realmController.getIsAutoSave().getIsAutoSave()) {
-                    startActivityForResult(insertIntent, RESULT_OK);
-                }
-                finish();
-            }
-        });
+        saveBtn = findViewById(R.id.finishButton1);
+        backBtn = findViewById(R.id.edit_back_button);
+        saveBtn.setOnClickListener(this);
+        backBtn.setOnClickListener(this);
     }
 
+    @Override
+    public void onClick(View view) {
+        if (view == saveBtn) {
+            Realm.init(app);
+            RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
+
+            if (!isAdded) {
+                BusinessCard editCard = new BusinessCard();
+                editCard.Copy(card);
+                editCard.setName(editName.getText().toString());
+                editCard.setPhoneNumber(editPhone.getText().toString());
+                editCard.setEmail(editEmail.getText().toString());
+                editCard.setWebSite(editWebSite.getText().toString());
+                editCard.setCompany(editCompany.getText().toString());
+                editCard.setAddress(editAddress.getText().toString());
+                editCard.setGroup(editGroup.getText().toString());
+
+                realmController.editBusinessCard(editCard, position);
+
+                resultIntent.putExtra("activity", "Edit");
+                resultIntent.putExtra("card", card);
+                resultIntent.putExtra("position", position);
+                setResult(RESULT_OK, resultIntent);
+            }
+
+            name_finValue = editName.getText().toString();
+            phone_finValue = editPhone.getText().toString();
+            email_finValue = editEmail.getText().toString();
+            webSite_finValue = editWebSite.getText().toString();
+            company_finValue = editCompany.getText().toString();
+            address_finValue = editAddress.getText().toString();
+            group_finValue = editGroup.getText().toString();
+
+            Intent insertIntent = new Intent(ContactsContract.Intents.Insert.ACTION);
+            insertIntent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+            insertIntent.putExtra(ContactsContract.Intents.Insert.NAME, name_finValue);
+            insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, company_finValue);
+            insertIntent.putExtra(ContactsContract.Intents.Insert.COMPANY, address_finValue);
+
+            ArrayList<ContentValues> contactData = new ArrayList<ContentValues>();
+
+            ContentValues rawContactRow = new ContentValues();
+            contactData.add(rawContactRow);
+
+            ContentValues phoneRow = new ContentValues();
+            phoneRow.put(
+                    ContactsContract.Data.MIMETYPE,
+                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+            );
+            phoneRow.put(ContactsContract.CommonDataKinds.Phone.NUMBER, phone_finValue);
+            contactData.add(phoneRow);
+
+            ContentValues emailRow = new ContentValues();
+            emailRow.put(
+                    ContactsContract.Data.MIMETYPE,
+                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+            );
+            emailRow.put(ContactsContract.CommonDataKinds.Email.ADDRESS, email_finValue);
+            contactData.add(emailRow);
+            insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+
+            ContentValues webRow = new ContentValues();
+            webRow.put(
+                    ContactsContract.Data.MIMETYPE,
+                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+            );
+            webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
+            contactData.add(webRow);
+            insertIntent.putParcelableArrayListExtra(ContactsContract.Intents.Insert.DATA, contactData);
+
+            if (isAdded) {
+                card.setName(name_finValue);
+                card.setPhoneNumber(phone_finValue);
+                card.setCompany(company_finValue);
+                card.setAddress(address_finValue);
+                card.setEmail(email_finValue);
+                card.setWebSite(webSite_finValue);
+                card.setGroup(group_finValue);
+                card.setFileName(fileName);
+                realmController.addBusinessCard(card);
+                startActivity(resultIntent);
+            }
+
+            if (isAdded && realmController.getIsAutoSave().getIsAutoSave()) {
+                startActivityForResult(insertIntent, RESULT_OK);
+            }
+            finish();
+        }
+        else if(view == backBtn)
+            finish();
+    }
 }
 
 

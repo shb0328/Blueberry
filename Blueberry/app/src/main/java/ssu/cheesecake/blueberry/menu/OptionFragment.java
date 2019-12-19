@@ -1,10 +1,12 @@
 package ssu.cheesecake.blueberry.menu;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -17,10 +19,19 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import net.steamcrafted.loadtoast.LoadToast;
+
+import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.LoginActivity;
 import ssu.cheesecake.blueberry.MainActivity;
+import ssu.cheesecake.blueberry.custom.BusinessCard;
 import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.RealmController;
@@ -67,10 +78,41 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View button) {
         if (backupBtn.equals(button)) {
-            FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
-            firebaseHelper.Backup(realmController);
+            final FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("백업");
+            alert.setMessage("백업을 실행하시겠습니까?");
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            firebaseHelper.Backup(realmController);
+                        }
+                    });
+            alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                }
+            });
+            alert.setIcon(getResources().getDrawable(R.drawable.button_icon_backup_black, null));
+            alert.show();
         } else if (restoreBtn.equals(button)) {
-            FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
+            final FirebaseHelper firebaseHelper = new FirebaseHelper(this.getContext());
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("복원");
+            alert.setMessage("복원을 실행하시겠습니까? 현재 단말기에 저장된 정보는 모두 지워지고, 백업된 내용이 들어옵니다.");
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    firebaseHelper.Restore(realmController);
+                }
+            });
+            alert.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                }
+            });
+            alert.setIcon(getResources().getDrawable(R.drawable.button_icon_restore_black, null));
+            alert.show();
             firebaseHelper.Restore(realmController);
         } else if(signOutBtn.equals(button)){
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -90,6 +132,7 @@ public class OptionFragment extends Fragment implements View.OnClickListener {
 
                 }
             });
+            alert.setIcon(getResources().getDrawable(R.drawable.button_icon_signout, null));
             alert.show();
         }
         else if(autoSave.equals(button)){
