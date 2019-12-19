@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nameCropActivityLinearLayout"
     style="@style/LayoutStyle"
     android:layout_width="match_parent"
@@ -10,35 +9,27 @@
     <TextView
         style="@style/TextViewStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="@string/name_crop"
+        android:text="이름 영역을 손으로 색칠하고 언어를 선택해주세요."
         android:textColor="#000000"
-        android:textSize="20dp"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
+        android:textSize="20dp"
+        android:textStyle="bold" />
 
     <ssu.cheesecake.blueberry.camera.NameCropImageView
         android:id="@+id/nameCropImageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:adjustViewBounds="true"
         android:gravity="center"
         android:scaleType="fitStart" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"/>
-
     <LinearLayout
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="horizontal">
 
@@ -70,31 +61,25 @@
     <LinearLayout
         style="@style/LayoutStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="center"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_ok_name"
-            style="@style/IconButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="ok"
-            app:icon="@drawable/button_icon_ok"
-            app:iconSize="20dp" />
+            android:text="ok" />
 
         <Button
             android:id="@+id/btn_cancel_name"
-            style="@style/IconButtonStyle"
+            style="@style/ButtonStyle"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="cancel"
-            app:icon="@drawable/button_icon_cancel"
-            app:iconSize="20dp" />
-
+            android:text="cancel" />
     </LinearLayout>
 
 </LinearLayout>
