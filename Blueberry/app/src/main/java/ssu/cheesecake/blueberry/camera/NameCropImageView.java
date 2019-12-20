@@ -39,18 +39,15 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         super(context);
     }
 
-    public NameCropImageView(Context context, @Nullable AttributeSet attrs)
-    {
+    public NameCropImageView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public NameCropImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr)
-    {
+    public NameCropImageView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public void init(Bitmap bitmap)
-    {
+    public void init(Bitmap bitmap) {
         this.bitmap = bitmap;
         super.setImageBitmap(bitmap);
         initBitmapRegion(getWidth(), getHeight());
@@ -71,8 +68,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         invalidate();
     }
 
-    public Point getLeftTop()
-    {
+    public Point getLeftTop() {
         if (hasName) {
             return leftTop;
         } else {
@@ -80,8 +76,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
         }
     }
 
-    public Point getRightBottom()
-    {
+    public Point getRightBottom() {
         if (hasName) {
             return rightBottom;
         } else {
@@ -90,8 +85,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     }
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (startPoint == null) {
             return;
@@ -102,8 +96,7 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     }
 
     @Override
-    public boolean onTouch(View v, MotionEvent event)
-    {
+    public boolean onTouch(View v, MotionEvent event) {
         if (isFirstTouch) {
             isFirstTouch = false;
             initBitmapRegion(v.getWidth(), v.getHeight());
@@ -125,16 +118,16 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
 
             } else if (isTouched && event.getAction() == MotionEvent.ACTION_MOVE) {
 
-                if(isLeftUp(point)){
+                if (isLeftUp(point)) {
                     leftTop.x = point.x;
                     leftTop.y = point.y;
-                }else if(isLeftDown(point)){
+                } else if (isLeftDown(point)) {
                     leftTop.x = point.x;
                     rightBottom.y = point.y;
-                }else if(isRightUp(point)){
+                } else if (isRightUp(point)) {
                     rightBottom.x = point.x;
                     leftTop.y = point.y;
-                }else if(isRightDown(point)){
+                } else if (isRightDown(point)) {
                     rightBottom.x = point.x;
                     rightBottom.y = point.y;
                 }
@@ -166,19 +159,14 @@ public class NameCropImageView extends AppCompatImageView implements View.OnTouc
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void initBitmapRegion(int width, int height)
-    {
+    public void initBitmapRegion(int width, int height) {
         myWidth = width;
         myHeight = height;
-        if (bitmap.getWidth() > this.getWidth()) {
-            width = (int) (bitmap.getWidth() * ((float) myWidth / bitmap.getWidth()));
-            height = (int) (bitmap.getHeight() * ((float) myHeight / bitmap.getHeight()));
-        }
+        height = (int) (bitmap.getHeight() * ((float) myHeight / bitmap.getHeight()));
         bitmapRegion = new Rect(0, 0, width, height);
         return;
     }

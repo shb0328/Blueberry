@@ -18,9 +18,6 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -36,6 +33,8 @@ import net.steamcrafted.loadtoast.LoadToast;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import ssu.cheesecake.blueberry.EditActivity;
 import ssu.cheesecake.blueberry.R;
 import ssu.cheesecake.blueberry.util.StringParser;
@@ -137,15 +136,14 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         leftTop = nameCropImageView.getLeftTop();
         rightBottom = nameCropImageView.getRightBottom();
         Log.d("DEBUG!", "onClick: " + nameCropImageView.getWidth() + "," + nameCropImageView.getHeight());
-        //image의 크기가 view보다 크다면
-        if (bitmap.getWidth() > nameCropImageView.getWidth()) {
-            //view에서의 좌표를 image에서의 좌표로 재설정
-            float ratio = ((float) bitmap.getWidth() / nameCropImageView.getWidth());
-            leftTop.x = (int) (leftTop.x * ratio);
-            leftTop.y = (int) (leftTop.y * ratio);
-            rightBottom.x = (int) (rightBottom.x * ratio);
-            rightBottom.y = (int) (rightBottom.y * ratio);
-        }
+
+        //view에서의 좌표를 image에서의 좌표로 재설정
+        float ratio = ((float) bitmap.getWidth() / nameCropImageView.getWidth());
+        leftTop.x = (int) (leftTop.x * ratio);
+        leftTop.y = (int) (leftTop.y * ratio);
+        rightBottom.x = (int) (rightBottom.x * ratio);
+        rightBottom.y = (int) (rightBottom.y * ratio);
+
         //좌표값이 image의 범위를 벗어날 경우 image 내의 좌표로 재설정
         if (leftTop.x < 0)
             leftTop.x = 0;
@@ -160,7 +158,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
     private Bitmap cropNameImage(int left, int top, int right, int bottom) {
         Rect rect = new Rect(left, top, right, bottom);
-        if(rect.height() <= 0)
+        if (rect.height() <= 0)
             return null;
 
         return Bitmap.createBitmap(bitmap, rect.left, rect.top, rect.width(), rect.height());
@@ -204,7 +202,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected String doInBackground(Bitmap... bitmaps) {
-            if(bitmaps[0] == null)
+            if (bitmaps[0] == null)
                 return "";
 
             tessBaseAPI.setImage(bitmaps[0]);
@@ -257,7 +255,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                             intent.putExtra("email", email);
                             intent.putExtra("company", company);
                             intent.putExtra("address", address);
-                            intent.putExtra("webSite",webSite);
+                            intent.putExtra("webSite", webSite);
                             intent.putExtra("mode", "new");
 
                             startActivity(intent);
