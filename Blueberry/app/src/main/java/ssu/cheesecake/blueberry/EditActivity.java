@@ -8,9 +8,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -76,6 +78,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button saveBtn;
     private Button backBtn;
+
+    private int OnShowing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +187,112 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             groupArray.add("선택 안함");
 
         }//end of ArrayLists setting
+        // triggered when dropdown popup window dismissed
+        editName.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+        editName.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+                OnShowing = 1;
+                // maybe you want to hide the soft input panel when the popup window is showing.
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editPhone.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editPhone.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+
+                OnShowing = 2;
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editEmail.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editEmail.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+                OnShowing = 3;
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editWebSite.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editWebSite.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+                OnShowing = 4;
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editCompany.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editCompany.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+                OnShowing = 5;
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editAddress.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editAddress.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+
+                OnShowing = 6;
+                hideSoftInputPanel();
+            }
+        });
+
+
+        editGroup.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+            }
+        });
+
+        editGroup.setOnShowListener(new EditSpinner.OnShowListener() {
+            @Override
+            public void onShow() {
+                OnShowing = 7;
+                hideSoftInputPanel();
+            }
+        });
 
         name_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, nameArray);
         editName.setAdapter(name_adapter);
@@ -304,6 +414,27 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(view == backBtn)
             finish();
+    }
+    private void hideSoftInputPanel() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            if (OnShowing == 1) {
+                imm.hideSoftInputFromWindow(editName.getWindowToken(), 0);
+            } else if (OnShowing == 2) {
+                imm.hideSoftInputFromWindow(editPhone.getWindowToken(), 0);
+            } else if (OnShowing == 3) {
+                imm.hideSoftInputFromWindow(editEmail.getWindowToken(), 0);
+            } else if (OnShowing == 4) {
+                imm.hideSoftInputFromWindow(editWebSite.getWindowToken(), 0);
+            } else if (OnShowing == 5) {
+                imm.hideSoftInputFromWindow(editCompany.getWindowToken(), 0);
+            } else if (OnShowing == 6) {
+                imm.hideSoftInputFromWindow(editAddress.getWindowToken(), 0);
+            } else if (OnShowing == 7) {
+                imm.hideSoftInputFromWindow(editGroup.getWindowToken(), 0);
+            }
+
+        }
     }
 }
 
