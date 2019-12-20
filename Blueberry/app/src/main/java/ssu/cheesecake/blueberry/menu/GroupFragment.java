@@ -137,7 +137,7 @@ public class GroupFragment extends Fragment {
                      */
                     touchDownTime = 0;
                     touchUpTime = 0;
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("그룹 삭제");
                     builder.setMessage("그룹을 삭제하시겠습니까?");
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

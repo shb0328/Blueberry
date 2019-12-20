@@ -28,9 +28,9 @@
 
 
     <style name="TextViewSmallStyle" parent="AppTheme">
-        <item name="android:textSize">15dp</item>
-        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">11dp</item>
         <item name="android:fontFamily">@font/nanumsquare</item>
+        <item name="android:layout_margin">5dp</item>
         <item name="color">@color/colorBlueBerry</item>
     </style>
 

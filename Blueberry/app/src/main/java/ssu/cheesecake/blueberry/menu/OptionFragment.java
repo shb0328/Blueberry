@@ -1,39 +1,26 @@
 package ssu.cheesecake.blueberry.menu;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 
-import net.steamcrafted.loadtoast.LoadToast;
-
-import java.io.FileNotFoundException;
-import java.util.HashMap;
-
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import io.realm.Realm;
 import ssu.cheesecake.blueberry.LoginActivity;
 import ssu.cheesecake.blueberry.MainActivity;
-import ssu.cheesecake.blueberry.custom.BusinessCard;
-import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.R;
+import ssu.cheesecake.blueberry.util.FirebaseHelper;
 import ssu.cheesecake.blueberry.util.RealmController;
 
 public class OptionFragment extends Fragment implements View.OnClickListener {
