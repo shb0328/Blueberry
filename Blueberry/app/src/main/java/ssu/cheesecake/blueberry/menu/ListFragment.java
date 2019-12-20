@@ -69,7 +69,6 @@ public class ListFragment extends Fragment implements View.OnClickListener, Recy
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == 1004){
             if(resultCode == RESULT_OK){
-                Toast.makeText(context,"ok",Toast.LENGTH_SHORT).show();
                 position = data.getIntExtra("position",-1);
                 adapter.notifyItemChanged(position);
             }
