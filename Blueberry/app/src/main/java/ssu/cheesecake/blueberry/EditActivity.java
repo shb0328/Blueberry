@@ -400,7 +400,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             ContentValues webRow = new ContentValues();
             webRow.put(
                     ContactsContract.Data.MIMETYPE,
-                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE
+                    ContactsContract.CommonDataKinds.Website.CONTENT_ITEM_TYPE
             );
             webRow.put(ContactsContract.CommonDataKinds.Website.URL, webSite_finValue);
             contactData.add(webRow);
