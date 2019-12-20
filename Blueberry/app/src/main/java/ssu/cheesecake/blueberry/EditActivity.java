@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -96,6 +97,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         mRealm = Realm.getDefaultInstance();
         realmController = new RealmController(mRealm, RealmController.WhichResult.Group);
         for (int i = 0; i < realmController.getGroups().size(); i++) {
+            Log.d("DEBUG!", "EditActivity onCreate: " + realmController.getGroups().get(i).getGroupName());
             groupArray.add(realmController.getGroups().get(i).getGroupName());
         }
 
@@ -179,7 +181,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             addressArray.add(card.getAddress());
             addressArray.add("직접 입력");
 
-            groupArray.add(card.getGroup());
             groupArray.add("선택 안함");
 
         }//end of ArrayLists setting
@@ -205,6 +206,15 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         group_adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, groupArray);
         editGroup.setAdapter(group_adapter);
         editGroup.setEditable(false);
+
+        //GroupSpinner에서 기존 값이 선택되어 있게 함
+        int groupIndex = -1;
+        for(int i = 0; i < groupArray.size(); i++) {
+            if (groupArray.get(i).equals(card.getGroup()))
+                groupIndex = i;
+        }
+        if(groupIndex != -1)
+            editGroup.selectItem(groupIndex);
 
         resultIntent = new Intent(this, MainActivity.class);
 
