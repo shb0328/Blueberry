@@ -74,7 +74,7 @@ public class RealmController {
 
     public void initializeGroup() {
         RealmResults<CustomGroup> result = mRealm.where(CustomGroup.class).findAll();
-        if (result.size() < 3){
+        if (result.size() < 3) {
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -93,8 +93,7 @@ public class RealmController {
 
     public void initializeAutoSave(final boolean value) {
         RealmResults<AutoSave> result = mRealm.where(AutoSave.class).findAll();
-        if (result == null || result.isEmpty()){
-            Log.d("DEBUG!", "Empty!!");
+        if (result == null || result.isEmpty()) {
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
                 public void execute(Realm realm) {
@@ -107,20 +106,19 @@ public class RealmController {
         return;
     }
 
-    public AutoSave getIsAutoSave(){
+    public AutoSave getIsAutoSave() {
         return mRealm.where(AutoSave.class).findFirst();
     }
 
-    public void changeAutoSave(){
+    public void changeAutoSave() {
         final AutoSave autoSave = mRealm.where(AutoSave.class).findFirst();
         final boolean isAuto = autoSave.getIsAutoSave();
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                if(isAuto){
+                if (isAuto) {
                     autoSave.setIsAutoSave(false);
-                }
-                else {
+                } else {
                     autoSave.setIsAutoSave(true);
                 }
             }
@@ -210,11 +208,10 @@ public class RealmController {
             @Override
             public void execute(Realm realm) {
                 CustomGroup deleteGroup = realm.where(CustomGroup.class).equalTo("groupName", groupName).findFirst();
-                if(deleteGroup.getGroupName().equals("직장") || deleteGroup.getGroupName().equals("가족") || deleteGroup.getGroupName().equals("친구")) {
+                if (deleteGroup.getGroupName().equals("직장") || deleteGroup.getGroupName().equals("가족") || deleteGroup.getGroupName().equals("친구")) {
                     Toast.makeText(context, "기본 그룹은 삭제할 수 없습니다!", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else {
+                } else {
                     groups.remove(deleteGroup);
                     deleteGroup.deleteFromRealm();
 
@@ -230,6 +227,7 @@ public class RealmController {
     public Vector<BusinessCard> getCards() {
         return cards;
     }
+
     public Vector<CustomGroup> getGroups() {
         return groups;
     }
@@ -257,23 +255,29 @@ public class RealmController {
 
     public void editBusinessCard(final BusinessCard card, final int position) {
         final int id = card.getId();
-        Log.d("DEBUG!", "editBusinessCardk: id" + id);
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
+                //Realm에서 수정
                 BusinessCard editCard = realm.where(BusinessCard.class).equalTo("id", id).findFirst();
                 editCard.Copy(card);
-                cards.get(position).Copy(editCard);
+                //RealmController가 갖고 있는 List에서 수정
+                //Favorite Fragment에서 호출했을 경우 editPosition 찾음
+                for (int i = 0; i < cards.size(); i++)
+                    if (cards.get(i).getId() == id) {
+                        cards.get(i).Copy(editCard);
+                        break;
+                    }
             }
         });
         return;
     }
 
-    public void changeAllId(){
+    public void changeAllId() {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                for(int i = 0; i < cards.size(); i++){
+                for (int i = 0; i < cards.size(); i++) {
                     cards.get(i).setId(i);
                 }
             }
