@@ -45,7 +45,7 @@ enum Language {
 
 public class NameCropActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Context app = this;
+    private Context context = this;
 
     private String imagePath = "";
     private String fileName;
@@ -102,7 +102,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         if (isOCRFailed == true) {
-            Toast.makeText(this, "cancel...", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "cancel...", Toast.LENGTH_SHORT).show();
         }
         super.onDestroy();
     }
@@ -186,13 +186,13 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
         }
 
         public void setOCRInitializer() {
-            OCRInitializer ocrInitializer = new OCRInitializer(app, nameLanguage);
+            OCRInitializer ocrInitializer = new OCRInitializer(context, nameLanguage);
             tessBaseAPI = ocrInitializer.getTessBaseAPI();
         }
 
         @Override
         protected void onPreExecute() {
-            loadToast = new LoadToast(app);
+            loadToast = new LoadToast(context);
             loadToast.setText("명함에서 글자를 인식하고 있습니다...");
             loadToast.setTranslationY(1000);
             loadToast.show();
@@ -247,7 +247,7 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                             address = stringParser.GetAddressArray();
                             webSite = stringParser.GetWebSiteArray();
 
-                            Intent intent = new Intent(app, EditActivity.class);
+                            Intent intent = new Intent(context, EditActivity.class);
                             intent.putExtra("path", imagePath);
                             intent.putExtra("fileName", fileName);
                             intent.putExtra("name", name);
@@ -266,10 +266,10 @@ public class NameCropActivity extends AppCompatActivity implements View.OnClickL
                             new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Log.d("DEBUG!", "Failed!");
                                     loadToast.error();
                                     isOCRFailed = true;
-                                    onDestroy();
+                                    Toast.makeText(context, "인터넷에 연결되지 않았습니다. 텍스트 추출이 불가능하므로 종료합니다.", Toast.LENGTH_LONG).show();
+                                    finish();
                                 }
                             }
                     );
