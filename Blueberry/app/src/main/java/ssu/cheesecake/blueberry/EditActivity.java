@@ -104,6 +104,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             Log.d("DEBUG!", "EditActivity onCreate: " + realmController.getGroups().get(i).getGroupName());
             groupArray.add(realmController.getGroups().get(i).getGroupName());
         }
+        groupArray.add("선택 안함");
 
         Intent intent = getIntent();
         if (intent.hasExtra("mode")) {
@@ -185,7 +186,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             addressArray.add(card.getAddress());
             addressArray.add("직접 입력");
 
-            groupArray.add("선택 안함");
 
         }//end of ArrayLists setting
         // triggered when dropdown popup window dismissed
@@ -344,6 +344,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             company_finValue = editCompany.getText().toString();
             address_finValue = editAddress.getText().toString();
             group_finValue = editGroup.getText().toString();
+            if(group_finValue.equals("선택 안함"))
+                group_finValue = null;
 
             Realm.init(app);
             RealmController realmController = new RealmController(Realm.getDefaultInstance(), RealmController.WhichResult.List);
